@@ -1,0 +1,110 @@
+"use client";
+
+import React from "react";
+import {
+  Button,
+  DropdownMenu,
+  Field,
+  Switch,
+  Tooltip,
+} from "@usefui/components";
+import { Icon, PixelIcon } from "@usefui/icons";
+
+function PromptField() {
+  return (
+    <form
+      style={{
+        border: "1px solid var(--font-color-alpha-10)",
+        borderRadius: "var(--measurement-medium-60)",
+        maxWidth: "var(--breakpoint-tablet)",
+        margin: "var(--measurement-large-30) auto",
+        background: "var(--body-color)",
+      }}
+      className="p-medium-60 w-100"
+    >
+      <Field.Root>
+        <Field
+          name="prompt-field"
+          placeholder="Ask Runp to create your next feature"
+          className="w-100"
+          sizing="large"
+          variant="ghost"
+          style={{ paddingBottom: 48 }}
+        />
+      </Field.Root>
+
+      <div className="flex align-center justify-between">
+        <div className="flex align-center g-medium-60">
+          <Tooltip content="Attach file">
+            <Button variant="ghost">
+              <Icon>
+                <PixelIcon.Plus />
+              </Icon>
+            </Button>
+          </Tooltip>
+
+          <DropdownMenu.Root>
+            <Tooltip content="Prompt Tools">
+              <DropdownMenu.Trigger variant="ghost">
+                <Icon>
+                  <PixelIcon.Sliders />
+                </Icon>
+              </DropdownMenu.Trigger>
+            </Tooltip>
+            <DropdownMenu>
+              <DropdownMenu.Content>
+                <DropdownMenu.Item radio>
+                  <Field.Label
+                    optional
+                    className="flex align-center justify-between w-100 g-medium-30"
+                    htmlFor="enable-graphs"
+                  >
+                    <span className="flex align-center g-medium-30 fs-medium-20">
+                      <Icon>
+                        <PixelIcon.Zap />
+                      </Icon>
+                      Enable Graphs
+                    </span>
+
+                    <Switch.Root>
+                      <Switch name="enable-graphs" sizing="medium">
+                        <Switch.Thumb />
+                      </Switch>
+                    </Switch.Root>
+                  </Field.Label>
+                </DropdownMenu.Item>
+                <DropdownMenu.Item
+                  radio
+                  disabled
+                  className="flex align-center g-medium-30 "
+                >
+                  <Icon>
+                    <PixelIcon.Script />
+                  </Icon>
+                  <span className="fs-medium-20">Enhance Prompt</span>
+                </DropdownMenu.Item>
+              </DropdownMenu.Content>
+            </DropdownMenu>
+          </DropdownMenu.Root>
+        </div>
+
+        <div className="flex align-center g-medium-60">
+          <span className="fs-small-50 opacity-default-30">CTRL + Enter</span>
+          <Button
+            variant="primary"
+            sizing="small"
+            style={{ borderRadius: 100 }}
+          >
+            <span className="p-y-small-30">
+              <Icon>
+                <PixelIcon.ArrowRight />
+              </Icon>
+            </span>
+          </Button>
+        </div>
+      </div>
+    </form>
+  );
+}
+
+export default PromptField;

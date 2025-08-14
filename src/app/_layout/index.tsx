@@ -11,6 +11,14 @@ const AppBox = styled.div`
   max-width: var(--breakpoint-desktop-small);
   min-width: var(--breakpoint-mobile-small);
 `;
+const AppBody = styled(Page.Content)`
+  background-image: url(/grain.png);
+  background-size: 100px 100px;
+  background-repeat: repeat;
+  background-blend-mode: overlay;
+  background-position: left top;
+  mix-blend-mode: overlay;
+`;
 
 function AppLayout({
   children,
@@ -19,7 +27,7 @@ function AppLayout({
 }>) {
   return (
     <Page>
-      <Page.Content className="w-100 h-100">
+      <AppBody className="w-100 h-100">
         <Navigation />
 
         <Page.Wrapper $menus={1.1}>
@@ -27,7 +35,7 @@ function AppLayout({
             <AppBox className="p-medium-60 w-100 h-100">{children}</AppBox>
           </ScrollArea>
         </Page.Wrapper>
-      </Page.Content>
+      </AppBody>
     </Page>
   );
 }
