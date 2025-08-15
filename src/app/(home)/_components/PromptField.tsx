@@ -33,12 +33,12 @@ const PromptWrapper = styled.form`
 
 function PromptField() {
   const trpc = useTRPC();
-  const greeting = useQuery(
-    trpc.create.queryOptions({ text: "TRPC Query value" }),
+  const { data } = useQuery(
+    trpc.create.queryOptions({ text: "Runp TRPC Client" }),
   );
 
-  if (!greeting.data) return <Spinner />;
-  console.log(greeting.data.greeting);
+  if (!data) return <Spinner />;
+  console.log(data.greeting);
 
   return (
     <PromptWrapper className="p-medium-60 w-100">

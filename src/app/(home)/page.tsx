@@ -1,16 +1,20 @@
 import React from "react";
-import { HydrateClient, prefetch, trpc } from "@/trpc/server";
+import { HydrateClient, caller, prefetch, trpc } from "@/trpc/server";
 
 import LandingHeading from "./_components/LandingHeading";
 import PromptField from "./_components/PromptField";
 import AnimatedHero from "./_components/AnimatedHero";
 
 async function Page() {
-  // prefetch(
-  //   trpc.create.queryOptions({
-  //     text: "Hello world",
-  //   }),
-  // );
+  // const data = await caller.create({ text: "Runp TRPC Server" });
+  // console.log(data);
+
+  // With prefetch
+  prefetch(
+    trpc.create.queryOptions({
+      text: "Runp TRPC Client",
+    }),
+  );
 
   return (
     <HydrateClient>
