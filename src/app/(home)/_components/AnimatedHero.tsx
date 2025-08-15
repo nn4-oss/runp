@@ -49,7 +49,7 @@ const Cell = styled.div`
   }
 `;
 
-function Hero({ chars }: { chars: string }) {
+function AnimatedHero({ chars }: { chars: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Precompute static positions + random factor for each cell
@@ -66,13 +66,13 @@ function Hero({ chars }: { chars: string }) {
 
       return { absX, absY, char: chars[i % chars.length], rand };
     });
-  }, []) as PositionsProps[];
+  }, [chars]) as PositionsProps[];
 
   useEffect(() => {
     const cells = containerRef.current?.children;
     if (!cells) return;
 
-    let start = performance.now();
+    const start = performance.now();
 
     const animate = (time: number) => {
       const t = ((time - start) % (ms * 2)) / ms; // normalized time
@@ -111,4 +111,4 @@ function Hero({ chars }: { chars: string }) {
   );
 }
 
-export default Hero;
+export default AnimatedHero;

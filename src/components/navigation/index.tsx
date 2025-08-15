@@ -11,7 +11,7 @@ function Navigation() {
       className="w-100 flex g-medium-60 align-center justify-between"
       style={{ border: "none", background: "transparent" }}
     >
-      <Icon width={24} height={24} fill="var(--font-color-alpha-30)">
+      <Icon width={24} height={24}>
         <PixelIcon.HumanRun />
       </Icon>
 

@@ -2,16 +2,16 @@
 
 import React from "react";
 
-import Heading from "./_components/heading";
-import Hero from "./_components/hero";
-import PromptField from "./_components/prompt-field";
+import LandingHeading from "./_components/LandingHeading";
+import PromptField from "./_components/PromptField";
+import AnimatedHero from "./_components/AnimatedHero";
 
 function LandingPage() {
   return (
     <div className="h-100 w-100" style={{ position: "relative" }}>
-      <Heading />
+      <LandingHeading />
       <PromptField />
-      <Hero chars="runp" />
+      <AnimatedHero chars="runp" />
     </div>
   );
 }

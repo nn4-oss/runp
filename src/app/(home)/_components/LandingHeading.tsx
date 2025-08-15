@@ -12,7 +12,7 @@ const HeadingGroup = styled.hgroup`
   }
 `;
 
-function Heading() {
+function LandingHeading() {
   return (
     <HeadingGroup className=" p-t-large-60 grid align-center justify-center g-medium-10">
       <h1>Build features using prompts</h1>
@@ -23,4 +23,4 @@ function Heading() {
   );
 }
 
-export default Heading;
+export default LandingHeading;
