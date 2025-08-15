@@ -9,17 +9,16 @@
     "check": "next lint && tsc --noEmit",
     "dev": "next dev --turbo",
     "db:init": "pnpx prisma init",
-    "db:migrate": "pnpx prisma migrate dev",
+    "db:generate": "pnpx prisma generate",
+    "db:migrate-dev": "pnpx prisma migrate dev",
     "db:seed": "pnpx prisma db seed",
+    "db:reset": "pnpx prisma migrate reset",
     "db:studio": "pnpx prisma studio",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
     "format:write": "prettier --write \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
     "typecheck": "tsc --noEmit"
-  },
-  "prisma": {
-    "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
