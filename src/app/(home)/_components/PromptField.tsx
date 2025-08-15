@@ -26,14 +26,13 @@ const PromptWrapper = styled.form`
   box-shadow: 0 var(--measurement-medium-30) var(--measurement-medium-60)
     calc(var(--measurement-medium-30) * -1) var(--contrast-color);
 `;
-
 function PromptField() {
   return (
     <PromptWrapper className="p-medium-60 w-100">
       <Field.Root>
         <Field
           name="prompt-field"
-          placeholder="Ask Runp to create your next feature"
+          placeholder="Ask Runp to build..."
           className="w-100"
           sizing="large"
           variant="ghost"
@@ -101,12 +100,7 @@ function PromptField() {
         </div>
 
         <div className="flex align-center g-medium-60">
-          <span className="fs-small-50 opacity-default-30">CTRL + Enter</span>
-          <Button
-            variant="primary"
-            sizing="small"
-            style={{ borderRadius: 100 }}
-          >
+          <Button variant="primary" sizing="small">
             <span className="p-y-small-30">
               <Icon>
                 <PixelIcon.ArrowRight />

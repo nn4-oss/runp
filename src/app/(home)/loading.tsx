@@ -3,7 +3,7 @@
 import React from "react";
 import { Spinner } from "@/components";
 
-function loading() {
+function Loading() {
   return (
     <section className="flex h-100 align-center justify-center">
       <Spinner />
@@ -11,4 +11,4 @@ function loading() {
   );
 }
 
-export default loading;
+export default Loading;

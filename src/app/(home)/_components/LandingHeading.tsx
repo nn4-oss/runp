@@ -17,7 +17,7 @@ function LandingHeading() {
     <HeadingGroup className=" p-t-large-60 grid align-center justify-center g-medium-10">
       <h1>Build features using prompts</h1>
       <p className="fs-medium-30 opacity-default-60">
-        Instantly create apps and features by chatting with AI
+        Build production ready apps and features by chatting with AI
       </p>
     </HeadingGroup>
   );

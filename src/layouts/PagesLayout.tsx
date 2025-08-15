@@ -22,7 +22,7 @@ const AppBody = styled(Page.Content)`
   mix-blend-mode: overlay;
 `;
 
-function AppLayout({
+function PagesLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -42,4 +42,4 @@ function AppLayout({
   );
 }
 
-export default AppLayout;
+export default PagesLayout;

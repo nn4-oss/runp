@@ -6,7 +6,7 @@ import LandingHeading from "./_components/LandingHeading";
 import PromptField from "./_components/PromptField";
 import AnimatedHero from "./_components/AnimatedHero";
 
-function LandingPage() {
+function Page() {
   return (
     <div className="h-100 w-100" style={{ position: "relative" }}>
       <LandingHeading />
@@ -16,4 +16,4 @@ function LandingPage() {
   );
 }
 
-export default LandingPage;
+export default Page;
