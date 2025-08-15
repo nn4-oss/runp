@@ -12,11 +12,13 @@ const AppBox = styled.div`
   min-width: var(--breakpoint-mobile-small);
 `;
 const AppBody = styled(Page.Content)`
-  background-image: url(/grain.png);
-  background-size: 100px 100px;
-  background-repeat: repeat;
+  background-image: url(/vignette.webp);
+  background-size: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center bottom;
+
   background-blend-mode: overlay;
-  background-position: left top;
   mix-blend-mode: overlay;
 `;
 
