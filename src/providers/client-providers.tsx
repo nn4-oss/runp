@@ -2,7 +2,6 @@
 
 import React from "react";
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ColorModeProvider, js_design_tokens } from "@usefui/tokens";
 
 import {
@@ -108,7 +107,6 @@ export function ClientProvider({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [queryClient] = React.useState(() => new QueryClient());
   const colorModeConfig = React.useMemo(
     () => ({
       body: {
@@ -124,14 +122,12 @@ export function ClientProvider({
   );
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <ColorModeProvider config={colorModeConfig}>
-        <ResetStyles />
-        <TypographyRoot />
-        <CSSRoot />
+    <ColorModeProvider config={colorModeConfig}>
+      <ResetStyles />
+      <TypographyRoot />
+      <CSSRoot />
 
-        {children}
-      </ColorModeProvider>
-    </QueryClientProvider>
+      {children}
+    </ColorModeProvider>
   );
 }

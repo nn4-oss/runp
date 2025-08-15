@@ -11,6 +11,7 @@
 # database
 /prisma/db.sqlite
 /prisma/db.sqlite-journal
+/generated/prisma
 db.sqlite
 
 # next.js
@@ -44,4 +45,3 @@ yarn-error.log*
 
 # idea files
 .idea
-/generated/prisma

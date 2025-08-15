@@ -3,6 +3,9 @@
 import React from "react";
 import styled from "styled-components";
 
+import { useQuery } from "@tanstack/react-query";
+import { useTRPC } from "@/trpc/client";
+
 import {
   Button,
   DropdownMenu,
@@ -11,6 +14,7 @@ import {
   Tooltip,
 } from "@usefui/components";
 import { Icon, PixelIcon } from "@usefui/icons";
+import { Spinner } from "@/components";
 
 const PromptWrapper = styled.form`
   border: var(--measurement-small-30) solid var(--font-color-alpha-10);
@@ -26,7 +30,16 @@ const PromptWrapper = styled.form`
   box-shadow: 0 var(--measurement-medium-30) var(--measurement-medium-60)
     calc(var(--measurement-medium-30) * -1) var(--contrast-color);
 `;
+
 function PromptField() {
+  const trpc = useTRPC();
+  const greeting = useQuery(
+    trpc.create.queryOptions({ text: "TRPC Query value" }),
+  );
+
+  if (!greeting.data) return <Spinner />;
+  console.log(greeting.data.greeting);
+
   return (
     <PromptWrapper className="p-medium-60 w-100">
       <Field.Root>
@@ -36,10 +49,9 @@ function PromptField() {
           className="w-100"
           sizing="large"
           variant="ghost"
-          style={{ paddingBottom: 48 }}
+          style={{ paddingBottom: 48, width: "100%" }}
         />
       </Field.Root>
-
       <div className="flex align-center justify-between">
         <div className="flex align-center g-medium-60">
           <Tooltip content="Attach file">
