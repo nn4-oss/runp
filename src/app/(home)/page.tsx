@@ -3,14 +3,16 @@
 import React from "react";
 
 import Heading from "./_components/heading";
+import Hero from "./_components/hero";
 import PromptField from "./_components/prompt-field";
 
 function LandingPage() {
   return (
-    <React.Fragment>
+    <div className="h-100 w-100" style={{ position: "relative" }}>
       <Heading />
       <PromptField />
-    </React.Fragment>
+      <Hero chars="runp" />
+    </div>
   );
 }
 
