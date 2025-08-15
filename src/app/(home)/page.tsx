@@ -1,5 +1,10 @@
 import React from "react";
-import { HydrateClient, caller, prefetch, trpc } from "@/trpc/server";
+import {
+  HydrateClient,
+  // caller,
+  prefetch,
+  trpc,
+} from "@/trpc/server";
 
 import LandingHeading from "./_components/LandingHeading";
 import PromptField from "./_components/PromptField";
