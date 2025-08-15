@@ -1,6 +1,8 @@
 "use client";
 
 import React from "react";
+import styled, { keyframes } from "styled-components";
+
 import {
   Button,
   DropdownMenu,
@@ -10,18 +12,24 @@ import {
 } from "@usefui/components";
 import { Icon, PixelIcon } from "@usefui/icons";
 
+const PromptWrapper = styled.form`
+  border: var(--measurement-small-30) solid var(--font-color-alpha-10);
+
+  border-radius: var(--measurement-medium-60);
+  max-width: var(--breakpoint-tablet);
+  margin: var(--measurement-large-30) auto;
+
+  background:
+    radial-gradient(ellipse at top right, var(--body-color), transparent),
+    radial-gradient(ellipse at bottom left, var(--contrast-color), transparent);
+
+  box-shadow: 0 var(--measurement-medium-30) var(--measurement-medium-60)
+    calc(var(--measurement-medium-30) * -1) var(--contrast-color);
+`;
+
 function PromptField() {
   return (
-    <form
-      style={{
-        border: "1px solid var(--font-color-alpha-10)",
-        borderRadius: "var(--measurement-medium-60)",
-        maxWidth: "var(--breakpoint-tablet)",
-        margin: "var(--measurement-large-30) auto",
-        background: "var(--body-color)",
-      }}
-      className="p-medium-60 w-100"
-    >
+    <PromptWrapper className="p-medium-60 w-100">
       <Field.Root>
         <Field
           name="prompt-field"
@@ -67,7 +75,11 @@ function PromptField() {
                     </span>
 
                     <Switch.Root>
-                      <Switch name="enable-graphs" sizing="medium">
+                      <Switch
+                        name="enable-graphs"
+                        sizing="medium"
+                        defaultChecked
+                      >
                         <Switch.Thumb />
                       </Switch>
                     </Switch.Root>
@@ -103,7 +115,7 @@ function PromptField() {
           </Button>
         </div>
       </div>
-    </form>
+    </PromptWrapper>
   );
 }
 
