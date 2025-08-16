@@ -3,7 +3,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
 
 import {
@@ -33,12 +33,18 @@ const PromptWrapper = styled.form`
 
 function PromptField() {
   const trpc = useTRPC();
-  const { data } = useQuery(
-    trpc.create.queryOptions({ text: "Runp TRPC Client" }),
+  const invoke = useMutation(
+    trpc.invoke.mutationOptions({
+      onSuccess: () => console.log("Background job started"),
+      onError: () => console.error("Background job error"),
+    }),
   );
+  // const { data } = useQuery(
+  //   trpc.create.queryOptions({ text: "Runp TRPC Client" }),
+  // );
 
-  if (!data) return <Spinner />;
-  console.log(data.greeting);
+  // if (!data) return <Spinner />;
+  // console.log(data.greeting);
 
   return (
     <PromptWrapper className="p-medium-60 w-100">
@@ -112,7 +118,12 @@ function PromptField() {
         </div>
 
         <div className="flex align-center g-medium-60">
-          <Button variant="primary" sizing="small">
+          <Button
+            variant="primary"
+            sizing="small"
+            onClick={() => invoke.mutate({ text: "runp-test-trigger" })}
+            disabled={invoke.isPending}
+          >
             <span className="p-y-small-30">
               <Icon>
                 <PixelIcon.ArrowRight />
