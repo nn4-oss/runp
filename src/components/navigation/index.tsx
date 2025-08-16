@@ -9,7 +9,7 @@ function Navigation() {
   return (
     <Page.Menu
       className="w-100 flex g-medium-60 align-center justify-between"
-      style={{ border: "none", background: "transparent" }}
+      style={{ border: "none", background: "transparent", position: "fixed" }}
     >
       <Icon width={24} height={24}>
         <PixelIcon.HumanRun />

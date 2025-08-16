@@ -31,12 +31,7 @@ function PagesLayout({
     <Page>
       <AppBody className="w-100 h-100">
         <Navigation />
-
-        <Page.Wrapper $menus={1.1}>
-          <ScrollArea className="w-100 h-100" scrollbar>
-            <AppBox className="p-medium-60 w-100 h-100">{children}</AppBox>
-          </ScrollArea>
-        </Page.Wrapper>
+        <AppBox className="p-medium-60 w-100 h-100">{children}</AppBox>
       </AppBody>
     </Page>
   );

@@ -23,11 +23,15 @@ async function Page() {
 
   return (
     <HydrateClient>
-      <div className="h-100 w-100" style={{ position: "relative" }}>
-        <LandingHeading />
-        <PromptField />
+      <section style={{ position: "relative" }} className="w-100 h-100">
+        <div className="h-100 w-100 flex align-center justify-center">
+          <div className="w-100">
+            <LandingHeading />
+            <PromptField />
+          </div>
+        </div>
         <AnimatedHero chars="runp" />
-      </div>
+      </section>
     </HydrateClient>
   );
 }

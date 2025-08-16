@@ -14,7 +14,7 @@ const HeadingGroup = styled.hgroup`
 
 function LandingHeading() {
   return (
-    <HeadingGroup className=" p-t-large-60 grid align-center justify-center g-medium-10">
+    <HeadingGroup className="grid align-center justify-center g-medium-10">
       <h1>Build features using prompts</h1>
       <p className="fs-medium-30 opacity-default-60">
         Build production ready apps and features by chatting with AI

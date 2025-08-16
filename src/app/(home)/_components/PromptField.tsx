@@ -21,7 +21,7 @@ const PromptWrapper = styled.form`
 
   border-radius: var(--measurement-medium-60);
   max-width: var(--breakpoint-tablet);
-  margin: var(--measurement-large-30) auto;
+  margin: var(--measurement-large-10) auto;
 
   background:
     radial-gradient(ellipse at top right, var(--body-color), transparent),
