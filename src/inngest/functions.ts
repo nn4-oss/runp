@@ -46,14 +46,14 @@ export const invokeCodeAgent = inngest.createFunction(
             command: z.string(),
           }),
 
-          /**
-           * Connect to the sandbox environment;
-           * run the command in the sandbox environment, report telemetry in buffers;
-           * return the execution output on success, errlog(stdout,stderr) on failure;
-           *
-           * This enable to keep the contexts of executions and give it to the model to refine inferences after each loop.
-           */
           handler: async ({ command }, { step }) => {
+            /**
+             * Connect to the sandbox environment;
+             * run the command in the sandbox environment, report telemetry in buffers;
+             * return the execution output on success, errlog(stdout,stderr) on failure;
+             *
+             * This enable to keep the contexts of executions and give it to the model to refine inferences after each loop.
+             */
             return await step?.run("terminal", async () => {
               const buffers = { stdout: "", stderr: "" };
 
@@ -76,6 +76,59 @@ export const invokeCodeAgent = inngest.createFunction(
                 return errlog;
               }
             });
+          },
+        }),
+        createTool({
+          name: "createOrUpdateFiles",
+          description: "Create or update files in the sandbox environment",
+          parameters: z.object({
+            files: z.array(
+              z.object({
+                path: z.string(),
+                content: z.string(),
+              }),
+            ),
+          }),
+
+          handler: async ({ files }, { step, network }) => {
+            /**
+             * Get the updated list of files array;
+             * Connect to the sandbox environment;
+             * For each entry in the updated files array, create/update it in the sandbox environment;
+             * This enable the model to create/update the files required to fulfill the user's utterances.
+             */
+
+            const newFiles = await step?.run(
+              "createOrUpdateFiles",
+              async () => {
+                try {
+                  /**
+                   * Because this step can be called N times, chosing an object instead of an array
+                   * in the case of data.files being falsy when the handler is invoked enables to overwrite any path if it changes.
+                   */
+                  const updatedFiles = network.state.data.files ?? {};
+                  const sandbox = await getSandbox(sandboxId);
+
+                  for (const file of files) {
+                    await sandbox.files.write(file.path, file.content);
+                    updatedFiles[file.path] = file.content;
+                  }
+
+                  return updatedFiles;
+                } catch (error) {
+                  return `Error: ${error}`;
+                }
+              },
+            );
+
+            /**
+             * Wait for the newFiles step before storing it into the internal network state.
+             * It an error occurs, newFiles will return a string, object otherwise.
+             * When the type of newFiles equals to object, it indicates a succesfull run.
+             */
+            if (typeof newFiles === "object") {
+              network.state.data.files = newFiles;
+            }
           },
         }),
       ],
