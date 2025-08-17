@@ -1,112 +1,34 @@
 import { Sandbox } from "@e2b/code-interpreter";
 
 import { inngest } from "./client";
-import { openai, createAgent, createTool } from "@inngest/agent-kit";
+import { getSandbox } from "./utils";
+import { createCodeAgent } from "./agents";
 
-import { z } from "zod";
-import { getLastMessageContent, getSandbox } from "./utils";
-
-import {
-  terminalAgentToolHandler,
-  createUpdateAgentToolHandler,
-  readFilesAgentToolHandler,
-} from "./tools";
-
-import { SYSTEM_PROMPT } from "./config/system.-prompt";
 import { SANDBOX_NAME, SANDBOX_PORT } from "./config/sandbox-variables";
-import { CODE_AGENT_PARAMETERS } from "./config/parameters";
 
 export const invokeCodeAgent = inngest.createFunction(
   { id: "runp-code-agent-invoke-function" },
   { event: "code-agent/invoke" },
 
   async ({ event, step }) => {
-    /**
-     * Create a Sandbox Environment using the E2B NextJS Template Docker Image,
-     */
+    /* Create a Sandbox Environment using the E2B NextJS Template Docker Image */
     const sandboxId = await step.run("get-sandbox-id", async () => {
       const sandbox = await Sandbox.create(SANDBOX_NAME);
       return sandbox.sandboxId;
     });
 
-    /**
-     * Run the code-agent using user's utterance;
-     * [TODO]: Decrypt and pass the user's oai key */
-
+    /* [TODO]: Decrypt and pass the user's oai key */
     // const userId = (event.data as { userId: string } | undefined)?.userId;
     // const apiKey = await db.userSecrets.getOpenAIKey(userId); // decrypt in-memory
 
-    const codeAgent = createAgent({
-      name: "code-agent",
-      description: "An expert coding agent",
-      system: SYSTEM_PROMPT,
-      model: openai({
-        model: "gpt-4.1",
-        defaultParameters: CODE_AGENT_PARAMETERS,
-        // apiKey,
-      }),
-      tools: [
-        createTool({
-          name: "terminal",
-          description: "Use the terminal to run commands",
-          parameters: z.object({
-            command: z.string(),
-          }),
-
-          handler: async ({ command }, { step }) =>
-            terminalAgentToolHandler({ command, step, sandboxId }),
-        }),
-        createTool({
-          name: "createOrUpdateFiles",
-          description: "Create or update files in the sandbox environment",
-          parameters: z.object({
-            files: z.array(
-              z.object({
-                path: z.string(),
-                content: z.string(),
-              }),
-            ),
-          }),
-
-          handler: async ({ files }, { step, network }) =>
-            createUpdateAgentToolHandler({ files, step, network, sandboxId }),
-        }),
-        createTool({
-          name: "readFiles",
-          description: "Read files from the sandbox environment",
-          parameters: z.object({
-            files: z.array(z.string()),
-          }),
-          handler: async ({ files }, { step }) =>
-            readFilesAgentToolHandler({ files, step, sandboxId }),
-        }),
-      ],
-      lifecycle: {
-        onResponse: async ({ result, network }) => {
-          const lastAssistantMessage = await getLastMessageContent(result);
-
-          /**
-           * Extract and parse the last assistant message;
-           * If the result includes the task_summary tag, store it in the network summary;
-           * Otherwise return the result and let the lifecycle of the function continue.
-           */
-          if (lastAssistantMessage && network) {
-            if (lastAssistantMessage.includes("<task_summary>")) {
-              network.state.data.summary = lastAssistantMessage;
-            }
-          }
-
-          return result;
-        },
-      },
-    });
-
+    /* Invoke and run the code-agent using user's utterance */
+    const codeAgent = createCodeAgent(sandboxId); // ,apiKey);
     const { output } = await codeAgent.run(event.data.input);
+
+    /* Kill the agent if the output can't be generated */
     if (!output) return { success: false };
 
-    /**
-     * Prepare the Sandbox Environment URL that will run the code-agent output
-     */
+    /* Prepare the Sandbox Environment URL that will run the code-agent output */
     const sandboxUrl = await step.run("get-sandbox-url", async () => {
       const sandbox = await getSandbox(sandboxId);
       const host = sandbox.getHost(SANDBOX_PORT);
