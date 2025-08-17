@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
+    "@inngest/agent-kit": "^0.9.0",
     "@prisma/client": "^6.14.0",
     "@t3-oss/env-nextjs": "^0.12.0",
     "@tanstack/react-query": "^5.85.3",
