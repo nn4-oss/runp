@@ -1,8 +1,9 @@
 import { Sandbox } from "@e2b/code-interpreter";
 
 import { inngest } from "./client";
-import { openai, createAgent } from "@inngest/agent-kit";
+import { openai, createAgent, createTool } from "@inngest/agent-kit";
 
+import { z } from "zod";
 import { getSandbox } from "./utils";
 
 const SANDBOX_NAME = "runp-test-dev"; // SANDBOX_NAME relates to the E2B docker image's name, they MUST match
@@ -37,6 +38,47 @@ export const invokeCodeAgent = inngest.createFunction(
         model: "gpt-4o",
         // apiKey,
       }),
+      tools: [
+        createTool({
+          name: "terminal",
+          description: "Use the terminal to run commands",
+          parameters: z.object({
+            command: z.string(),
+          }),
+
+          /**
+           * Connect to the sandbox environment;
+           * run the command in the sandbox environment, report telemetry in buffers;
+           * return the execution output on success, errlog(stdout,stderr) on failure;
+           *
+           * This enable to keep the contexts of executions and give it to the model to refine inferences after each loop.
+           */
+          handler: async ({ command }, { step }) => {
+            return await step?.run("terminal", async () => {
+              const buffers = { stdout: "", stderr: "" };
+
+              try {
+                const sandbox = await getSandbox(sandboxId); //
+                const result = await sandbox.commands.run(command, {
+                  onStdout: (data: string) => {
+                    buffers.stdout += data;
+                  },
+                  onStderr: (data: string) => {
+                    buffers.stderr += data;
+                  },
+                });
+
+                return result.stdout;
+              } catch (e) {
+                const errlog = `Command failed: ${e} \nstdout: ${buffers.stdout} \stderr: ${buffers.stderr}`;
+
+                console.error(errlog);
+                return errlog;
+              }
+            });
+          },
+        }),
+      ],
     });
 
     const { output } = await codeAgent.run(event.data.input);
