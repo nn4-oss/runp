@@ -131,6 +131,34 @@ export const invokeCodeAgent = inngest.createFunction(
             }
           },
         }),
+        createTool({
+          name: "readFiles",
+          description: "Read files from the sandbox environment",
+          parameters: z.object({
+            files: z.array(z.string()),
+          }),
+          handler: async ({ files }, { step }) => {
+            return await step?.run("readFiles", async () => {
+              try {
+                const sandbox = await getSandbox(sandboxId);
+                const contents = [];
+
+                for (const file of files) {
+                  const content = await sandbox.files.read(file);
+                  contents.push({ path: file, content });
+                }
+
+                /**
+                 * This output doesn't need a specificdata structure since it is
+                 * used by models to read files.
+                 */
+                return JSON.stringify(contents);
+              } catch (error) {
+                return `Error: ${error}`;
+              }
+            });
+          },
+        }),
       ],
     });
 
