@@ -27,12 +27,11 @@ export default async function createUpdateAgentToolHandler({
   const newFiles = await step?.run("createOrUpdateFiles", async () => {
     try {
       /**
-       * Because this step can be called N times, chosing an object instead of an array
-       * in the case of data.files being falsy when the handler is invoked enables to overwrite any path if it changes.
+       * Because this step can be called N times, choosing an object instead of an array
+       * for data.files (when falsy) allows overwriting any path if it changes.
        */
       const updatedFiles = network.state.data.files ?? {};
       const sandbox = await getSandbox(sandboxId);
-
       for (const file of files) {
         await sandbox.files.write(file.path, file.content);
         updatedFiles[file.path] = file.content;
