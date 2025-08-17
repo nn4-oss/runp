@@ -4,7 +4,7 @@ import { inngest } from "./client";
 import { openai, createAgent, createTool } from "@inngest/agent-kit";
 
 import { z } from "zod";
-import { getSandbox } from "./utils";
+import { getLastMessageContent, getSandbox } from "./utils";
 
 import {
   terminalAgentToolHandler,
@@ -81,6 +81,24 @@ export const invokeCodeAgent = inngest.createFunction(
             readFilesAgentToolHandler({ files, step, sandboxId }),
         }),
       ],
+      lifecycle: {
+        onResponse: async ({ result, network }) => {
+          const lastAssistantMessage = await getLastMessageContent(result);
+
+          /**
+           * Extract and parse the last assistant message;
+           * If the result includes the task_summary tag, store it in the network summary;
+           * Otherwise return the result and let the lifecycle of the function continue.
+           */
+          if (lastAssistantMessage && network) {
+            if (lastAssistantMessage.includes("<task_summary>")) {
+              network.state.data.summary = lastAssistantMessage;
+            }
+          }
+
+          return result;
+        },
+      },
     });
 
     const { output } = await codeAgent.run(event.data.input);
