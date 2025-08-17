@@ -14,9 +14,8 @@ import {
   Tooltip,
 } from "@usefui/components";
 import { Icon, PixelIcon } from "@usefui/icons";
-import { Spinner } from "@/components";
 
-const PromptWrapper = styled.form`
+const PromptWrapper = styled.div`
   border: var(--measurement-small-30) solid var(--font-color-alpha-10);
 
   border-radius: var(--measurement-medium-60);
@@ -32,6 +31,8 @@ const PromptWrapper = styled.form`
 `;
 
 function PromptField() {
+  const [value, setValue] = React.useState<string>("");
+
   const trpc = useTRPC();
   const invoke = useMutation(
     trpc.invoke.mutationOptions({
@@ -39,12 +40,6 @@ function PromptField() {
       onError: () => console.error("Background job error"),
     }),
   );
-  // const { data } = useQuery(
-  //   trpc.create.queryOptions({ text: "Runp TRPC Client" }),
-  // );
-
-  // if (!data) return <Spinner />;
-  // console.log(data.greeting);
 
   return (
     <PromptWrapper className="p-medium-60 w-100">
@@ -55,9 +50,12 @@ function PromptField() {
           className="w-100"
           sizing="large"
           variant="ghost"
+          value={value}
+          onChange={(event) => setValue(event.target.value)}
           style={{ paddingBottom: 48, width: "100%" }}
         />
       </Field.Root>
+
       <div className="flex align-center justify-between">
         <div className="flex align-center g-medium-60">
           <Tooltip content="Attach file">
@@ -121,8 +119,9 @@ function PromptField() {
           <Button
             variant="primary"
             sizing="small"
-            onClick={() => invoke.mutate({ text: "runp-test-trigger" })}
+            onClick={() => invoke.mutate({ value })}
             disabled={invoke.isPending}
+            type="button"
           >
             <span className="p-y-small-30">
               <Icon>

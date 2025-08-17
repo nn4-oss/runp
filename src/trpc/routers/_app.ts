@@ -1,36 +1,23 @@
 import { z } from "zod";
 import { baseProcedure, createTRPCRouter } from "../init";
-import { text } from "stream/consumers";
 import { inngest } from "@/inngest/client";
 
 export const appRouter = createTRPCRouter({
   invoke: baseProcedure
     .input(
       z.object({
-        text: z.string(),
+        value: z.string(),
       }),
     )
     .mutation(async ({ input }) => {
       await inngest.send({
-        name: "test/hello.world",
+        name: "code-agent/invoke",
         data: {
-          email: input.text,
+          input: input.value,
         },
       });
 
       return { ok: true };
-    }),
-
-  create: baseProcedure
-    .input(
-      z.object({
-        text: z.string(),
-      }),
-    )
-    .query((opts) => {
-      return {
-        greeting: opts.input.text,
-      };
     }),
 });
 
