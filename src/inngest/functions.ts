@@ -14,6 +14,7 @@ import {
 
 import { SYSTEM_PROMPT } from "./config/system.-prompt";
 import { SANDBOX_NAME, SANDBOX_PORT } from "./config/sandbox-variables";
+import { CODE_AGENT_PARAMETERS } from "./config/parameters";
 
 export const invokeCodeAgent = inngest.createFunction(
   { id: "runp-code-agent-invoke-function" },
@@ -37,9 +38,11 @@ export const invokeCodeAgent = inngest.createFunction(
 
     const codeAgent = createAgent({
       name: "code-agent",
+      description: "An expert coding agent",
       system: SYSTEM_PROMPT,
       model: openai({
-        model: "gpt-4o",
+        model: "gpt-4.1",
+        defaultParameters: CODE_AGENT_PARAMETERS,
         // apiKey,
       }),
       tools: [
