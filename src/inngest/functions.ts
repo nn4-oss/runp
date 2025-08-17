@@ -2,9 +2,12 @@ import { Sandbox } from "@e2b/code-interpreter";
 
 import { inngest } from "./client";
 import { getSandbox } from "./utils";
+
+import { createNetwork } from "@inngest/agent-kit";
 import { createCodeAgent } from "./agents";
 
 import { SANDBOX_NAME, SANDBOX_PORT } from "./config/sandbox-variables";
+import { MAX_ITERATION } from "./config/parameters";
 
 export const invokeCodeAgent = inngest.createFunction(
   { id: "runp-code-agent-invoke-function" },
@@ -21,12 +24,25 @@ export const invokeCodeAgent = inngest.createFunction(
     // const userId = (event.data as { userId: string } | undefined)?.userId;
     // const apiKey = await db.userSecrets.getOpenAIKey(userId); // decrypt in-memory
 
-    /* Invoke and run the code-agent using user's utterance */
+    /* Invoke the code-agent */
     const codeAgent = createCodeAgent(sandboxId); // ,apiKey);
-    const { output } = await codeAgent.run(event.data.input);
 
-    /* Kill the agent if the output can't be generated */
-    if (!output) return { success: false };
+    /* Setup and add codeAgent to the inngest network */
+    const network = createNetwork({
+      name: "runp-code-agent",
+      agents: [codeAgent],
+      maxIter: MAX_ITERATION, // Limit how many loops the agent can perform
+      router: async ({ network }) => {
+        const summary = network.state.data.summary;
+
+        /** Kill the loop if a summary had been generated, call the agent otherwise */
+        if (summary) return;
+        return codeAgent;
+      },
+    });
+
+    /* Run the code-agent using user's utterance */
+    const result = await network.run(event.data.input);
 
     /* Prepare the Sandbox Environment URL that will run the code-agent output */
     const sandboxUrl = await step.run("get-sandbox-url", async () => {
@@ -36,6 +52,11 @@ export const invokeCodeAgent = inngest.createFunction(
       return `https://${host}`;
     });
 
-    return { success: true, output, sandboxUrl };
+    return {
+      url: sandboxUrl,
+      title: "Fragment",
+      files: result.state.data.files,
+      summary: result.state.data.summary,
+    };
   },
 );
