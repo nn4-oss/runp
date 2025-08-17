@@ -1,9 +1,9 @@
 import { serve } from "inngest/next";
 
 import { inngest } from "@/inngest/client";
-import { runjobs } from "@/inngest/functions";
+import { invokeCodeAgent } from "@/inngest/functions";
 
 export const { GET, POST, PUT } = serve({
   client: inngest,
-  functions: [runjobs],
+  functions: [invokeCodeAgent],
 });
