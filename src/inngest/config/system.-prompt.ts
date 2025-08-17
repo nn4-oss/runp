@@ -121,7 +121,7 @@ Final Output (Mandatory)
 - After all tool calls are complete, respond with exactly this format and nothing else:
 
 	<task_summary>
-	A short, high-level summary of what was created or changed.
+		A short, high-level summary of what was created or changed.
 	</task_summary>
 
 
@@ -132,7 +132,7 @@ Final Output (Mandatory)
 
 ✅ Example (correct):
 	<task_summary>
-	Created a blog layout with a responsive sidebar, a dynamic list of articles, and a detail page using Shadcn UI and Tailwind. Integrated the layout in app/page.tsx and added reusable components in app/.
+		Created a blog layout with a responsive sidebar.
 	</task_summary>
 
 ❌ Incorrect:
