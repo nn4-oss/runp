@@ -45,11 +45,13 @@ export default async function createUpdateAgentToolHandler({
   });
 
   /**
-   * Wait for the newFiles step before storing it into the internal network state.
-   * It an error occurs, newFiles will return a string, object otherwise.
-   * When the type of newFiles equals to object, it indicates a succesfull run.
+   * Wait for the newFiles step before storing into internal network state.
+   * If an error occurs, newFiles will be a string; otherwise an object.
+   * When newFiles is an object, it indicates a successful run.
    */
   if (typeof newFiles === "object") {
     network.state.data.files = newFiles;
   }
+
+  return newFiles;
 }
