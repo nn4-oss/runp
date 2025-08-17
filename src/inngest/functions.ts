@@ -9,14 +9,17 @@ export const invokeCodeAgent = inngest.createFunction(
   { event: "code-agent/invoke" },
 
   async ({ event }) => {
+    /** [TODO]: Decrypt and pass the user's oai key */
+
+    // const userId = (event.data as { userId: string } | undefined)?.userId;
+    // const apiKey = await db.userSecrets.getOpenAIKey(userId); // decrypt in-memory
+
     const codeAgent = createAgent({
       name: "code-agent",
       system: sysprompt,
       model: openai({
         model: "gpt-4o",
-
-        /** [TODO]: Pass the user's API key */
-        // apiKey: 'test-api-key'
+        // apiKey,
       }),
     });
 
