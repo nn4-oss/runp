@@ -3,16 +3,27 @@
 import React, { useEffect, useRef, useMemo } from "react";
 import styled from "styled-components";
 
-type PositionsProps = {
+interface Position {
   absX: number;
   absY: number;
   char: string;
-};
+}
 
-const cols = 64;
-const n = 2048;
-const rows = Math.ceil(n / cols);
-const ms = 1000;
+interface CellState {
+  nextChange: number;
+  isVisible: boolean;
+  opacity: number;
+}
+
+const COLS = 24;
+const CELLS = 256;
+const ROWS = Math.ceil(CELLS / COLS);
+
+const INITIAL_VISIBILITY_CHANCE = 0.01;
+const OPACITY_TRANSITION_SPEED = 0.05;
+
+const MIN_CHANGE_DELAY = 1618;
+const MAX_CHANGE_DELAY = 1618 * 2;
 
 const Wrapper = styled.div`
   width: 100%;
@@ -26,7 +37,6 @@ const Wrapper = styled.div`
   overflow: hidden;
   z-index: -1;
 `;
-
 const Container = styled.div<{ cols: number }>`
   display: grid;
   justify-content: center;
@@ -37,7 +47,6 @@ const Container = styled.div<{ cols: number }>`
   width: 100%;
   height: 100%;
 `;
-
 const Cell = styled.div`
   will-change: opacity;
   user-select: none;
@@ -51,56 +60,67 @@ const Cell = styled.div`
 
 function AnimatedHero({ chars }: { chars: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const totalCells = COLS * ROWS;
 
-  // Precompute static positions + random factor for each cell
-  const positions = useMemo(() => {
-    return Array.from({ length: n }, (_, i) => {
-      const x = ((i + 1) % cols) / cols - Math.PI / 10;
-      const y = (rows - Math.floor(i / cols)) / rows - Math.PI / 10;
+  const positions = useMemo((): Position[] => {
+    return Array.from({ length: totalCells }, (_, i) => {
+      const x = ((i + 1) % COLS) / COLS - Math.PI / 10;
+      const y = (ROWS - Math.floor(i / COLS)) / ROWS - Math.PI / 10;
 
-      const absX = Math.abs(x);
-      const absY = Math.abs(y);
-
-      // Random factor between 0.85 and 1.15 for subtle variation
-      const rand = 0.85 + Math.random() * 0.3;
-
-      return { absX, absY, char: chars[i % chars.length], rand };
+      return {
+        absX: Math.abs(x),
+        absY: Math.abs(y),
+        char: chars[i % chars.length] || "0",
+      };
     });
-  }, [chars]) as PositionsProps[];
+  }, [chars, COLS, ROWS, totalCells]);
 
   useEffect(() => {
     const cells = containerRef.current?.children;
     if (!cells) return;
 
-    const start = performance.now();
+    let animationId: number;
 
-    const animate = (time: number) => {
-      const t = ((time - start) % (ms * 2)) / ms; // normalized time
-      const phaseShift = t < 1 ? t : 2 - t; // alternate-reverse effect
+    const startTime = performance.now();
+    const cellStates: CellState[] = positions.map(() => ({
+      nextChange: Math.random() * (Math.PI * 1e4),
+      isVisible: Math.random() < INITIAL_VISIBILITY_CHANCE,
+      opacity: 0.05,
+    }));
 
-      for (let i = 0; i < n; i++) {
-        const currentPosition = positions[i];
-        const absX = Number(currentPosition?.absX);
-        const absY = Number(currentPosition?.absY);
+    const animate = (currentTime: number) => {
+      const elapsed = currentTime - startTime;
 
-        const phaseLoop = Math.sin(absY * (Math.PI * 6));
-        const animationPhase = (absX / phaseLoop) * 8 - phaseShift;
+      cellStates.forEach((state, index) => {
+        if (elapsed > state.nextChange) {
+          state.isVisible = !state.isVisible;
+          state.nextChange =
+            elapsed +
+            MIN_CHANGE_DELAY +
+            Math.random() * (MAX_CHANGE_DELAY - MIN_CHANGE_DELAY);
+        }
 
-        const lightness = Math.sin(animationPhase) * 8;
-        const alpha = Math.max(lightness / 100, 0.01);
+        const targetOpacity = state.isVisible ? 0.1618 : 0.03;
 
-        (cells[i] as HTMLElement).style.opacity = alpha.toString();
-      }
+        state.opacity +=
+          (targetOpacity - state.opacity) * OPACITY_TRANSITION_SPEED;
 
-      requestAnimationFrame(animate);
+        const cellElement = cells[index] as HTMLElement;
+        cellElement.style.opacity = state.opacity.toString();
+      });
+
+      animationId = requestAnimationFrame(animate);
     };
 
-    requestAnimationFrame(animate);
+    animationId = requestAnimationFrame(animate);
+    return () => {
+      if (animationId) cancelAnimationFrame(animationId);
+    };
   }, [positions]);
 
   return (
     <Wrapper>
-      <Container ref={containerRef} cols={cols}>
+      <Container ref={containerRef} cols={COLS}>
         {positions.map((p, i) => (
           <Cell key={i}>
             <span>{p.char}</span>
