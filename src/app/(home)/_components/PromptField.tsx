@@ -45,6 +45,7 @@ function PromptField() {
     <PromptWrapper className="p-medium-60 w-100">
       <Field.Root>
         <Field
+          autoComplete="off"
           name="prompt-field"
           placeholder="Ask Runp to build..."
           className="w-100"
