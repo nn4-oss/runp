@@ -1,16 +1,22 @@
 "use client";
 
+import styled from "styled-components";
+
 import { Page, Button, Tooltip } from "@usefui/components";
 import { Icon, PixelIcon, SocialIcon } from "@usefui/icons";
 
 import { ColorModes } from "../";
 
+const FixedNav = styled(Page.Menu)`
+  border: none;
+  background: transparent;
+  position: fixed;
+  z-index: var(--depth-default-90);
+`;
+
 function Navigation() {
   return (
-    <Page.Menu
-      className="w-100 flex g-medium-60 align-center justify-between"
-      style={{ border: "none", background: "transparent", position: "fixed" }}
-    >
+    <FixedNav className="w-100 flex g-medium-60 align-center justify-between">
       <Icon width={24} height={24}>
         <PixelIcon.HumanRun />
       </Icon>
@@ -54,7 +60,7 @@ function Navigation() {
         <span className="opacity-default-10">|</span>
         <ColorModes />
       </div>
-    </Page.Menu>
+    </FixedNav>
   );
 }
 
