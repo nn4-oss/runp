@@ -22,9 +22,7 @@ const PromptWrapper = styled.div`
   max-width: var(--breakpoint-tablet);
   margin: var(--measurement-large-10) auto;
 
-  background:
-    radial-gradient(ellipse at top right, var(--body-color), transparent),
-    radial-gradient(ellipse at bottom left, var(--contrast-color), transparent);
+  background: var(--contrast-color);
 
   box-shadow: 0 var(--measurement-medium-30) var(--measurement-medium-60)
     calc(var(--measurement-medium-30) * -1) var(--contrast-color);
