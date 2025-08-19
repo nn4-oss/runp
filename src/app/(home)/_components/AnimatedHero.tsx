@@ -4,26 +4,48 @@ import React, { useEffect, useRef, useMemo } from "react";
 import styled from "styled-components";
 
 interface Position {
-  absX: number;
-  absY: number;
-  char: string;
+  absX: number; // Absolute X coordinate (normalized 0-1, offset by π/10)
+  absY: number; // Absolute Y coordinate (normalized 0-1, offset by π/10)
+  char: string; // Character to display in this cell
 }
 
+/**
+ * Tracks the animation state of each individual cell
+ */
 interface CellState {
-  nextChange: number;
-  isVisible: boolean;
-  opacity: number;
+  nextChange: number; // Timestamp when cell should next toggle visibility
+  isVisible: boolean; // Current visibility state
+  opacity: number; // Current opacity value (smoothly interpolated)
 }
 
+/**
+ * Grid Layout Configuration
+ * - COLS: Fixed number of columns (24 provides good density)
+ * - CELLS: Total number of grid cells (512 creates rich pattern)
+ * - ROWS: Calculated rows needed to fit all cells
+ */
 const COLS = 24;
 const CELLS = 256;
 const ROWS = Math.ceil(CELLS / COLS);
 
+/**
+ * Visibility Constraint
+ * Only 1/5 (20%) of cells can be visible simultaneously.
+ * This creates a sparse, controlled visual density.
+ */
+const MAX_VISIBLE_CELLS = Math.floor(CELLS * (1 / 5)); // ~102 cells max visible
+
+/**
+ * Animation Timing Constants
+ * - INITIAL_VISIBILITY_CHANCE: Probability each cell starts visible (1%)
+ * - OPACITY_TRANSITION_SPEED: How quickly opacity changes (0.05 = smooth)
+ * - MIN/MAX_CHANGE_DELAY: Random delay range between visibility toggles
+ *   Using golden ratio (1618ms) for aesthetically pleasing timing
+ */
 const INITIAL_VISIBILITY_CHANCE = 0.01;
 const OPACITY_TRANSITION_SPEED = 0.05;
-
-const MIN_CHANGE_DELAY = 1618;
-const MAX_CHANGE_DELAY = 1618 * 2;
+const MIN_CHANGE_DELAY = 1618; // Golden ratio in milliseconds
+const MAX_CHANGE_DELAY = 1618 * 2; // Double golden ratio
 
 const Wrapper = styled.div`
   width: 100%;
@@ -35,22 +57,23 @@ const Wrapper = styled.div`
   margin: 0 auto;
 
   overflow: hidden;
-  z-index: -1;
+  z-index: -1; /* Behind all content */
 `;
+
 const Container = styled.div<{ cols: number }>`
   display: grid;
   justify-content: center;
   align-items: center;
   grid-template-columns: repeat(${(props) => props.cols}, 1fr);
   gap: var(--measurement-large-10);
-
   width: 100%;
   height: 100%;
 `;
+
 const Cell = styled.div`
-  will-change: opacity;
-  user-select: none;
-  pointer-events: none;
+  will-change: opacity; /* Browser optimization hint */
+  user-select: none; /* Prevent text selection */
+  pointer-events: none; /* Prevent mouse interaction */
 
   span {
     font-size: var(--fontsize-small-10);
@@ -58,66 +81,172 @@ const Cell = styled.div`
   }
 `;
 
+/**
+ * AnimatedHero Component
+ *
+ * @param chars - String of characters to cycle through in the grid
+ *                Each cell displays chars[cellIndex % chars.length]
+ */
 function AnimatedHero({ chars }: { chars: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const totalCells = COLS * ROWS;
 
+  /**
+   * POSITION CALCULATION
+   *
+   * Pre-calculates position data for all grid cells.
+   * Uses mathematical offset (π/10) to create slight irregularity
+   * in what would otherwise be a perfectly uniform grid.
+   */
   const positions = useMemo((): Position[] => {
     return Array.from({ length: totalCells }, (_, i) => {
-      const x = ((i + 1) % COLS) / COLS - Math.PI / 10;
-      const y = (ROWS - Math.floor(i / COLS)) / ROWS - Math.PI / 10;
+      // Calculate grid coordinates
+      const x = ((i + 1) % COLS) / COLS - Math.PI / 10; // 0-1 range with π offset
+      const y = (ROWS - Math.floor(i / COLS)) / ROWS - Math.PI / 10; // Inverted Y
 
       return {
-        absX: Math.abs(x),
+        absX: Math.abs(x), // Remove negative values
         absY: Math.abs(y),
-        char: chars[i % chars.length] || "0",
+        char: chars[i % chars.length] || "0", // Cycle through chars, fallback to "0"
       };
     });
-  }, [chars, COLS, ROWS, totalCells]);
+  }, [chars, totalCells]);
 
+  /**
+   * ANIMATION EFFECT
+   *
+   * Manages the core animation loop and visibility constraint algorithm.
+   */
   useEffect(() => {
     const cells = containerRef.current?.children;
-    if (!cells) return;
+    if (!cells) return; // Exit if DOM elements not ready
 
     let animationId: number;
+    const startTime = performance.now(); // High-precision timestamp
 
-    const startTime = performance.now();
+    // INITIALIZATION: Set up random initial state for all cells
     const cellStates: CellState[] = positions.map(() => ({
-      nextChange: Math.random() * (Math.PI * 1e4),
-      isVisible: Math.random() < INITIAL_VISIBILITY_CHANCE,
-      opacity: 0.05,
+      nextChange: Math.random() * (Math.PI * 1e4), // Random initial delay
+      isVisible: Math.random() < INITIAL_VISIBILITY_CHANCE, // 1% chance visible
+      opacity: 0.05, // Start with minimal opacity
     }));
 
+    // CONSTRAINT ENFORCEMENT: Ensure initial state respects visibility limit
+    const initialVisibleCount = cellStates.filter((s) => s.isVisible).length;
+
+    if (initialVisibleCount > MAX_VISIBLE_CELLS) {
+      // Get indices of all currently visible cells
+      const visibleIndices = cellStates
+        .map((s, i) => (s.isVisible ? i : -1))
+        .filter((i) => i !== -1);
+
+      // Calculate how many cells we need to turn off
+      const excessCount = initialVisibleCount - MAX_VISIBLE_CELLS;
+
+      // Randomly select and turn off excess visible cells
+      for (let i = 0; i < excessCount && visibleIndices.length > 0; i++) {
+        const randomIndex = Math.floor(Math.random() * visibleIndices.length);
+        const cellIndex = visibleIndices.splice(randomIndex, 1)[0];
+
+        // Safety check before array access
+        if (cellIndex !== undefined && cellStates[cellIndex]) {
+          cellStates[cellIndex].isVisible = false;
+        }
+      }
+    }
+
+    // ANIMATION LOOP: Core visibility and opacity management
     const animate = (currentTime: number) => {
       const elapsed = currentTime - startTime;
 
+      // Process each cell's state
       cellStates.forEach((state, index) => {
+        // Check if it's time for this cell to change visibility
         if (elapsed > state.nextChange) {
-          state.isVisible = !state.isVisible;
+          const currentVisibleCount = cellStates.filter(
+            (s) => s.isVisible,
+          ).length;
+
+          if (!state.isVisible) {
+            // CASE 1: Cell wants to become visible
+
+            if (currentVisibleCount < MAX_VISIBLE_CELLS) {
+              // Space available - simply turn on
+              state.isVisible = true;
+            } else {
+              // AT CAPACITY - need to replace a visible cell
+
+              // Find all visible cells (excluding current cell)
+              const visibleIndices = cellStates
+                .map((s, i) => (s.isVisible ? i : -1))
+                .filter((i) => i !== -1 && i !== index);
+
+              if (visibleIndices.length > 0) {
+                // Randomly select a visible cell to turn off
+                const randomVisibleIndex =
+                  visibleIndices[
+                    Math.floor(Math.random() * visibleIndices.length)
+                  ];
+
+                // Safety check and replacement logic
+                if (
+                  randomVisibleIndex !== undefined &&
+                  cellStates[randomVisibleIndex]
+                ) {
+                  // Turn off the selected visible cell
+                  cellStates[randomVisibleIndex].isVisible = false;
+                  cellStates[randomVisibleIndex].nextChange =
+                    elapsed +
+                    MIN_CHANGE_DELAY +
+                    Math.random() * (MAX_CHANGE_DELAY - MIN_CHANGE_DELAY);
+
+                  // Turn on the current cell
+                  state.isVisible = true;
+                }
+              }
+            }
+          } else {
+            // CASE 2: Cell wants to become invisible
+            // Always allowed - helps maintain visual dynamism
+            state.isVisible = false;
+          }
+
+          // Schedule next change with random delay
           state.nextChange =
             elapsed +
             MIN_CHANGE_DELAY +
             Math.random() * (MAX_CHANGE_DELAY - MIN_CHANGE_DELAY);
         }
 
+        // OPACITY ANIMATION: Smooth transitions between visible/invisible
+
+        // Set target opacity based on visibility state
+        // 0.1618 ≈ golden ratio conjugate for visible cells
         const targetOpacity = state.isVisible ? 0.1618 : 0.03;
 
+        // Smoothly interpolate current opacity toward target
         state.opacity +=
           (targetOpacity - state.opacity) * OPACITY_TRANSITION_SPEED;
 
+        // Apply opacity to actual DOM element
         const cellElement = cells[index] as HTMLElement;
         cellElement.style.opacity = state.opacity.toString();
       });
 
+      // Schedule next animation frame
       animationId = requestAnimationFrame(animate);
     };
 
+    // Start the animation loop
     animationId = requestAnimationFrame(animate);
+
+    // Cleanup: Cancel animation when component unmounts
     return () => {
       if (animationId) cancelAnimationFrame(animationId);
     };
-  }, [positions]);
+  }, [positions]); // Re-run if positions change (when chars prop changes)
 
+  // RENDER: Generate grid structure with character cells
   return (
     <Wrapper>
       <Container ref={containerRef} cols={COLS}>

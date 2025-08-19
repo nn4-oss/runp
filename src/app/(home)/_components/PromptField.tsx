@@ -3,7 +3,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueries, useQuery } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
 
 import {
@@ -14,6 +14,8 @@ import {
   Tooltip,
 } from "@usefui/components";
 import { Icon, PixelIcon } from "@usefui/icons";
+import { toast } from "sonner";
+import type z from "zod";
 
 const PromptWrapper = styled.div`
   border: var(--measurement-small-30) solid var(--font-color-alpha-10);
@@ -22,9 +24,7 @@ const PromptWrapper = styled.div`
   max-width: var(--breakpoint-tablet);
   margin: var(--measurement-large-10) auto;
 
-  background:
-    radial-gradient(ellipse at top right, var(--body-color), transparent),
-    radial-gradient(ellipse at bottom left, var(--contrast-color), transparent);
+  background: var(--contrast-color);
 
   box-shadow: 0 var(--measurement-medium-30) var(--measurement-medium-60)
     calc(var(--measurement-medium-30) * -1) var(--contrast-color);
@@ -34,10 +34,11 @@ function PromptField() {
   const [value, setValue] = React.useState<string>("");
 
   const trpc = useTRPC();
-  const invoke = useMutation(
-    trpc.invoke.mutationOptions({
-      onSuccess: () => console.log("Background job started"),
-      onError: () => console.error("Background job error"),
+
+  const { data: messages } = useQuery(trpc.messages.getMany.queryOptions());
+  const message = useMutation(
+    trpc.messages.create.mutationOptions({
+      onSuccess: () => toast("Generation stated.."),
     }),
   );
 
@@ -120,8 +121,8 @@ function PromptField() {
           <Button
             variant="primary"
             sizing="small"
-            onClick={() => invoke.mutate({ value })}
-            disabled={invoke.isPending}
+            onClick={() => message.mutate({ value })}
+            disabled={message.isPending}
             type="button"
           >
             <span className="p-y-small-30">
@@ -132,6 +133,8 @@ function PromptField() {
           </Button>
         </div>
       </div>
+
+      {JSON.stringify(messages)}
     </PromptWrapper>
   );
 }

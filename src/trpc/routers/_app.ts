@@ -1,24 +1,9 @@
-import { z } from "zod";
-import { baseProcedure, createTRPCRouter } from "../init";
-import { inngest } from "@/inngest/client";
+import { createTRPCRouter } from "../init";
+import { messagesRouter } from "../data";
 
 export const appRouter = createTRPCRouter({
-  invoke: baseProcedure
-    .input(
-      z.object({
-        value: z.string(),
-      }),
-    )
-    .mutation(async ({ input }) => {
-      await inngest.send({
-        name: "code-agent/invoke",
-        data: {
-          input: input.value,
-        },
-      });
-
-      return { ok: true };
-    }),
+  messages: messagesRouter,
+  // fragments: fragmentsRouter
 });
 
 export type AppRouter = typeof appRouter;

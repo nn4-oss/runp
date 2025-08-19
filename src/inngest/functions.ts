@@ -1,3 +1,5 @@
+import prisma from "@/lib/prisma";
+
 import { Sandbox } from "@e2b/code-interpreter";
 
 import { inngest } from "./client";
@@ -8,6 +10,8 @@ import { createCodeAgent } from "./agents";
 
 import { SANDBOX_NAME, SANDBOX_PORT } from "./config/sandbox-variables";
 import { MAX_ITERATION } from "./config/parameters";
+
+import type { AgentState } from "./types";
 
 export const invokeCodeAgent = inngest.createFunction(
   { id: "runp-code-agent-invoke-function" },
@@ -28,7 +32,7 @@ export const invokeCodeAgent = inngest.createFunction(
     const codeAgent = createCodeAgent(sandboxId); // ,apiKey);
 
     /* Setup and add codeAgent to the inngest network */
-    const network = createNetwork({
+    const network = createNetwork<AgentState>({
       name: "runp-code-agent",
       agents: [codeAgent],
       maxIter: MAX_ITERATION, // Limit how many loops the agent can perform
@@ -50,6 +54,40 @@ export const invokeCodeAgent = inngest.createFunction(
       const host = sandbox.getHost(SANDBOX_PORT);
 
       return `https://${host}`;
+    });
+
+    const hasNoSummary = !result.state.data.summary;
+    const hasNoFile = Object.keys(result.state.data.files || {}).length === 0;
+    const isError = hasNoSummary || hasNoFile;
+
+    /** Save Result in DB when the agent job is completed */
+    await step.run("save-result", async () => {
+      /** Save as error if no summary/files are defined */
+      if (isError) {
+        return await prisma.message.create({
+          data: {
+            content: "Something went wrong, please try again.",
+            role: "ASSISTANT",
+            type: "ERROR",
+          },
+        });
+      }
+
+      /** Save user's utterance as is */
+      return await prisma.message.create({
+        data: {
+          content: result.state.data.summary,
+          role: "ASSISTANT",
+          type: "RESULT",
+          fragment: {
+            create: {
+              sandboxUrl: sandboxUrl,
+              title: "Fragment",
+              files: result.state.data.files,
+            },
+          },
+        },
+      });
     });
 
     return {

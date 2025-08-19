@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { openai, createAgent, createTool } from "@inngest/agent-kit";
+import { openai, createAgent, createTool, type Tool } from "@inngest/agent-kit";
 
 import { agentLifecycle } from "./";
 import {
@@ -11,8 +11,10 @@ import {
 import { SYSTEM_PROMPT } from "../config/system.-prompt";
 import { CODE_AGENT_PARAMETERS } from "../config/parameters";
 
+import type { AgentState } from "../types";
+
 export default function createCodeAgent(sandboxId: string, apiKey?: string) {
-  return createAgent({
+  return createAgent<AgentState>({
     name: "code-agent",
     description: "An expert coding agent",
     system: SYSTEM_PROMPT,
@@ -32,7 +34,7 @@ export default function createCodeAgent(sandboxId: string, apiKey?: string) {
           command: z.string(),
         }),
 
-        handler: async ({ command }, { step }) =>
+        handler: async ({ command }, { step }: Tool.Options<AgentState>) =>
           terminalAgentToolHandler({ command, step, sandboxId }),
       }),
       createTool({
@@ -47,8 +49,10 @@ export default function createCodeAgent(sandboxId: string, apiKey?: string) {
           ),
         }),
 
-        handler: async ({ files }, { step, network }) =>
-          createUpdateAgentToolHandler({ files, step, network, sandboxId }),
+        handler: async (
+          { files },
+          { step, network }: Tool.Options<AgentState>,
+        ) => createUpdateAgentToolHandler({ files, step, network, sandboxId }),
       }),
       createTool({
         name: "readFiles",
@@ -56,7 +60,7 @@ export default function createCodeAgent(sandboxId: string, apiKey?: string) {
         parameters: z.object({
           files: z.array(z.string()),
         }),
-        handler: async ({ files }, { step }) =>
+        handler: async ({ files }, { step }: Tool.Options<AgentState>) =>
           readFilesAgentToolHandler({ files, step, sandboxId }),
       }),
     ],

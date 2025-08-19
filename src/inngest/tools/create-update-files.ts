@@ -1,5 +1,7 @@
 import { getSandbox } from "../utils";
-import type { NetworkRun, StateData } from "@inngest/agent-kit";
+
+import type { AgentState } from "../types";
+import type { NetworkRun } from "@inngest/agent-kit";
 
 /**
  * Get the updated list of files array;
@@ -21,7 +23,7 @@ export default async function createUpdateAgentToolHandler({
 }: {
   files: Files;
   step: any;
-  network: NetworkRun<StateData>;
+  network: NetworkRun<AgentState>;
   sandboxId: string;
 }) {
   const newFiles = await step?.run("createOrUpdateFiles", async () => {
