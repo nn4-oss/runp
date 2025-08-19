@@ -67,7 +67,7 @@ export const invokeCodeAgent = inngest.createFunction(
         return await prisma.message.create({
           data: {
             content: "Something went wrong, please try again.",
-            role: "ASSISNTANT",
+            role: "ASSISTANT",
             type: "ERROR",
           },
         });
@@ -77,7 +77,7 @@ export const invokeCodeAgent = inngest.createFunction(
       return await prisma.message.create({
         data: {
           content: result.state.data.summary,
-          role: "ASSISNTANT",
+          role: "ASSISTANT",
           type: "RESULT",
           fragment: {
             create: {

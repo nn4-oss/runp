@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "public"."MessageRole" AS ENUM ('USER', 'ASSISNTANT');
+CREATE TYPE "public"."MessageRole" AS ENUM ('USER', 'ASSISTANT');
 
 -- CreateEnum
 CREATE TYPE "public"."MessageType" AS ENUM ('RESULT', 'ERROR');
