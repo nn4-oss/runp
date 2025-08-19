@@ -1,9 +1,11 @@
 import { getLastMessageContent } from "../utils";
-import type { AgentResult, NetworkRun, StateData } from "@inngest/agent-kit";
+
+import type { AgentState } from "../types";
+import type { AgentResult, NetworkRun } from "@inngest/agent-kit";
 
 type AgentLifeCycle = {
   result: AgentResult;
-  network: NetworkRun<StateData> | undefined;
+  network: NetworkRun<AgentState> | undefined;
 };
 
 export default async function agentLifecycle({
