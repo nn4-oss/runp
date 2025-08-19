@@ -1,3 +1,5 @@
+import prisma from "@/lib/prisma";
+
 import { Sandbox } from "@e2b/code-interpreter";
 
 import { inngest } from "./client";
@@ -50,6 +52,24 @@ export const invokeCodeAgent = inngest.createFunction(
       const host = sandbox.getHost(SANDBOX_PORT);
 
       return `https://${host}`;
+    });
+
+    /** Save Result in DB when the agent job is completed */
+    await step.run("save-result", async () => {
+      return await prisma.message.create({
+        data: {
+          content: result.state.data.summary,
+          role: "ASSISNTANT",
+          type: "RESULT",
+          fragment: {
+            create: {
+              sandboxUrl: sandboxUrl,
+              title: "Fragment",
+              files: result.state.data.files,
+            },
+          },
+        },
+      });
     });
 
     return {
