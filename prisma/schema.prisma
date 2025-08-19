@@ -10,7 +10,7 @@ datasource db {
 
 enum MessageRole {
   USER
-  ASSISNTANT
+  ASSISTANT
 }
 
 enum MessageType {
