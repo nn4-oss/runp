@@ -3,6 +3,7 @@
 import React from "react";
 import styled from "styled-components";
 
+import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
 
@@ -36,6 +37,11 @@ const PromptContainer = styled.div`
 
 const PREDEFINED_PROMPTS = [
   {
+    label: "Landing Page",
+    content:
+      "Build a simple landing page with UX friendly interactions and advanced, mordern UI",
+  },
+  {
     label: "Kanban Board",
     content: "Build an animated Kanban Board using motion React dnd",
   },
@@ -54,12 +60,15 @@ const PREDEFINED_PROMPTS = [
 ] as const;
 
 function PromptField() {
+  const router = useRouter();
+
   const [value, setValue] = React.useState<string>("");
   const deferredValue = React.useDeferredValue(value);
 
   const trpc = useTRPC();
   const createProject = useMutation(
     trpc.projects.create.mutationOptions({
+      onSuccess: (data) => router.push(`/projects/${data.id}`),
       onError: () => toast.error("An error occurred."),
     }),
   );
