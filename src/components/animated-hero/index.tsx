@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useRef, useMemo } from "react";
-import styled from "styled-components";
+import React from "react";
+import styled, { keyframes } from "styled-components";
 
 interface Position {
   absX: number; // Absolute X coordinate (normalized 0-1, offset by π/10)
@@ -30,10 +30,9 @@ const ROWS = Math.ceil(CELLS / COLS);
 
 /**
  * Visibility Constraint
- * Only 1/5 (20%) of cells can be visible simultaneously.
  * This creates a sparse, controlled visual density.
  */
-const MAX_VISIBLE_CELLS = Math.floor(CELLS * (1 / 5)); // ~102 cells max visible
+const MAX_VISIBLE_CELLS = Math.floor(CELLS * (1 / 3));
 
 /**
  * Animation Timing Constants
@@ -44,8 +43,9 @@ const MAX_VISIBLE_CELLS = Math.floor(CELLS * (1 / 5)); // ~102 cells max visible
  */
 const INITIAL_VISIBILITY_CHANCE = 0.01;
 const OPACITY_TRANSITION_SPEED = 0.05;
+const MIN_OPACITY = 0.05;
 const MIN_CHANGE_DELAY = 1618; // Golden ratio in milliseconds
-const MAX_CHANGE_DELAY = 1618 * 2; // Double golden ratio
+const MAX_CHANGE_DELAY = 1618 * 4;
 
 const Wrapper = styled.div`
   width: 100%;
@@ -70,10 +70,22 @@ const Container = styled.div<{ cols: number }>`
   height: 100%;
 `;
 
+const fadeIn = keyframes`
+  from {
+    opacity: 0; /* Default opacity to 0 prevents ui glitches on page load */
+  }
+  to {
+    opacity: ${MIN_OPACITY / 2};
+  }
+`;
 const Cell = styled.div`
-  will-change: opacity; /* Browser optimization hint */
   user-select: none; /* Prevent text selection */
   pointer-events: none; /* Prevent mouse interaction */
+  will-change: opacity; /* Browser optimization hint */
+
+  opacity: 0;
+  transition: all 0.2s ease-in-out;
+  animation: ${fadeIn} 1s ease-in-out;
 
   span {
     font-size: var(--fontsize-small-10);
@@ -88,7 +100,7 @@ const Cell = styled.div`
  *                Each cell displays chars[cellIndex % chars.length]
  */
 function AnimatedHero({ chars }: { chars: string }) {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef = React.useRef<HTMLDivElement>(null);
   const totalCells = COLS * ROWS;
 
   /**
@@ -98,7 +110,7 @@ function AnimatedHero({ chars }: { chars: string }) {
    * Uses mathematical offset (π/10) to create slight irregularity
    * in what would otherwise be a perfectly uniform grid.
    */
-  const positions = useMemo((): Position[] => {
+  const positions = React.useMemo((): Position[] => {
     return Array.from({ length: totalCells }, (_, i) => {
       // Calculate grid coordinates
       const x = ((i + 1) % COLS) / COLS - Math.PI / 10; // 0-1 range with π offset
@@ -117,7 +129,7 @@ function AnimatedHero({ chars }: { chars: string }) {
    *
    * Manages the core animation loop and visibility constraint algorithm.
    */
-  useEffect(() => {
+  React.useEffect(() => {
     const cells = containerRef.current?.children;
     if (!cells) return; // Exit if DOM elements not ready
 
@@ -128,7 +140,7 @@ function AnimatedHero({ chars }: { chars: string }) {
     const cellStates: CellState[] = positions.map(() => ({
       nextChange: Math.random() * (Math.PI * 1e4), // Random initial delay
       isVisible: Math.random() < INITIAL_VISIBILITY_CHANCE, // 1% chance visible
-      opacity: 0.05, // Start with minimal opacity
+      opacity: MIN_OPACITY, // Start with minimal opacity
     }));
 
     // CONSTRAINT ENFORCEMENT: Ensure initial state respects visibility limit
