@@ -7,16 +7,14 @@ import { Icon, PixelIcon, SocialIcon } from "@usefui/icons";
 
 import { ColorModes } from "../";
 
-const FixedNav = styled(Page.Menu)`
+const StyledMenu = styled(Page.Menu)`
   border: none;
-  background: transparent;
-  position: fixed;
-  z-index: var(--depth-default-90);
+  background-color: transparent;
 `;
 
 function Navigation() {
   return (
-    <FixedNav className="w-100 flex g-medium-60 align-center justify-between">
+    <StyledMenu className="w-100 flex g-medium-60 p-x-medium-60 align-center justify-between">
       <Icon width={24} height={24}>
         <PixelIcon.HumanRun />
       </Icon>
@@ -60,7 +58,7 @@ function Navigation() {
         <span className="opacity-default-10">|</span>
         <ColorModes />
       </div>
-    </FixedNav>
+    </StyledMenu>
   );
 }
 

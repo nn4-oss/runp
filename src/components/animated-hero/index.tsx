@@ -24,8 +24,8 @@ interface CellState {
  * - CELLS: Total number of grid cells (512 creates rich pattern)
  * - ROWS: Calculated rows needed to fit all cells
  */
-const COLS = 24;
-const CELLS = 256;
+const COLS = 12;
+const CELLS = 128;
 const ROWS = Math.ceil(CELLS / COLS);
 
 /**
@@ -51,13 +51,15 @@ const Wrapper = styled.div`
   width: 100%;
   height: 100%;
 
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   margin: 0 auto;
 
   overflow: hidden;
-  z-index: -1; /* Behind all content */
+  user-select: none;
+  pointer-events: none;
+  z-index: 0;
 `;
 
 const Container = styled.div<{ cols: number }>`
@@ -260,7 +262,7 @@ function AnimatedHero({ chars }: { chars: string }) {
 
   // RENDER: Generate grid structure with character cells
   return (
-    <Wrapper>
+    <Wrapper tabIndex={-1}>
       <Container ref={containerRef} cols={COLS}>
         {positions.map((p, i) => (
           <Cell key={i}>

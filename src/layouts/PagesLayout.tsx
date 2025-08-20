@@ -7,14 +7,8 @@ import { Page } from "@usefui/components";
 import { Navigation } from "@/components";
 
 const AppBody = styled(Page.Content)`
-  background-color: var(--body-color);
-  background-image: url(/vignette.webp);
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center center;
-
-  background-blend-mode: overlay;
-  mix-blend-mode: overlay;
+  background-color: var(--contrast-color);
+  border-radius: var(--measurement-medium-60);
 `;
 
 function PagesLayout({
@@ -24,10 +18,16 @@ function PagesLayout({
 }>) {
   return (
     <Page>
-      <AppBody>
+      <Page.Content className="w-100 h-100">
         <Navigation />
-        <div className="p-medium-60 w-100 h-100">{children}</div>
-      </AppBody>
+
+        <Page.Wrapper
+          $menus={1.1}
+          className="w-100 h-100 p-r-medium-60 p-b-medium-60 p-l-medium-60"
+        >
+          <AppBody className="w-100 h-100 p-medium-60">{children}</AppBody>
+        </Page.Wrapper>
+      </Page.Content>
     </Page>
   );
 }

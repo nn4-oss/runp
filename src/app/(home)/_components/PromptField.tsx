@@ -182,8 +182,6 @@ function PromptField() {
           </ReflectiveButton>
         ))}
       </div>
-
-      {/* <ScrollArea className="h-10">{JSON.stringify(messages)}</ScrollArea> */}
     </PromptContainer>
   );
 }

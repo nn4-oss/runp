@@ -30,7 +30,6 @@ const cssVariables = generateCSSVariables({
   design_tokens: {
     color: [
       ...design_tokens.color,
-
       {
         name: "mono-dark",
         base: { hex: "#171717" },

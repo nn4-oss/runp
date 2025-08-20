@@ -18,13 +18,9 @@ async function Page() {
 
   return (
     <HydrateClient>
-      <section style={{ position: "relative" }} className="w-100 h-100">
-        <div className="h-100 w-100 flex align-center justify-center">
-          <div className="w-100">
-            <LandingHeading />
-            <PromptField />
-          </div>
-        </div>
+      <section className="h-100 w-100 p-y-large-60">
+        <LandingHeading />
+        <PromptField />
       </section>
     </HydrateClient>
   );
