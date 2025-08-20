@@ -3,14 +3,13 @@
 import React from "react";
 import styled from "styled-components";
 
-import { useMutation, useQueries, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
 
 import {
   Button,
   DropdownMenu,
   Field,
-  ScrollArea,
   Switch,
   Tooltip,
 } from "@usefui/components";
@@ -56,13 +55,12 @@ const PREDEFINED_PROMPTS = [
 
 function PromptField() {
   const [value, setValue] = React.useState<string>("");
+  const deferredValue = React.useDeferredValue(value);
 
   const trpc = useTRPC();
-
-  const { data: messages } = useQuery(trpc.messages.getMany.queryOptions());
-  const message = useMutation(
-    trpc.messages.create.mutationOptions({
-      onSuccess: () => toast("Generation stated.."),
+  const createProject = useMutation(
+    trpc.projects.create.mutationOptions({
+      onError: () => toast.error("An error occurred."),
     }),
   );
 
@@ -77,7 +75,7 @@ function PromptField() {
             className="w-100"
             sizing="large"
             variant="ghost"
-            value={value}
+            value={deferredValue}
             onChange={(event) => setValue(event.target.value)}
             style={{ paddingBottom: 48, width: "100%" }}
           />
@@ -146,8 +144,8 @@ function PromptField() {
             <ReflectiveButton
               sizing="small"
               variant="border"
-              onClick={() => message.mutate({ value })}
-              disabled={message.isPending}
+              onClick={() => createProject.mutate({ value })}
+              disabled={createProject.isPending}
               type="button"
             >
               <span className="p-y-small-30">
@@ -168,7 +166,7 @@ function PromptField() {
             key={task.label}
             onClick={() => {
               setValue(task.content);
-              message.mutate({ value: task.content });
+              createProject.mutate({ value: task.content });
             }}
           >
             <span className="fs-medium-10">{task.label}</span>
