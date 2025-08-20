@@ -1,9 +1,9 @@
 import React from "react";
+
 import { HydrateClient } from "@/trpc/server";
 
 import LandingHeading from "./_components/LandingHeading";
 import PromptField from "./_components/PromptField";
-import AnimatedHero from "./_components/AnimatedHero";
 
 async function Page() {
   // const data = await caller.create({ text: "Runp TRPC Server" });
@@ -25,7 +25,6 @@ async function Page() {
             <PromptField />
           </div>
         </div>
-        <AnimatedHero chars="runp" />
       </section>
     </HydrateClient>
   );

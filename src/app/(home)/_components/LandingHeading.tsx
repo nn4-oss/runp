@@ -1,6 +1,9 @@
 "use client";
 
+import React from "react";
 import styled from "styled-components";
+
+import { AnimatedHero } from "@/components";
 
 const HeadingGroup = styled.hgroup`
   text-align: center;
@@ -25,12 +28,16 @@ const HeadingGroup = styled.hgroup`
 
 function LandingHeading() {
   return (
-    <HeadingGroup className="grid align-center justify-center g-medium-10">
-      <h1>Build features using prompts</h1>
-      <p className="fs-medium-30 opacity-default-30">
-        Build production ready apps and features by chatting with AI
-      </p>
-    </HeadingGroup>
+    <React.Fragment>
+      <HeadingGroup className="grid align-center justify-center g-medium-10">
+        <h1>Build features using prompts</h1>
+        <p className="fs-medium-30 opacity-default-30">
+          Build production ready apps and features by chatting with AI
+        </p>
+      </HeadingGroup>
+
+      <AnimatedHero chars="runp" />
+    </React.Fragment>
   );
 }
 
