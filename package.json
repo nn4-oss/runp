@@ -63,6 +63,7 @@
     "eslint-config-next": "^15.4.5",
     "prettier": "^3.6.2",
     "prisma": "^6.14.0",
+    "random-word-slugs": "^0.1.7",
     "tsx": "^4.20.4",
     "typescript": "^5.9.2",
     "typescript-eslint": "^8.38.0"
