@@ -19,20 +19,21 @@ import { ReflectiveButton } from "@/components";
 
 import { toast } from "sonner";
 
-const PromptWrapper = styled.div`
-  border: var(--measurement-small-30) solid var(--font-color-alpha-10);
-  border-radius: var(--measurement-medium-60);
-
-  max-width: var(--breakpoint-tablet);
-  margin: var(--measurement-large-10) auto var(--measurement-medium-60) auto;
-
-  background: var(--body-color);
-`;
 const PromptContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+`;
+
+const PromptWrapper = styled.div`
+  border: var(--measurement-small-30) solid var(--font-color-alpha-10);
+  border-radius: var(--measurement-medium-60);
+
+  max-width: var(--breakpoint-tablet);
+  margin: var(--measurement-large-20) auto var(--measurement-medium-60) auto;
+
+  background: var(--contrast-color);
 `;
 
 const PREDEFINED_PROMPTS = [
@@ -92,14 +93,6 @@ function PromptField() {
 
         <div className="flex align-center justify-between">
           <div className="flex align-center g-medium-60">
-            <Tooltip content="Attach file">
-              <Button variant="ghost">
-                <Icon>
-                  <PixelIcon.Plus />
-                </Icon>
-              </Button>
-            </Tooltip>
-
             <DropdownMenu.Root>
               <Tooltip content="Prompt Tools">
                 <DropdownMenu.Trigger variant="ghost">
@@ -124,11 +117,7 @@ function PromptField() {
                       </span>
 
                       <Switch.Root>
-                        <Switch
-                          name="enable-graphs"
-                          sizing="medium"
-                          defaultChecked
-                        >
+                        <Switch name="enable-graphs" sizing="medium">
                           <Switch.Thumb />
                         </Switch>
                       </Switch.Root>
@@ -152,7 +141,7 @@ function PromptField() {
           <div className="flex align-center g-medium-60">
             <ReflectiveButton
               sizing="small"
-              variant="border"
+              variant="mono"
               onClick={() => createProject.mutate({ value })}
               disabled={createProject.isPending}
               type="button"
@@ -167,11 +156,11 @@ function PromptField() {
         </div>
       </PromptWrapper>
 
-      <div className="flex flex-wrap g-medium-10">
+      <div className="flex flex-wrap g-medium-10 justify-center align-center">
         {PREDEFINED_PROMPTS.map((task) => (
           <ReflectiveButton
             sizing="medium"
-            variant="border"
+            variant="mono"
             key={task.label}
             onClick={() => {
               setValue(task.content);

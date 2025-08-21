@@ -99,6 +99,10 @@ const CSSRoot = createGlobalStyle`
 		--breakpoint-desktop: 1440px;
 		--breakpoint-desktop-large: 1589px;
 	}
+
+  ::selection {
+    background-color: var(--font-color-alpha-10);
+  }
 `;
 
 export function ClientProvider({

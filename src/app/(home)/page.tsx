@@ -1,6 +1,7 @@
 import React from "react";
 
 import { HydrateClient } from "@/trpc/server";
+import { AppContainer } from "@/components";
 
 import LandingHeading from "./_components/LandingHeading";
 import PromptField from "./_components/PromptField";
@@ -18,10 +19,10 @@ async function Page() {
 
   return (
     <HydrateClient>
-      <section className="h-100 w-100 p-y-large-60">
+      <AppContainer className="h-100 w-100 p-t-large-60 p-b-large-10 p-x-medium-60">
         <LandingHeading />
         <PromptField />
-      </section>
+      </AppContainer>
     </HydrateClient>
   );
 }
