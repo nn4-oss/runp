@@ -22,9 +22,11 @@ const StyledButton = styled(Button)`
   position: relative;
   border-radius: var(--measurement-medium-30) !important;
 
-  svg {
+  svg,
+  span {
     transition: all 0.2s ease-in-out;
   }
+
   &:hover {
     /* Group hover styles can be added here if needed */
   }

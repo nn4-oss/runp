@@ -1,10 +1,10 @@
 import React from "react";
-import PagesLayout from "@/layouts/PagesLayout";
+import AppLayout from "@/layouts/AppLayout";
 
 export default function Layout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <PagesLayout>{children}</PagesLayout>;
+  return <AppLayout>{children}</AppLayout>;
 }
