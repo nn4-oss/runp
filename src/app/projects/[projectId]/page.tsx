@@ -6,7 +6,7 @@ interface Props {
   }>;
 }
 import { HydrateClient } from "@/trpc/server";
-import { AppContainer, SplitScreen } from "@/components";
+import { AppContainer, SplitScreen, Textarea } from "@/components";
 
 async function Page({ params }: Props) {
   const { projectId } = await params;
@@ -17,12 +17,12 @@ async function Page({ params }: Props) {
         defaultWidth={25}
         left={
           <AppContainer className="p-medium-60">
-            <p>Left</p>
+            <Textarea placeholder="Ask anything" />
           </AppContainer>
         }
         right={
           <AppContainer className="p-medium-60">
-            <p>{projectId}</p>
+            <p className="fs-medium-10">{projectId}</p>
           </AppContainer>
         }
       />

@@ -7,15 +7,9 @@ import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
 
-import {
-  Button,
-  DropdownMenu,
-  Field,
-  Switch,
-  Tooltip,
-} from "@usefui/components";
+import { DropdownMenu, Field, Switch, Tooltip } from "@usefui/components";
 import { Icon, PixelIcon } from "@usefui/icons";
-import { ReflectiveButton } from "@/components";
+import { ReflectiveButton, Textarea } from "@/components";
 
 import { toast } from "sonner";
 
@@ -34,6 +28,13 @@ const PromptWrapper = styled.div`
   margin: var(--measurement-large-20) auto var(--measurement-medium-60) auto;
 
   background: var(--contrast-color);
+
+  will-change: border-color;
+  transition: border-color ease-in-out 0.2s;
+
+  &:has(textarea:focus) {
+    border-color: var(--font-color-alpha-20);
+  }
 `;
 
 const PREDEFINED_PROMPTS = [
@@ -77,19 +78,14 @@ function PromptField() {
   return (
     <PromptContainer>
       <PromptWrapper className="p-medium-60 w-100">
-        <Field.Root>
-          <Field
-            autoComplete="off"
-            name="prompt-field"
-            placeholder="Ask Runp to build..."
-            className="w-100"
-            sizing="large"
-            variant="ghost"
-            value={deferredValue}
-            onChange={(event) => setValue(event.target.value)}
-            style={{ paddingBottom: 48, width: "100%" }}
-          />
-        </Field.Root>
+        <Textarea
+          autoComplete="off"
+          name="prompt-field"
+          placeholder="Ask Runp to build..."
+          className="w-100"
+          value={deferredValue}
+          onChange={(event) => setValue(event.target.value)}
+        />
 
         <div className="flex align-center justify-between">
           <div className="flex align-center g-medium-60">
@@ -143,7 +139,7 @@ function PromptField() {
               sizing="small"
               variant="mono"
               onClick={() => createProject.mutate({ value })}
-              disabled={createProject.isPending}
+              disabled={createProject.isPending || deferredValue.length === 0}
               type="button"
             >
               <span className="p-y-small-30">
