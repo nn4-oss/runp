@@ -7,8 +7,19 @@ import PromptForm from "../data/PromptForm";
 
 import { Spinner } from "@/components";
 import { Page, ScrollArea } from "@usefui/components";
+import type { Fragment } from "generated/prisma";
 
-function MessagesContainer({ projectId }: { projectId: string }) {
+type MessageContainerProps = {
+  projectId: string;
+  activeFragment: Fragment | null;
+  setActiveFragment: (fragment: Fragment | null) => void;
+};
+
+function MessagesContainer({
+  projectId,
+  activeFragment,
+  setActiveFragment,
+}: MessageContainerProps) {
   return (
     <Page.Content
       className="flex justify-between"
@@ -16,7 +27,11 @@ function MessagesContainer({ projectId }: { projectId: string }) {
     >
       <ScrollArea scrollbar className="p-x-medium-30">
         <React.Suspense fallback={<Spinner />}>
-          <MessagesStream projectId={projectId} />
+          <MessagesStream
+            projectId={projectId}
+            activeFragment={activeFragment}
+            setActiveFragment={setActiveFragment}
+          />
         </React.Suspense>
       </ScrollArea>
 

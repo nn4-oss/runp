@@ -40,8 +40,7 @@ const PromptWrapper = styled.div`
 const PREDEFINED_PROMPTS = [
   {
     label: "Landing Page",
-    content:
-      "Build a simple landing page with UX friendly interactions and advanced, mordern UI",
+    content: "Build a simple landing page",
   },
   {
     label: "Kanban Board",

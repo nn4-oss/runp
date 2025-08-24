@@ -14,7 +14,7 @@ function FragmentBubble({
 }: FragmentBubbleProps) {
   return (
     <Button
-      variant="border"
+      variant={isActiveFragment ? "mono" : "border"}
       sizing="large"
       onClick={() => onFragmentClick(fragment)}
     >
