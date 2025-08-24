@@ -11,10 +11,16 @@ import UserBubble from "../data/UserBubble";
 import { MessageRole } from "generated/prisma";
 
 function MessagesStream({ projectId }: { projectId: string }) {
+  const streamEndRef = React.useRef<HTMLDivElement>(null);
+
   const trpc = useTRPC();
   const { data: messages } = useSuspenseQuery(
     trpc.messages.getMany.queryOptions({ projectId }),
   );
+
+  React.useEffect(() => {
+    streamEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages.length]);
 
   return (
     <div className="grid g-large-10">
@@ -35,6 +41,8 @@ function MessagesStream({ projectId }: { projectId: string }) {
           )}
         </React.Fragment>
       ))}
+
+      <div ref={streamEndRef} />
     </div>
   );
 }

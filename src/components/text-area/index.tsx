@@ -52,7 +52,7 @@ const CustomScrollbar = css<ScrollContainerProps>`
 const TextAreaContainer = styled.textarea<ScrollContainerProps>`
   background-color: transparent;
   border: none;
-  font-size: var(--fontsize-medium-10);
+  font-size: var(--fontsize-medium-20);
 
   resize: none;
   max-height: var(--measurement-large-60);
