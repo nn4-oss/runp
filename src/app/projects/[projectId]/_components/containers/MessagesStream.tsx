@@ -25,19 +25,19 @@ function MessagesStream({ projectId }: { projectId: string }) {
 
   return (
     <div className="grid g-large-10">
-      {messages.map((msg, key) => (
-        <React.Fragment key={key}>
-          {msg.role === MessageRole.USER && (
-            <UserBubble content={msg.content} />
+      {messages.map((message) => (
+        <React.Fragment key={message.id}>
+          {message.role === MessageRole.USER && (
+            <UserBubble content={message.content} />
           )}
-          {msg.role === MessageRole.ASSISTANT && (
+          {message.role === MessageRole.ASSISTANT && (
             <AssistantBubble
-              type={msg.type}
-              content={msg.content}
-              fragment={msg.fragment}
-              createdAt={msg.createdAt}
+              type={message.type}
+              content={message.content}
+              fragment={message.fragment}
+              createdAt={message.createdAt}
               isActiveFragment={false}
-              onFragmentClick={() => console.log()}
+              onFragmentClick={() => {}}
             />
           )}
         </React.Fragment>
