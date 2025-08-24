@@ -5,9 +5,7 @@ import FragmentBubble from "./FragmentBubble";
 
 import { Avatar, Field } from "@usefui/components";
 
-import { MessageType } from "generated/prisma";
 import { format } from "date-fns";
-
 import type { BubbleProps } from "../types";
 
 function AssistantBubble({
@@ -30,11 +28,9 @@ function AssistantBubble({
         </div>
       </div>
 
-      {type === MessageType.ERROR && (
-        <Field.Meta variant="error">{content}</Field.Meta>
-      )}
+      {type === "ERROR" && <Field.Meta variant="error">{content}</Field.Meta>}
 
-      {type === MessageType.RESULT && (
+      {type === "RESULT" && (
         <div className="grid g-medium-60">
           <p className="fs-medium-20 w-80">{content}</p>
           {fragment && (
