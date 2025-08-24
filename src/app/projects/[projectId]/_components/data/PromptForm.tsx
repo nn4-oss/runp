@@ -6,23 +6,27 @@ import styled from "styled-components";
 import { useTRPC } from "@/trpc/client";
 import { useForm } from "react-hook-form";
 import { useKeyPress } from "@usefui/hooks";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { ReflectiveButton, Spinner, Textarea } from "@/components";
 import { Icon, PixelIcon } from "@usefui/icons";
 
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 
 const PromptWrapper = styled.form`
   border: var(--measurement-small-30) solid var(--font-color-alpha-10);
   border-radius: var(--measurement-medium-30);
 
   background: var(--contrast-color);
+  box-shadow: 0 calc(var(--measurement-medium-50) * -1)
+    var(--measurement-medium-50) 0 var(--body-color);
 
   will-change: border-color;
   transition: border-color ease-in-out 0.2s;
 
+  z-index: var(--depth-default-100);
   &:has(textarea:focus) {
     border-color: var(--font-color-alpha-20);
   }
@@ -40,7 +44,23 @@ function PromptForm({ projectId }: { projectId: string }) {
   const shortcutControls = useKeyPress("Enter", true, "ctrlKey");
 
   const trpc = useTRPC();
-  const createMessage = useMutation(trpc.messages.create.mutationOptions());
+  const queryClient = useQueryClient();
+
+  const createMessage = useMutation(
+    trpc.messages.create.mutationOptions({
+      onSuccess: (data) => {
+        form.reset();
+
+        queryClient.invalidateQueries(
+          trpc.messages.getMany.queryOptions({
+            projectId: data.projectId,
+          }),
+        );
+      },
+
+      onError: (error) => toast.error(error.message),
+    }),
+  );
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
