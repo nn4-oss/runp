@@ -35,7 +35,7 @@ function AssistantBubble({
       )}
 
       {type === MessageType.RESULT && (
-        <React.Fragment>
+        <div className="grid g-medium-60">
           <p className="fs-medium-20 w-80">{content}</p>
           {fragment && (
             <FragmentBubble
@@ -44,7 +44,7 @@ function AssistantBubble({
               onFragmentClick={onFragmentClick}
             />
           )}
-        </React.Fragment>
+        </div>
       )}
     </div>
   );
