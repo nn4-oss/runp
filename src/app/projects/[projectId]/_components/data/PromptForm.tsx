@@ -47,13 +47,11 @@ function PromptForm({ projectId }: { projectId: string }) {
 
   const createMessage = useMutation(
     trpc.messages.create.mutationOptions({
-      onSuccess: (data) => {
+      onSuccess: async () => {
         form.reset();
 
-        queryClient.invalidateQueries(
-          trpc.messages.getMany.queryOptions({
-            projectId: data.projectId,
-          }),
+        await queryClient.invalidateQueries(
+          trpc.messages.getMany.queryOptions({ projectId }),
         );
       },
 
@@ -78,7 +76,7 @@ function PromptForm({ projectId }: { projectId: string }) {
   React.useEffect(() => {
     const enableShortcutSubmit =
       shortcutControls && isFocused && form.formState.isValid;
-    if (enableShortcutSubmit) onSubmit(form.getValues());
+    if (enableShortcutSubmit) async () => await onSubmit(form.getValues());
   }, [shortcutControls]);
 
   return (

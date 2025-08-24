@@ -13,7 +13,7 @@ import { CODE_AGENT_PARAMETERS } from "../config/parameters";
 
 import type { AgentState } from "../types";
 
-export default function createCodeAgent(sandboxId: string, apiKey?: string) {
+export default function createCodeAgent(sandboxId: string, _apiKey?: string) {
   return createAgent<AgentState>({
     name: "code-agent",
     description: "An expert coding agent",

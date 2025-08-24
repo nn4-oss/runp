@@ -121,7 +121,7 @@ function AnimatedHero({ chars }: { chars: string }) {
       return {
         absX: Math.abs(x), // Remove negative values
         absY: Math.abs(y),
-        char: chars[i % chars.length] || "0", // Cycle through chars, fallback to "0"
+        char: chars[i % chars.length] ?? "0", // Cycle through chars, fallback to "0"
       };
     });
   }, [chars, totalCells]);

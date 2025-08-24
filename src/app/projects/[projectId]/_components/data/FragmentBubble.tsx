@@ -2,8 +2,8 @@
 
 import React from "react";
 
-import { Badge, Button } from "@usefui/components";
-import { Icon, PixelIcon, WebIcon } from "@usefui/icons";
+import { Button } from "@usefui/components";
+import { Icon, PixelIcon } from "@usefui/icons";
 
 import type { FragmentBubbleProps } from "../types";
 

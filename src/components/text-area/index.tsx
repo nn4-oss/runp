@@ -12,8 +12,8 @@ interface ScrollContainerProps {
 }
 
 const CustomScrollbar = css<ScrollContainerProps>`
-  height: ${({ $height }) => $height || "100%"};
-  width: ${({ $width }) => $width || "100%"};
+  height: ${({ $height }) => $height ?? "100%"};
+  width: ${({ $width }) => $width ?? "100%"};
   overflow-y: auto;
   overflow-x: hidden;
 
@@ -24,28 +24,28 @@ const CustomScrollbar = css<ScrollContainerProps>`
   }
 
   &::-webkit-scrollbar-track {
-    background: ${({ $trackColor }) => $trackColor || "transparent"};
+    background: ${({ $trackColor }) => $trackColor ?? "transparent"};
     border-radius: var(--measurement-medium-30);
     border: none;
   }
 
   &::-webkit-scrollbar-thumb {
     background: ${({ $thumbColor }) =>
-      $thumbColor || "var(--font-color-alpha-10)"};
+      $thumbColor ?? "var(--font-color-alpha-10)"};
     border-radius: var(--measurement-medium-30);
     transition: background-color 0.2s ease;
   }
 
   &::-webkit-scrollbar-thumb:hover {
     background: ${({ $thumbHoverColor, $thumbColor }) =>
-      $thumbHoverColor || $thumbColor || "var(--font-color-alpha-20)"};
+      $thumbHoverColor ?? $thumbColor ?? "var(--font-color-alpha-20)"};
   }
 
   // Firefox
   scrollbar-width: thin;
   scrollbar-color: ${({ $thumbColor, $trackColor }) =>
-    `${$thumbColor || "var(--font-color-alpha-10)"} ${
-      $trackColor || "transparent"
+    `${$thumbColor ?? "var(--font-color-alpha-10)"} ${
+      $trackColor ?? "transparent"
     }`};
 `;
 

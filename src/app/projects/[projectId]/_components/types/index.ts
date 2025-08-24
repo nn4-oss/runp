@@ -1,5 +1,4 @@
-import { MessageRole } from "generated/prisma";
-import { MessageType, type Fragment } from "generated/prisma";
+import type { MessageRole, MessageType, Fragment } from "generated/prisma";
 
 export interface FragmentBubbleProps {
   fragment: Fragment | null;
