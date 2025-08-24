@@ -1,6 +1,6 @@
 import React from "react";
 
-import ProjectView from "./_components/ProjectView";
+import ProjectContainer from "./_components/containers/ProjectContainer";
 import { HydrateClient, prefetch, trpc } from "@/trpc/server";
 
 interface Props {
@@ -17,7 +17,7 @@ async function Page({ params }: Props) {
 
   return (
     <HydrateClient>
-      <ProjectView projectId={projectId} />
+      <ProjectContainer projectId={projectId} />
     </HydrateClient>
   );
 }
