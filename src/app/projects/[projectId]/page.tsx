@@ -1,31 +1,23 @@
 import React from "react";
 
+import ProjectView from "./_components/ProjectView";
+import { HydrateClient, prefetch, trpc } from "@/trpc/server";
+
 interface Props {
   params: Promise<{
     projectId: string;
   }>;
 }
-import { HydrateClient } from "@/trpc/server";
-import { AppContainer, SplitScreen, Textarea } from "@/components";
 
 async function Page({ params }: Props) {
   const { projectId } = await params;
 
+  prefetch(trpc.projects.getProject.queryOptions({ id: projectId }));
+  prefetch(trpc.messages.getMany.queryOptions({ projectId }));
+
   return (
     <HydrateClient>
-      <SplitScreen
-        defaultWidth={25}
-        left={
-          <AppContainer className="p-medium-60">
-            <Textarea placeholder="Ask anything" />
-          </AppContainer>
-        }
-        right={
-          <AppContainer className="p-medium-60">
-            <p className="fs-medium-10">{projectId}</p>
-          </AppContainer>
-        }
-      />
+      <ProjectView projectId={projectId} />
     </HydrateClient>
   );
 }
