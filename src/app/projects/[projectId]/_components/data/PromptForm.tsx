@@ -61,6 +61,7 @@ function PromptForm({ projectId }: { projectId: string }) {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    mode: "onChange",
     defaultValues: {
       value: "",
     },
@@ -75,9 +76,23 @@ function PromptForm({ projectId }: { projectId: string }) {
 
   React.useEffect(() => {
     const enableShortcutSubmit =
-      shortcutControls && isFocused && form.formState.isValid;
-    if (enableShortcutSubmit) async () => await onSubmit(form.getValues());
-  }, [shortcutControls]);
+      shortcutControls &&
+      isFocused &&
+      form.formState.isValid &&
+      !createMessage.isPending;
+    if (enableShortcutSubmit) {
+      // Use RHF's handleSubmit to re-run validation before submit.
+      void form.handleSubmit(onSubmit)();
+    }
+    // Re-run when key state toggles or guard inputs change.
+  }, [
+    shortcutControls,
+    isFocused,
+    form.formState.isValid,
+    createMessage.isPending,
+    form,
+    onSubmit,
+  ]);
 
   return (
     <PromptWrapper

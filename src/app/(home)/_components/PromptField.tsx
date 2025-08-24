@@ -62,12 +62,11 @@ const PREDEFINED_PROMPTS = [
 ] as const;
 
 function PromptField() {
-  const router = useRouter();
-
   const [value, setValue] = React.useState<string>("");
-  const deferredValue = React.useDeferredValue(value);
 
+  const router = useRouter();
   const trpc = useTRPC();
+
   const createProject = useMutation(
     trpc.projects.create.mutationOptions({
       onSuccess: (data) => router.push(`/projects/${data.id}`),
@@ -83,7 +82,7 @@ function PromptField() {
           name="prompt-field"
           placeholder="Ask Runp to build..."
           className="w-100"
-          value={deferredValue}
+          value={value}
           onChange={(event) => setValue(event.target.value)}
         />
 
@@ -139,7 +138,7 @@ function PromptField() {
               sizing="small"
               variant="mono"
               onClick={() => createProject.mutate({ value })}
-              disabled={createProject.isPending || deferredValue.length === 0}
+              disabled={createProject.isPending || value.trim().length === 0}
               type="button"
             >
               <span className="p-y-small-30">
