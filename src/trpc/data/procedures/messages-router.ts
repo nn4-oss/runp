@@ -2,7 +2,9 @@ import prisma from "@/lib/prisma";
 import { inngest } from "@/inngest/client";
 
 import { baseProcedure, createTRPCRouter } from "@/trpc/init";
+
 import { z } from "zod";
+import { utteranceValueSchema } from "@/schemas/utterances-schema";
 
 export const messagesRouter = createTRPCRouter({
   getMany: baseProcedure
@@ -30,10 +32,7 @@ export const messagesRouter = createTRPCRouter({
   create: baseProcedure
     .input(
       z.object({
-        value: z
-          .string()
-          .min(1, { message: "input.value is required" })
-          .max(1024, { message: "input.value cannot exceed 1024 chars" }),
+        value: utteranceValueSchema,
         projectId: z.string().min(1, { message: "projectId is required" }),
       }),
     )

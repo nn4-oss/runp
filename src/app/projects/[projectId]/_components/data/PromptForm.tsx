@@ -13,6 +13,8 @@ import { Icon, PixelIcon } from "@usefui/icons";
 
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { utteranceValueSchema } from "@/schemas/utterances-schema";
+
 import { toast } from "sonner";
 
 const PromptWrapper = styled.form`
@@ -33,10 +35,7 @@ const PromptWrapper = styled.form`
 `;
 
 const formSchema = z.object({
-  value: z
-    .string()
-    .min(1, { message: "input.value is required" })
-    .max(1024, { message: "input.value cannot exceed 1024 chars" }),
+  value: utteranceValueSchema,
 });
 
 function PromptForm({ projectId }: { projectId: string }) {
