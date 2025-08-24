@@ -2,11 +2,36 @@ import prisma from "@/lib/prisma";
 import { inngest } from "@/inngest/client";
 
 import { baseProcedure, createTRPCRouter } from "@/trpc/init";
+import { TRPCError } from "@trpc/server";
+
+import { z } from "zod";
+import { utteranceValueSchema } from "@/schemas/utterances-schema";
 
 import { generateSlug } from "random-word-slugs";
-import { z } from "zod";
 
 export const projectsRouter = createTRPCRouter({
+  getUnique: baseProcedure
+    .input(
+      z.object({
+        id: z.string().min(1, { message: "Id is required" }),
+      }),
+    )
+    .query(async ({ input }) => {
+      const project = await prisma.project.findUnique({
+        where: {
+          id: input.id,
+        },
+      });
+
+      if (!project)
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Project not found",
+        });
+
+      return project;
+    }),
+
   getMany: baseProcedure.query(async () => {
     const projects = await prisma.project.findMany({
       orderBy: {
@@ -20,10 +45,7 @@ export const projectsRouter = createTRPCRouter({
   create: baseProcedure
     .input(
       z.object({
-        value: z
-          .string()
-          .min(1, { message: "input.value is required" })
-          .max(1024, { message: "input.value cannot exceed 1024 chars" }),
+        value: utteranceValueSchema,
       }),
     )
     .mutation(async ({ input }) => {

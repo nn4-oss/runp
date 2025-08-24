@@ -1,4 +1,4 @@
 export interface AgentState {
   summary: string;
-  files: { [path: string]: string };
+  files: Record<string, string>;
 }

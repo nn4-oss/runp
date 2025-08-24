@@ -12,8 +12,8 @@ const Panel = styled.div<{ width: number }>`
 `;
 const Divider = styled.div<{ $dragging: boolean }>`
   width: var(--measurement-medium-10);
-  height: 95%;
-  top: 2.5%;
+  height: 100%;
+  top: 0;
 
   border-radius: var(--measurement-medium-60);
   background-color: ${(props) =>
