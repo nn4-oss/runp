@@ -18,6 +18,7 @@ function MessagesStream({ projectId }: { projectId: string }) {
     trpc.messages.getMany.queryOptions({ projectId }),
   );
 
+  // Auto-scroll to bottom when messages change
   React.useEffect(() => {
     streamEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages.length]);

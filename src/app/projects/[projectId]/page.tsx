@@ -12,7 +12,7 @@ interface Props {
 async function Page({ params }: Props) {
   const { projectId } = await params;
 
-  prefetch(trpc.projects.getProject.queryOptions({ id: projectId }));
+  prefetch(trpc.projects.getUnique.queryOptions({ id: projectId }));
   prefetch(trpc.messages.getMany.queryOptions({ projectId }));
 
   return (

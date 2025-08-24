@@ -9,7 +9,7 @@ function ProjectPreview({ projectId }: { projectId: string }) {
   const trpc = useTRPC();
 
   const { data: project } = useSuspenseQuery(
-    trpc.projects.getProject.queryOptions({ id: projectId }),
+    trpc.projects.getUnique.queryOptions({ id: projectId }),
   );
 
   return <div>{JSON.stringify(project)}</div>;

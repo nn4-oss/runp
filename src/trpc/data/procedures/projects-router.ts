@@ -8,7 +8,7 @@ import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 
 export const projectsRouter = createTRPCRouter({
-  getProject: baseProcedure
+  getUnique: baseProcedure
     .input(
       z.object({
         id: z.string().min(1, { message: "Id is required" }),
