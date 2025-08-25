@@ -8,7 +8,7 @@ export default function Layout({
 }>) {
   return (
     <EditorLayout>
-      <div className="w-100 h-100 p-medium-40">{children}</div>
+      <div className="w-100 h-100 p-x-medium-30 p-b-medium-30">{children}</div>
     </EditorLayout>
   );
 }

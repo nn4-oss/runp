@@ -57,7 +57,7 @@ function MessagesStream({
   }, [messages, setActiveFragment]);
 
   return (
-    <div className="grid g-large-10">
+    <div className="grid g-large-10 p-t-large-10">
       {messages.map((message) => (
         <React.Fragment key={message.id}>
           {message.role === MessageRole.USER && (
