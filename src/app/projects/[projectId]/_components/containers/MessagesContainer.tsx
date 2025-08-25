@@ -2,11 +2,13 @@
 
 import React from "react";
 
+import MessagesHeader from "../navigations/MessagesHeader";
 import MessagesStream from "./MessagesStream";
 import PromptForm from "../data/PromptForm";
 
 import { Spinner } from "@/components";
 import { Page, ScrollArea } from "@usefui/components";
+
 import type { Fragment } from "generated/prisma";
 
 type MessageContainerProps = {
@@ -25,6 +27,10 @@ function MessagesContainer({
       className="flex justify-between"
       style={{ flexDirection: "column" }}
     >
+      <React.Suspense fallback={<Spinner />}>
+        <MessagesHeader projectId={projectId} />
+      </React.Suspense>
+
       <ScrollArea scrollbar className="p-x-medium-30">
         <React.Suspense fallback={<Spinner />}>
           <MessagesStream
