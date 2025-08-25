@@ -51,7 +51,13 @@ export const projectsRouter = createTRPCRouter({
     .mutation(async ({ input }) => {
       const userProject = await prisma.project.create({
         data: {
-          name: generateSlug(2, { format: "kebab" }),
+          name: generateSlug(3, {
+            format: "kebab",
+            categories: {
+              noun: ["thing", "technology"],
+              adjective: ["condition"],
+            },
+          }),
           messages: {
             create: {
               content: input.value,
