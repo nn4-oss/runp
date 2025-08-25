@@ -2,13 +2,13 @@
 
 import styled from "styled-components";
 
-import { Page, Button, Tooltip } from "@usefui/components";
+import { Page, Button, Tooltip, Avatar } from "@usefui/components";
 import { Icon, PixelIcon, SocialIcon } from "@usefui/icons";
 
 import { ColorModes } from "../";
 
 const StyledMenu = styled(Page.Navigation)`
-  border: none;
+  border: none !important;
   background-color: transparent;
 `;
 
