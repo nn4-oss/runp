@@ -7,16 +7,25 @@ import { useTRPC } from "@/trpc/client";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
-import { Button, Divider, DropdownMenu, Page } from "@usefui/components";
+import { Avatar, Divider, DropdownMenu, Page } from "@usefui/components";
 import { Icon, PixelIcon } from "@usefui/icons";
 
 import { formatDistanceToNow } from "date-fns";
+import { ColorModes } from "@/components";
 
-const StyledHeader = styled.header`
+const StyledMenu = styled(Page.Navigation)`
+  border: none !important;
+  background-color: transparent;
   box-shadow: 0 0 var(--measurement-medium-50) var(--measurement-medium-10)
     var(--body-color);
 
   z-index: var(--depth-default-90);
+`;
+const UserAvatar = styled(Avatar)`
+  width: var(--measurement-medium-70) !important;
+  min-width: var(--measurement-medium-70) !important;
+  height: var(--measurement-medium-70) !important;
+  min-height: var(--measurement-medium-70) !important;
 `;
 
 function MessagesHeader({ projectId }: { projectId: string }) {
@@ -31,16 +40,40 @@ function MessagesHeader({ projectId }: { projectId: string }) {
   });
   console.log(lastUpdate);
   return (
-    <StyledHeader className="flex align-center justify-between p-b-medium-30">
+    <StyledMenu className="w-100 flex g-medium-30 p-x-medium-30 align-center justify-start">
       <DropdownMenu.Root>
         <DropdownMenu>
-          <DropdownMenu.Trigger className="flex align-start">
-            <span className="fs-medium-10">{project.name}</span>
-            <Icon>
-              <PixelIcon.ChevronDown />
-            </Icon>
+          <DropdownMenu.Trigger>
+            <UserAvatar src="/gradient.svg" />
           </DropdownMenu.Trigger>
-          <DropdownMenu.Content>
+          <DropdownMenu.Content sizing="large">
+            <DropdownMenu.Item className="w-100 flex align-center g-medium-30">
+              <Icon>
+                <PixelIcon.User />
+              </Icon>
+              Profile
+            </DropdownMenu.Item>
+            <DropdownMenu.Item className="w-100 flex align-center g-medium-30">
+              <Icon>
+                <PixelIcon.Sliders />
+              </Icon>
+              Settings
+            </DropdownMenu.Item>
+            <DropdownMenu.Item className="w-100 flex align-center g-medium-30">
+              <Icon>
+                <PixelIcon.BookOpen />
+              </Icon>
+              Documentation
+            </DropdownMenu.Item>
+
+            <Divider className="m-y-medium-50" />
+            <div className="flex justify-between align-center p-l-medium-30">
+              <span className="opacity-default-60">Appearance</span>
+
+              <ColorModes />
+            </div>
+            <Divider className="m-y-medium-50" />
+
             <DropdownMenu.Item
               className="w-100 flex align-center g-medium-30"
               onClick={() => router.push("/")}
@@ -48,40 +81,46 @@ function MessagesHeader({ projectId }: { projectId: string }) {
               <Icon>
                 <PixelIcon.ChevronLeft />
               </Icon>
-              <span className="fs-medium-10">Go to dashboard</span>
-            </DropdownMenu.Item>
-            <Divider />
-
-            <DropdownMenu.Item className="w-100 flex align-center g-medium-30">
-              <Icon>
-                <PixelIcon.Sliders />
-              </Icon>
-              <span className="fs-medium-10">Settings</span>
-            </DropdownMenu.Item>
-            <DropdownMenu.Item className="w-100 flex align-center g-medium-30">
-              <Icon>
-                <PixelIcon.EditBox />
-              </Icon>
-              <span className="fs-medium-10">Edit project</span>
-            </DropdownMenu.Item>
-
-            <Divider />
-            <DropdownMenu.Item className="w-100 flex align-center justify-between">
-              <span className="flex align-center g-medium-30">
-                <Icon>
-                  <PixelIcon.BookOpen />
-                </Icon>
-                <span className="fs-medium-10">Help</span>
-              </span>
-
-              <Icon>
-                <PixelIcon.ChevronRight />
-              </Icon>
+              Go to dashboard
             </DropdownMenu.Item>
           </DropdownMenu.Content>
         </DropdownMenu>
       </DropdownMenu.Root>
-    </StyledHeader>
+
+      <span className="fs-medium-10 opacity-default-10">/</span>
+      <DropdownMenu.Root>
+        <DropdownMenu>
+          <DropdownMenu.Trigger>
+            {project.name}
+            <Icon>
+              <PixelIcon.ChevronDown />
+            </Icon>
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Content>
+            <DropdownMenu.Item className="w-100 flex align-center g-medium-30">
+              <Icon>
+                <PixelIcon.EditBox />
+              </Icon>
+              Edit project
+            </DropdownMenu.Item>
+
+            <DropdownMenu.Item className="w-100 flex align-center g-medium-30">
+              <Icon>
+                <PixelIcon.Bookmark />
+              </Icon>
+              Favorite
+            </DropdownMenu.Item>
+
+            <DropdownMenu.Item className="w-100 flex align-center g-medium-30">
+              <Icon fill="var(--color-red)">
+                <PixelIcon.Delete />
+              </Icon>
+              <span style={{ color: "var(--color-red)" }}>Delete</span>
+            </DropdownMenu.Item>
+          </DropdownMenu.Content>
+        </DropdownMenu>
+      </DropdownMenu.Root>
+    </StyledMenu>
   );
 }
 
