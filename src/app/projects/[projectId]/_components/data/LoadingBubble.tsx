@@ -19,7 +19,7 @@ const BlinkText = styled.span`
 `;
 
 function ShimmerText() {
-  const shimmerMessages = ["Loading..", "Thinking..", "Generating ouputs.."];
+  const shimmerMessages = ["Loading..", "Thinking..", "Generating outputs.."];
   const [currentMsgIndex, setCurrentMsgIndex] = React.useState<number>(0);
 
   React.useEffect(() => {
@@ -44,7 +44,12 @@ function LoadingBubble() {
         <Avatar sizing="small" style={{ background: "var(--font-color)" }}>
           <AnimatedAgent />
         </Avatar>
-        <div className="grid">
+        <div
+          className="grid"
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+        >
           <span className="fs-medium-10">Runp</span>
           <ShimmerText />
         </div>

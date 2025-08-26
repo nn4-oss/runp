@@ -58,7 +58,7 @@ function ProjectsHeader() {
 
       <div className="flex g-medium-30 align-center">
         <Tooltip content="Open in new tab">
-          <Button variant="ghost" sizing="small">
+          <Button variant="ghost" sizing="small" aria-label="Open in new tab">
             <Icon>
               <PixelIcon.Open />
             </Icon>
@@ -68,7 +68,7 @@ function ProjectsHeader() {
         <Field variant="secondary" sizing="small" placeholder="/" />
 
         <Tooltip content="Refresh page">
-          <Button variant="ghost" sizing="small">
+          <Button variant="ghost" sizing="small" aria-label="Refresh page">
             <Icon>
               <PixelIcon.Reload />
             </Icon>
@@ -76,8 +76,8 @@ function ProjectsHeader() {
         </Tooltip>
       </div>
 
-      <Tooltip content="Fullscreen">
-        <Button variant="ghost">
+      <Tooltip content="Enter fullscreen">
+        <Button variant="ghost" aria-label="Enter fullscreen">
           <Icon>
             <PixelIcon.Scale />
           </Icon>
