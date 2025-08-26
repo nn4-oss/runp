@@ -2,21 +2,42 @@
 
 import React from "react";
 
+import MessagesHeader from "../navigations/MessagesHeader";
 import MessagesStream from "./MessagesStream";
 import PromptForm from "../data/PromptForm";
 
 import { Spinner } from "@/components";
 import { Page, ScrollArea } from "@usefui/components";
 
-function MessagesContainer({ projectId }: { projectId: string }) {
+import type { Fragment } from "generated/prisma";
+
+type MessageContainerProps = {
+  projectId: string;
+  activeFragment: Fragment | null;
+  setActiveFragment: (fragment: Fragment | null) => void;
+};
+
+function MessagesContainer({
+  projectId,
+  activeFragment,
+  setActiveFragment,
+}: MessageContainerProps) {
   return (
     <Page.Content
       className="flex justify-between"
       style={{ flexDirection: "column" }}
     >
+      <React.Suspense fallback={<Spinner />}>
+        <MessagesHeader projectId={projectId} />
+      </React.Suspense>
+
       <ScrollArea scrollbar className="p-x-medium-30">
         <React.Suspense fallback={<Spinner />}>
-          <MessagesStream projectId={projectId} />
+          <MessagesStream
+            projectId={projectId}
+            activeFragment={activeFragment}
+            setActiveFragment={setActiveFragment}
+          />
         </React.Suspense>
       </ScrollArea>
 

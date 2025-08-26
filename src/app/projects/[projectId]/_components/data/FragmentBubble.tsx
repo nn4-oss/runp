@@ -13,14 +13,7 @@ function FragmentBubble({
   onFragmentClick,
 }: FragmentBubbleProps) {
   return (
-    <Button
-      variant="border"
-      sizing="large"
-      onClick={() => onFragmentClick(fragment)}
-    >
-      <Icon>
-        <PixelIcon.Link />
-      </Icon>
+    <Button variant="ghost" onClick={() => onFragmentClick(fragment)}>
       {fragment?.sandboxUrl}
 
       {isActiveFragment && (

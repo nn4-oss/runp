@@ -16,10 +16,10 @@ const Divider = styled.div<{ $dragging: boolean }>`
   top: 0;
 
   border-radius: var(--measurement-medium-60);
-  background-color: ${(props) =>
-    props.$dragging
-      ? "var(--font-color-alpha-30)"
-      : "var(--font-color-alpha-10)"};
+  background-color: transparent;
+
+  /* background-color: ${(props) =>
+    props.$dragging ? "var(--font-color-alpha-10)" : "transparent"}; */
 
   cursor: col-resize;
   transition: background-color 0.2s;
@@ -30,7 +30,15 @@ const Divider = styled.div<{ $dragging: boolean }>`
   &:active .drag-indicator-handle {
     opacity: 1;
   }
+
+  .drag-indicator-handle {
+    height: ${(props) =>
+      props.$dragging
+        ? "var(--measurement-large-10)"
+        : "var(--measurement-medium-60)"};
+  }
 `;
+
 const DragHandle = styled.div`
   position: absolute;
   top: 0;
@@ -41,12 +49,12 @@ const DragHandle = styled.div`
 const DragIndicator = styled.div`
   position: fixed;
   width: var(--measurement-medium-10);
-  height: var(--measurement-medium-60);
+  /* height: var(--measurement-medium-60); */
   background-color: var(--font-color-alpha-60);
   border-radius: var(--measurement-large-10);
 
   opacity: 0;
-  transition: opacity 0.2s;
+  transition: all 0.2s;
 `;
 const DragOverlay = styled.div`
   position: fixed;
@@ -120,7 +128,7 @@ function SplitScreen({
 
   return (
     <React.Fragment>
-      <SplitContainer ref={containerRef} className="h-100 flex g-medium-10">
+      <SplitContainer ref={containerRef} className="h-100 flex">
         <Panel width={leftWidth}>{left}</Panel>
 
         <Divider
