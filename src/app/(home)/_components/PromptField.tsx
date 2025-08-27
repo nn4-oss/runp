@@ -44,7 +44,7 @@ const PREDEFINED_PROMPTS = [
   },
   {
     label: "Kanban Board",
-    content: "Build an animated Kanban Board using motion React dnd",
+    content: "Build an animated Kanban Board using motion",
   },
   {
     label: "Music Player",
@@ -56,7 +56,7 @@ const PREDEFINED_PROMPTS = [
   },
   {
     label: "Split-Screen Editor",
-    content: "Build an animated Split-Screen Editor using motion and React dnd",
+    content: "Build an animated Split-Screen Editor using motion",
   },
 ] as const;
 
