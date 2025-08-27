@@ -27,7 +27,7 @@ const StyledMenu = styled(Page.Navigation)`
 `;
 
 function ProjectsHeader({ fragment, setSandboxKey }: ProjectHeaderProps) {
-  const handleRefresh = () => setSandboxKey(Math.random());
+  const handleRefresh = () => setSandboxKey((k) => k + 1);
   const handleNewTab = () => {
     if (!fragment?.sandboxUrl) return;
     window.open(fragment?.sandboxUrl, "_blank", "noopener,noreferrer");
@@ -40,6 +40,7 @@ function ProjectsHeader({ fragment, setSandboxKey }: ProjectHeaderProps) {
         sizing="small"
         className="w-100"
         style={{ width: "100%" }}
+        readOnly
         disabled={!fragment?.sandboxUrl}
         value={fragment?.sandboxUrl ?? "/"}
       />
@@ -77,7 +78,7 @@ function ProjectsHeader({ fragment, setSandboxKey }: ProjectHeaderProps) {
         </DropdownMenu.Root>
         <Tooltip content="Open in new tab">
           <Button
-            disabled={!fragment}
+            disabled={!fragment?.sandboxUrl}
             variant="ghost"
             sizing="small"
             aria-label="Open in new tab"
@@ -90,7 +91,7 @@ function ProjectsHeader({ fragment, setSandboxKey }: ProjectHeaderProps) {
         </Tooltip>
         <Tooltip content="Refresh page">
           <Button
-            disabled={!fragment}
+            disabled={!fragment?.sandboxUrl}
             variant="ghost"
             sizing="small"
             aria-label="Refresh page"
