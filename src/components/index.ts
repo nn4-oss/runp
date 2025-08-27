@@ -1,10 +1,12 @@
-export { default as Navigation } from "./navigation";
-export { default as ColorModes } from "./color-mode";
-export { default as ReflectiveButton } from "./reflective-button";
+export { default as AnimatedAgent } from "./animated-agent";
 export { default as AnimatedHero } from "./animated-hero";
+export { default as CodeEditor } from "./code-editor";
+export { default as ColorModes } from "./color-mode";
+export { default as CopyCode } from "./copy-code";
+export { default as Navigation } from "./navigation";
+export { default as ReflectiveButton } from "./reflective-button";
 export { default as SplitScreen } from "./split-screen";
 export { default as Textarea } from "./text-area";
-export { default as AnimatedAgent } from "./animated-agent";
 
 export { Spinner } from "./spinner";
 export { AppContainer } from "./container";
