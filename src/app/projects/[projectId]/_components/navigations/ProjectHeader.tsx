@@ -14,7 +14,7 @@ import {
 import { Icon, PixelIcon, WebIcon } from "@usefui/icons";
 
 import type { Fragment } from "generated/prisma";
-import type { ViewProps } from "../containers/ProjectEditor";
+import type { ViewProps } from "../types";
 
 type ProjectHeaderProps = {
   fragment: Fragment | null;

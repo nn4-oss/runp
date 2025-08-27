@@ -15,3 +15,5 @@ export interface BubbleProps extends FragmentBubbleProps {
 export interface MessageBubbleProps extends BubbleProps {
   role: MessageRole;
 }
+
+export type ViewProps = "preview" | "code";
