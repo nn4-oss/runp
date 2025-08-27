@@ -3,37 +3,28 @@
 import React from "react";
 import styled from "styled-components";
 
-import { Toolbar, Tooltip } from "@usefui/components";
+import { ScrollArea, Toolbar, Tooltip } from "@usefui/components";
 import { Icon, PixelIcon } from "@usefui/icons";
 
-const ExplorerToolbar = styled(Toolbar)`
-  max-width: var(--measurement-large-80) !important;
-  background-color: var(--contrast-color) !important;
+type FilesProps = Record<string, string>;
+type FileExplorerProps = {
+  files?: FilesProps;
+};
+
+const ExplorerToolbar = styled(ScrollArea)`
+  padding: var(--measurement-medium-30);
+  background-color: var(--body-color);
+  border-right: var(--measurement-small-30) solid var(--font-color-alpha-10);
+  height: 100%;
 `;
 
-function FilesExplorer() {
-  return (
-    <Toolbar.Root>
-      <ExplorerToolbar
-        side="left"
-        height="display"
-        defaultOpen
-        className="h-100"
-      >
-        <Tooltip content="Files explorer">
-          <Toolbar.Trigger variant="border" sizing="small">
-            <span className="flex align-center justify-center p-y-small-60">
-              <Icon>
-                <PixelIcon.LayoutSidebarLeft />
-              </Icon>
-            </span>
-          </Toolbar.Trigger>
-        </Tooltip>
+function getLanguageExtension(filename: string): string {
+  const extension = filename.split(".").pop()?.toLowerCase();
+  return extension ?? "text";
+}
 
-        <Toolbar.Section className="flex justify-center w-100 h-100 align-center p-t-large-90 p-b-medium-30"></Toolbar.Section>
-      </ExplorerToolbar>
-    </Toolbar.Root>
-  );
+function FilesExplorer({ files }: FileExplorerProps) {
+  return <ExplorerToolbar>files</ExplorerToolbar>;
 }
 
 export default FilesExplorer;

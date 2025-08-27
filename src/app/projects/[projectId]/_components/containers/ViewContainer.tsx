@@ -6,10 +6,10 @@ import ProjectPreview from "./ProjectPreview";
 import FilesExplorer from "./FilesExplorer";
 import CodeEditor from "@/components/code-editor";
 
-import { Spinner } from "@/components";
+import { Spinner, SplitScreen } from "@/components";
 
 import type { Fragment } from "generated/prisma";
-import type { ViewProps } from "./ProjectEditor";
+import type { ViewProps } from "../types";
 
 function ViewContainer({
   fragment,
@@ -25,7 +25,7 @@ function ViewContainer({
   const isCodeMode = !isPending && fragment && currentView === "code";
 
   return (
-    <React.Fragment>
+    <div className="w-100 h-100">
       {isPending && <Spinner />}
 
       {isPreviewMode && (
@@ -36,12 +36,18 @@ function ViewContainer({
       )}
 
       {isCodeMode && (
-        <div className="h-100 w-100 h-100 flex align-center justify-center">
-          <FilesExplorer />
-          <CodeEditor value={JSON.stringify(fragment, null, 2)} readOnly />
-        </div>
+        <SplitScreen
+          defaultWidth={33}
+          left={<FilesExplorer />}
+          right={
+            <CodeEditor
+              value={JSON.stringify(fragment?.files, null, 2)}
+              readOnly
+            />
+          }
+        />
       )}
-    </React.Fragment>
+    </div>
   );
 }
 
