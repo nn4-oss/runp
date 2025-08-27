@@ -4,7 +4,7 @@ import React from "react";
 import styled from "styled-components";
 
 const IFrame = styled.iframe`
-  all: unset;
+  display: block;
   width: 100%;
   height: 100%;
   box-sizing: border-box;
@@ -21,10 +21,12 @@ function ProjectPreview({
 }) {
   return (
     <IFrame
-      src={sandboxUrl}
       key={sandboxKey}
+      src={sandboxUrl}
       className="h-100 w-100"
-      sandbox="allow-forms allow-scripts allow-same-origin"
+      sandbox="allow-forms allow-scripts"
+      title="Project preview"
+      referrerPolicy="no-referrer"
       loading="lazy"
     />
   );
