@@ -23,7 +23,7 @@ function ProjectEditor({ projectId }: { projectId: string }) {
           setActiveFragment={setActiveFragment}
         />
       }
-      right={<ProjectContainer projectId={projectId} />}
+      right={<ProjectContainer fragment={activeFragment} />}
     />
   );
 }

@@ -1,18 +1,26 @@
 "use client";
 
 import React from "react";
+import styled from "styled-components";
 
-import { useTRPC } from "@/trpc/client";
-import { useSuspenseQuery } from "@tanstack/react-query";
+const IFrame = styled.iframe`
+  all: unset;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  border: none;
+  background-color: transparent;
+`;
 
-function ProjectPreview({ projectId }: { projectId: string }) {
-  const trpc = useTRPC();
-
-  const { data: project } = useSuspenseQuery(
-    trpc.projects.getUnique.queryOptions({ id: projectId }),
+function ProjectPreview({ sandboxUrl }: { sandboxUrl: string }) {
+  return (
+    <IFrame
+      src={sandboxUrl}
+      className="h-100 w-100"
+      sandbox="allow-forms allow-scripts allow-same-origin"
+      loading="lazy"
+    />
   );
-
-  return <div>{JSON.stringify(project)}</div>;
 }
 
 export default ProjectPreview;
