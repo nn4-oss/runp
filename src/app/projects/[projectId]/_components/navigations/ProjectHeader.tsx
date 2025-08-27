@@ -14,10 +14,13 @@ import {
 import { Icon, PixelIcon, WebIcon } from "@usefui/icons";
 
 import type { Fragment } from "generated/prisma";
+import type { ViewProps } from "../containers/ProjectEditor";
 
 type ProjectHeaderProps = {
   fragment: Fragment | null;
+  currentView: ViewProps;
   setSandboxKey: React.Dispatch<React.SetStateAction<number>>;
+  setCurrentView: React.Dispatch<React.SetStateAction<ViewProps>>;
 };
 
 const StyledMenu = styled(Page.Navigation)`
@@ -26,12 +29,24 @@ const StyledMenu = styled(Page.Navigation)`
   padding-left: 0;
 `;
 
-function ProjectsHeader({ fragment, setSandboxKey }: ProjectHeaderProps) {
+function ProjectsHeader({
+  fragment,
+  currentView,
+  setSandboxKey,
+  setCurrentView,
+}: ProjectHeaderProps) {
+  const handleViewChange = () => {
+    if (currentView === "code") return setCurrentView("preview");
+    if (currentView === "preview") return setCurrentView("code");
+    return;
+  };
   const handleRefresh = () => setSandboxKey((k) => k + 1);
   const handleNewTab = () => {
     if (!fragment?.sandboxUrl) return;
     window.open(fragment?.sandboxUrl, "_blank", "noopener,noreferrer");
   };
+
+  const switchViewLabel = currentView === "code" ? "Preview" : "Code";
 
   return (
     <StyledMenu className="w-100 flex g-medium-30 align-center justify-between">
@@ -46,36 +61,21 @@ function ProjectsHeader({ fragment, setSandboxKey }: ProjectHeaderProps) {
       />
 
       <div className="flex g-medium-30 align-center justify-end">
-        <DropdownMenu.Root>
-          <DropdownMenu>
-            <DropdownMenu.Trigger>
-              <Icon>
-                <PixelIcon.SlidersVertical />
-              </Icon>
-            </DropdownMenu.Trigger>
+        <Tooltip content={`Show ${switchViewLabel}`}>
+          <Button
+            disabled={!fragment?.sandboxUrl}
+            variant="ghost"
+            sizing="small"
+            aria-label={`Show ${switchViewLabel}`}
+            onClick={handleViewChange}
+          >
+            <Icon>
+              {currentView === "code" && <PixelIcon.Eye />}
+              {currentView === "preview" && <WebIcon.DataObject />}
+            </Icon>
+          </Button>
+        </Tooltip>
 
-            <DropdownMenu.Content sizing="small">
-              <DropdownMenu.Item className="w-100 flex align-center g-medium-30">
-                <Icon>
-                  <PixelIcon.Eye />
-                </Icon>
-                Preview
-              </DropdownMenu.Item>
-              <DropdownMenu.Item className="w-100 flex align-center g-medium-30">
-                <Icon>
-                  <PixelIcon.ChevronsHorizontal />
-                </Icon>
-                Code
-              </DropdownMenu.Item>
-              <DropdownMenu.Item className="w-100 flex align-center g-medium-30">
-                <Icon>
-                  <PixelIcon.CornerUpLeft />
-                </Icon>
-                Diagram
-              </DropdownMenu.Item>
-            </DropdownMenu.Content>
-          </DropdownMenu>
-        </DropdownMenu.Root>
         <Tooltip content="Open in new tab">
           <Button
             disabled={!fragment?.sandboxUrl}
@@ -89,6 +89,7 @@ function ProjectsHeader({ fragment, setSandboxKey }: ProjectHeaderProps) {
             </Icon>
           </Button>
         </Tooltip>
+
         <Tooltip content="Refresh page">
           <Button
             disabled={!fragment?.sandboxUrl}

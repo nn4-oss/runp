@@ -44,7 +44,7 @@ const EditorWrapper = styled(ScrollArea)`
 const EditorTheme = createTheme({
   theme: "light",
   settings: {
-    background: "var(--body-color)",
+    background: "var(--contrast-color)",
     backgroundImage: "",
     foreground: "",
     caret: "var(--font-color-alpha-60)",
@@ -52,7 +52,7 @@ const EditorTheme = createTheme({
     selectionMatch: "var(--font-color-alpha-10)",
     fontSize: "var(--fontsize-small-60)",
     gutterActiveForeground: "var(--font-color-alpha-30)",
-    gutterBackground: "var(--body-color)",
+    gutterBackground: "var(--contrast-color)",
     gutterBorder: "var(--font-color-alpha-10)",
     lineHighlight: "var(--font-color-alpha-10)",
   },

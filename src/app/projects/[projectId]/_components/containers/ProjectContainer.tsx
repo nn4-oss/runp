@@ -2,30 +2,42 @@
 
 import React from "react";
 
-import ProjectPreview from "./ProjectPreview";
 import ProjectsHeader from "../navigations/ProjectHeader";
+import ViewContainer from "./ViewContainer";
 
-import { AppContainer, Spinner } from "@/components";
+import { AppContainer } from "@/components";
 import { ViewsContainer } from "./ViewsContainer";
 
 import type { Fragment } from "generated/prisma";
+import type { ViewProps } from "./ProjectEditor";
 
-function ProjectContainer({ fragment }: { fragment: Fragment | null }) {
+type ProjectContainerProps = {
+  fragment: Fragment | null;
+  currentView: ViewProps;
+  setCurrentView: React.Dispatch<React.SetStateAction<ViewProps>>;
+};
+function ProjectContainer({
+  currentView,
+  setCurrentView,
+  fragment,
+}: ProjectContainerProps) {
   const [sandboxKey, setSandboxKey] = React.useState(0);
 
   return (
     <ViewsContainer>
-      <ProjectsHeader fragment={fragment} setSandboxKey={setSandboxKey} />
+      <ProjectsHeader
+        fragment={fragment}
+        currentView={currentView}
+        setSandboxKey={setSandboxKey}
+        setCurrentView={setCurrentView}
+      />
 
       <AppContainer className="h-100 w-100 flex align-center justify-center">
-        {fragment ? (
-          <ProjectPreview
-            sandboxUrl={fragment.sandboxUrl}
-            sandboxKey={sandboxKey}
-          />
-        ) : (
-          <Spinner />
-        )}
+        <ViewContainer
+          fragment={fragment}
+          currentView={currentView}
+          sandboxKey={sandboxKey}
+        />
       </AppContainer>
     </ViewsContainer>
   );

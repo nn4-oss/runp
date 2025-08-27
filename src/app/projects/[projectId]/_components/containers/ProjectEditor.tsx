@@ -8,7 +8,10 @@ import ProjectContainer from "./ProjectContainer";
 import { SplitScreen } from "@/components";
 import type { Fragment } from "generated/prisma";
 
+export type ViewProps = "preview" | "code";
+
 function ProjectEditor({ projectId }: { projectId: string }) {
+  const [currentView, setCurrentView] = React.useState<ViewProps>("preview");
   const [activeFragment, setActiveFragment] = React.useState<Fragment | null>(
     null,
   );
@@ -23,7 +26,13 @@ function ProjectEditor({ projectId }: { projectId: string }) {
           setActiveFragment={setActiveFragment}
         />
       }
-      right={<ProjectContainer fragment={activeFragment} />}
+      right={
+        <ProjectContainer
+          fragment={activeFragment}
+          currentView={currentView}
+          setCurrentView={setCurrentView}
+        />
+      }
     />
   );
 }
