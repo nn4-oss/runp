@@ -7,7 +7,8 @@ import MessagesStream from "./MessagesStream";
 import PromptForm from "../data/PromptForm";
 
 import { Spinner } from "@/components";
-import { Page, ScrollArea } from "@usefui/components";
+import { ScrollArea } from "@usefui/components";
+import { ViewsContainer } from "./ViewsContainer";
 
 import type { Fragment } from "generated/prisma";
 
@@ -23,10 +24,7 @@ function MessagesContainer({
   setActiveFragment,
 }: MessageContainerProps) {
   return (
-    <Page.Content
-      className="flex justify-between"
-      style={{ flexDirection: "column" }}
-    >
+    <ViewsContainer>
       <React.Suspense fallback={<Spinner />}>
         <MessagesHeader projectId={projectId} />
       </React.Suspense>
@@ -42,7 +40,7 @@ function MessagesContainer({
       </ScrollArea>
 
       <PromptForm projectId={projectId} />
-    </Page.Content>
+    </ViewsContainer>
   );
 }
 

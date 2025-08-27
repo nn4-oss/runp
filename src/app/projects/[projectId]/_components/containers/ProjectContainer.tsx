@@ -5,23 +5,29 @@ import React from "react";
 import ProjectPreview from "./ProjectPreview";
 import ProjectsHeader from "../navigations/ProjectHeader";
 
-import { AppContainer } from "@/components";
-import { Page } from "@usefui/components";
+import { AppContainer, Spinner } from "@/components";
+import { ViewsContainer } from "./ViewsContainer";
 
-function ProjectContainer({ projectId }: { projectId: string }) {
+import type { Fragment } from "generated/prisma";
+
+function ProjectContainer({ fragment }: { fragment: Fragment | null }) {
+  const [sandboxKey, setSandboxKey] = React.useState(0);
+
   return (
-    <Page.Content
-      className="flex justify-between"
-      style={{ flexDirection: "column" }}
-    >
-      <ProjectsHeader />
+    <ViewsContainer>
+      <ProjectsHeader fragment={fragment} setSandboxKey={setSandboxKey} />
 
-      <AppContainer className="p-medium-60">
-        <React.Suspense fallback="Loading project details..">
-          <ProjectPreview projectId={projectId} />
-        </React.Suspense>
+      <AppContainer className="h-100 w-100 flex align-center justify-center">
+        {fragment ? (
+          <ProjectPreview
+            sandboxUrl={fragment.sandboxUrl}
+            sandboxKey={sandboxKey}
+          />
+        ) : (
+          <Spinner />
+        )}
       </AppContainer>
-    </Page.Content>
+    </ViewsContainer>
   );
 }
 
