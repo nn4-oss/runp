@@ -17,3 +17,4 @@ export interface MessageBubbleProps extends BubbleProps {
 }
 
 export type ViewProps = "preview" | "code";
+export type FilesProps = Record<string, string>;
