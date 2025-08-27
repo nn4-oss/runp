@@ -27,6 +27,7 @@ const StyledMenu = styled(Page.Navigation)`
   border: none !important;
   background-color: transparent;
   padding-left: 0;
+  padding-right: var(--measurement-small-10) !important;
 `;
 
 function ProjectsHeader({
@@ -49,7 +50,23 @@ function ProjectsHeader({
   const switchViewLabel = currentView === "code" ? "Preview" : "Code";
 
   return (
-    <StyledMenu className="w-100 flex g-medium-30 align-center justify-between">
+    <StyledMenu className="w-100 flex g-medium-10 align-center justify-between">
+      <Tooltip content={`Show ${switchViewLabel}`}>
+        <Button
+          disabled={!fragment?.sandboxUrl}
+          variant="border"
+          sizing="small"
+          aria-label={`Show ${switchViewLabel}`}
+          onClick={handleViewChange}
+        >
+          <span className="flex align-center justify-center p-y-small-60">
+            <Icon>
+              {currentView === "code" && <PixelIcon.Eye />}
+              {currentView === "preview" && <WebIcon.DataObject />}
+            </Icon>
+          </span>
+        </Button>
+      </Tooltip>
       <Field
         variant="secondary"
         sizing="small"
@@ -60,50 +77,37 @@ function ProjectsHeader({
         value={fragment?.sandboxUrl ?? "/"}
       />
 
-      <div className="flex g-medium-30 align-center justify-end">
-        <Tooltip content={`Show ${switchViewLabel}`}>
-          <Button
-            disabled={!fragment?.sandboxUrl}
-            variant="ghost"
-            sizing="small"
-            aria-label={`Show ${switchViewLabel}`}
-            onClick={handleViewChange}
-          >
-            <Icon>
-              {currentView === "code" && <PixelIcon.Eye />}
-              {currentView === "preview" && <WebIcon.DataObject />}
-            </Icon>
-          </Button>
-        </Tooltip>
-
-        <Tooltip content="Open in new tab">
-          <Button
-            disabled={!fragment?.sandboxUrl}
-            variant="ghost"
-            sizing="small"
-            aria-label="Open in new tab"
-            onClick={handleNewTab}
-          >
+      <Tooltip content="Open in new tab">
+        <Button
+          disabled={!fragment?.sandboxUrl}
+          variant="border"
+          sizing="small"
+          aria-label="Open in new tab"
+          onClick={handleNewTab}
+        >
+          <span className="flex align-center justify-center p-y-small-60">
             <Icon>
               <PixelIcon.Open />
             </Icon>
-          </Button>
-        </Tooltip>
+          </span>
+        </Button>
+      </Tooltip>
 
-        <Tooltip content="Refresh page">
-          <Button
-            disabled={!fragment?.sandboxUrl}
-            variant="ghost"
-            sizing="small"
-            aria-label="Refresh page"
-            onClick={handleRefresh}
-          >
+      <Tooltip content="Refresh page">
+        <Button
+          disabled={!fragment?.sandboxUrl}
+          variant="border"
+          sizing="small"
+          aria-label="Refresh page"
+          onClick={handleRefresh}
+        >
+          <span className="flex align-center justify-center p-y-small-60">
             <Icon>
               <PixelIcon.Reload />
             </Icon>
-          </Button>
-        </Tooltip>
-      </div>
+          </span>
+        </Button>
+      </Tooltip>
     </StyledMenu>
   );
 }

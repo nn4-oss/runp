@@ -140,7 +140,7 @@ function PromptField() {
               disabled={createProject.isPending || value.trim().length === 0}
               type="button"
             >
-              <span className="p-y-small-30">
+              <span className="p-y-small-60 flex align-center justify-center">
                 <Icon>
                   <PixelIcon.ArrowRight />
                 </Icon>
