@@ -12,10 +12,17 @@ const IFrame = styled.iframe`
   background-color: transparent;
 `;
 
-function ProjectPreview({ sandboxUrl }: { sandboxUrl: string }) {
+function ProjectPreview({
+  sandboxUrl,
+  sandboxKey,
+}: {
+  sandboxUrl: string;
+  sandboxKey: number;
+}) {
   return (
     <IFrame
       src={sandboxUrl}
+      key={sandboxKey}
       className="h-100 w-100"
       sandbox="allow-forms allow-scripts allow-same-origin"
       loading="lazy"

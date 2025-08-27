@@ -7,11 +7,9 @@ import { useTRPC } from "@/trpc/client";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
+import { ColorModes } from "@/components";
 import { Avatar, Divider, DropdownMenu, Page } from "@usefui/components";
 import { Icon, PixelIcon } from "@usefui/icons";
-
-import { formatDistanceToNow } from "date-fns";
-import { ColorModes } from "@/components";
 
 const StyledMenu = styled(Page.Navigation)`
   border: none !important;
@@ -35,10 +33,6 @@ function MessagesHeader({ projectId }: { projectId: string }) {
     trpc.projects.getUnique.queryOptions({ id: projectId }),
   );
 
-  const lastUpdate = formatDistanceToNow(project.updatedAt, {
-    addSuffix: true,
-  });
-  console.log(lastUpdate);
   return (
     <StyledMenu className="w-100 flex g-medium-30 p-x-medium-30 align-center justify-start">
       <DropdownMenu.Root>

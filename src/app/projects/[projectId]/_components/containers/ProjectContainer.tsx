@@ -11,18 +11,21 @@ import { ViewsContainer } from "./ViewsContainer";
 import type { Fragment } from "generated/prisma";
 
 function ProjectContainer({ fragment }: { fragment: Fragment | null }) {
+  const [sandboxKey, setSandboxKey] = React.useState(0);
+
   return (
     <ViewsContainer>
-      <ProjectsHeader />
+      <ProjectsHeader fragment={fragment} setSandboxKey={setSandboxKey} />
 
       <AppContainer className="h-100 w-100 flex align-center justify-center">
-        <React.Suspense fallback={<Spinner />}>
-          {fragment ? (
-            <ProjectPreview sandboxUrl={fragment.sandboxUrl} />
-          ) : (
-            <Spinner />
-          )}
-        </React.Suspense>
+        {fragment ? (
+          <ProjectPreview
+            sandboxUrl={fragment.sandboxUrl}
+            sandboxKey={sandboxKey}
+          />
+        ) : (
+          <Spinner />
+        )}
       </AppContainer>
     </ViewsContainer>
   );
