@@ -23,6 +23,7 @@ type ProjectHeaderProps = {
 const StyledMenu = styled(Page.Navigation)`
   border: none !important;
   background-color: transparent;
+  padding-left: 0;
 `;
 
 function ProjectsHeader({ fragment, setSandboxKey }: ProjectHeaderProps) {
@@ -34,16 +35,23 @@ function ProjectsHeader({ fragment, setSandboxKey }: ProjectHeaderProps) {
 
   return (
     <StyledMenu className="w-100 flex g-medium-30 align-center justify-between">
-      <div className="flex g-medium-30 align-center">
+      <Field
+        variant="secondary"
+        sizing="small"
+        className="w-100"
+        style={{ width: "100%" }}
+        disabled={!fragment?.sandboxUrl}
+        value={fragment?.sandboxUrl ?? "/"}
+      />
+
+      <div className="flex g-medium-30 align-center justify-end">
         <DropdownMenu.Root>
           <DropdownMenu>
-            <Tooltip content="View">
-              <DropdownMenu.Trigger>
-                <Icon>
-                  <WebIcon.More />
-                </Icon>
-              </DropdownMenu.Trigger>
-            </Tooltip>
+            <DropdownMenu.Trigger>
+              <Icon>
+                <PixelIcon.SlidersVertical />
+              </Icon>
+            </DropdownMenu.Trigger>
 
             <DropdownMenu.Content sizing="small">
               <DropdownMenu.Item className="w-100 flex align-center g-medium-30">
@@ -67,9 +75,6 @@ function ProjectsHeader({ fragment, setSandboxKey }: ProjectHeaderProps) {
             </DropdownMenu.Content>
           </DropdownMenu>
         </DropdownMenu.Root>
-      </div>
-
-      <div className="flex g-medium-30 align-center">
         <Tooltip content="Open in new tab">
           <Button
             disabled={!fragment}
@@ -83,14 +88,6 @@ function ProjectsHeader({ fragment, setSandboxKey }: ProjectHeaderProps) {
             </Icon>
           </Button>
         </Tooltip>
-
-        <Field
-          variant="secondary"
-          sizing="small"
-          disabled={!fragment?.sandboxUrl}
-          value={fragment?.sandboxUrl ?? "/"}
-        />
-
         <Tooltip content="Refresh page">
           <Button
             disabled={!fragment}
@@ -105,18 +102,6 @@ function ProjectsHeader({ fragment, setSandboxKey }: ProjectHeaderProps) {
           </Button>
         </Tooltip>
       </div>
-
-      <Tooltip content="Enter fullscreen">
-        <Button
-          disabled={!fragment}
-          variant="ghost"
-          aria-label="Enter fullscreen"
-        >
-          <Icon>
-            <PixelIcon.Scale />
-          </Icon>
-        </Button>
-      </Tooltip>
     </StyledMenu>
   );
 }
