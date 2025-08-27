@@ -3,19 +3,13 @@
 import React from "react";
 
 import ProjectPreview from "./ProjectPreview";
-import FilesExplorer from "./FilesExplorer";
+import FilesTree from "./FilesTree";
 
 import { Spinner, SplitScreen, CodeEditor, CopyCode } from "@/components";
+import { getFirstFileKey, convertFilesToTree } from "../../_utils";
 
 import type { Fragment } from "generated/prisma";
-import type { ViewProps, FilesProps } from "../types";
-
-function getFirstFileKey(files: FilesProps | null): string | null {
-  if (!files) return null;
-
-  const fileKeys = Object.keys(files);
-  return fileKeys.length > 0 ? fileKeys[0]! : null;
-}
+import type { ViewProps } from "../types";
 
 function ViewContainer({
   fragment,
@@ -31,20 +25,36 @@ function ViewContainer({
     return null;
   }, [fragment]);
 
+  const filesTree = React.useMemo(() => {
+    if (files) return convertFilesToTree(files);
+    return null;
+  }, [files]);
+
   const [selectedFile, setSelectedFile] = React.useState<string | null>(null);
 
   const isPending = !fragment?.sandboxUrl;
   const isPreviewMode = !isPending && fragment && currentView === "preview";
   const isCodeMode = !isPending && fragment && currentView === "code";
 
+  const handleOnSelectFile = React.useCallback(
+    (path: string) => {
+      if (files && files[path]) {
+        setSelectedFile(path);
+      }
+    },
+    [files],
+  );
+
   /** Auto-select first file */
-  React.useEffect(() => {
-    setSelectedFile(getFirstFileKey(files));
-  }, [files]);
+  React.useEffect(() => setSelectedFile(getFirstFileKey(files)), [files]);
 
   return (
     <div className="w-100 h-100">
-      {isPending && <Spinner />}
+      {isPending && (
+        <div className="w-100 h-100 flex align-center jusity-center">
+          <Spinner />
+        </div>
+      )}
 
       {isPreviewMode && (
         <ProjectPreview
@@ -55,8 +65,14 @@ function ViewContainer({
 
       {isCodeMode && (
         <SplitScreen
-          defaultWidth={33}
-          left={<FilesExplorer />}
+          defaultWidth={25}
+          left={
+            <FilesTree
+              files={filesTree}
+              value={selectedFile}
+              onSelect={handleOnSelectFile}
+            />
+          }
           right={
             <React.Fragment>
               {selectedFile && files && files[selectedFile] ? (
