@@ -1,13 +1,15 @@
 "use client";
 
 import React from "react";
+
 import ProjectPreview from "./ProjectPreview";
+import FilesExplorer from "./FilesExplorer";
+import CodeEditor from "@/components/code-editor";
 
 import { Spinner } from "@/components";
 
 import type { Fragment } from "generated/prisma";
 import type { ViewProps } from "./ProjectEditor";
-import CodeEditor from "@/components/code-editor";
 
 function ViewContainer({
   fragment,
@@ -34,7 +36,10 @@ function ViewContainer({
       )}
 
       {isCodeMode && (
-        <CodeEditor value={JSON.stringify(fragment, null, 2)} readOnly />
+        <div className="h-100 w-100 h-100 flex align-center justify-center">
+          <FilesExplorer />
+          <CodeEditor value={JSON.stringify(fragment, null, 2)} readOnly />
+        </div>
       )}
     </React.Fragment>
   );
