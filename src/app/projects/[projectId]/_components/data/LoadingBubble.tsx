@@ -41,8 +41,15 @@ function LoadingBubble() {
   return (
     <div className="grid p-medium-30">
       <div className="flex align-center g-medium-30">
-        <Badge variant="border" shape="round" className="p-y-medium-30">
-          <AnimatedAgent />
+        <Badge
+          variant="border"
+          shape="round"
+          className="p-y-medium-30"
+          aria-hidden="true"
+        >
+          <span className="p-y-small-80 flex align-center justify-center">
+            <AnimatedAgent />
+          </span>
         </Badge>
         <div
           className="grid"
