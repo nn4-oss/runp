@@ -26,7 +26,7 @@ function ProjectPreview({
       className="h-100 w-100"
       sandbox="allow-forms allow-scripts allow-same-origin"
       title="Project preview"
-      referrerPolicy="no-referrer"
+      referrerPolicy="strict-origin-when-cross-origin"
       loading="lazy"
     />
   );
