@@ -3,7 +3,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { Accordion, Button, ScrollArea } from "@usefui/components";
+import { Accordion, Button, Divider, ScrollArea } from "@usefui/components";
 import { Icon, PixelIcon } from "@usefui/icons";
 
 import type { TreeItem } from "../../_utils";
@@ -16,13 +16,12 @@ type FilesTreeProps = {
 };
 type TreeProps = {
   file: TreeItem;
-  selectedValue: string;
+  selectedValue: string | null;
   parentPath: string;
   onSelect: OnSelect;
 };
 
 const TreeWrapper = styled(ScrollArea)`
-  padding: var(--measurement-medium-30);
   background-color: var(--contrast-color);
   border-right: var(--measurement-small-30) solid var(--font-color-alpha-10);
   height: 100%;
@@ -38,6 +37,7 @@ function Tree({ file, parentPath, selectedValue, onSelect }: TreeProps) {
 
     return (
       <Button
+        aria-current={isFileSelected ? "true" : undefined}
         onClick={() => onSelect?.(currentPath)}
         variant="ghost"
         sizing="small"
@@ -45,7 +45,7 @@ function Tree({ file, parentPath, selectedValue, onSelect }: TreeProps) {
         <Icon>
           <PixelIcon.File />
         </Icon>
-        <span>{name}</span>
+        {name}
         {isFileSelected && (
           <Icon>
             <PixelIcon.ChevronRight />
@@ -58,8 +58,8 @@ function Tree({ file, parentPath, selectedValue, onSelect }: TreeProps) {
   // Folder case
   return (
     <Accordion.Root>
-      <Accordion>
-        <Accordion.Trigger value={name}>
+      <Accordion className="m-b-medium-30">
+        <Accordion.Trigger value={name} variant="ghost" sizing="small">
           <Icon>
             <PixelIcon.Folder />
           </Icon>
@@ -74,15 +74,20 @@ function Tree({ file, parentPath, selectedValue, onSelect }: TreeProps) {
           className="p-l-medium-60 grid g-medium-30 p-t-medium-30"
         >
           {/**Recursive use of the component */}
-          {items.map((subitem, key) => (
-            <Tree
-              key={key}
-              file={subitem}
-              selectedValue={selectedValue}
-              onSelect={onSelect}
-              parentPath={currentPath}
-            />
-          ))}
+          {items.map((subitem) => {
+            const childName = Array.isArray(subitem) ? subitem[0] : subitem;
+            const childPath = `${currentPath}/${childName}`;
+
+            return (
+              <Tree
+                key={childPath}
+                file={subitem}
+                selectedValue={selectedValue}
+                onSelect={onSelect}
+                parentPath={currentPath}
+              />
+            );
+          })}
         </Accordion.Content>
       </Accordion>
     </Accordion.Root>
@@ -92,15 +97,26 @@ function Tree({ file, parentPath, selectedValue, onSelect }: TreeProps) {
 function FilesTree({ files, value, onSelect }: FilesTreeProps) {
   return (
     <TreeWrapper scrollbar>
-      {files?.map((file, key) => (
-        <Tree
-          key={key}
-          file={file}
-          selectedValue={String(value)}
-          onSelect={onSelect}
-          parentPath=""
-        />
-      ))}
+      <header className="p-x-medium-30 p-t-medium-30">
+        <p className="fs-medium-10 opacity-default-30">Explorer</p>
+      </header>
+
+      <Divider className="m-b-medium-60" />
+
+      <div className="p-x-medium-30 p-b-medium-30">
+        {files?.map((file) => {
+          const name = Array.isArray(file) ? file[0] : file;
+          return (
+            <Tree
+              key={name}
+              file={file}
+              selectedValue={value}
+              onSelect={onSelect}
+              parentPath=""
+            />
+          );
+        })}
+      </div>
     </TreeWrapper>
   );
 }
