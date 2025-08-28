@@ -5,6 +5,11 @@ export interface TreeNode {
   [key: string]: TreeNode | null;
 }
 
+export function getFilesKeys(files: FilesProps | null) {
+  if (files) return Object.keys(files);
+  return [];
+}
+
 export function getFirstFileKey(files: FilesProps | null): string | null {
   if (!files) return null;
 
@@ -12,7 +17,10 @@ export function getFirstFileKey(files: FilesProps | null): string | null {
   return fileKeys.length > 0 ? fileKeys[0]! : null;
 }
 
-function convertNode(node: TreeNode, name?: string): TreeItem | TreeItem[] {
+export function convertNode(
+  node: TreeNode,
+  name?: string,
+): TreeItem | TreeItem[] {
   const entries = Object.entries(node).sort(([a], [b]) => a.localeCompare(b)); // Ensure stable child ordering
   if (entries.length === 0) return name ? name : [];
 

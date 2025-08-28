@@ -1,27 +1,99 @@
 "use client";
 
 import React from "react";
+import styled from "styled-components";
 
-import { Button } from "@usefui/components";
+import { TextLimiter } from "@/components/breadcrumbs";
+import { Accordion, Button, Divider, Tooltip } from "@usefui/components";
 import { Icon, PixelIcon } from "@usefui/icons";
 
-import type { FragmentBubbleProps } from "../../_types";
+import { getFilesKeys } from "../../_utils";
+
+import type { FilesProps, FragmentBubbleProps } from "../../_types";
+
+const WrappedAccordion = styled(Accordion)`
+  display: block;
+  width: 100%;
+  max-width: var(--breakpoint-mobile);
+  padding: var(--measurement-medium-50);
+
+  background: var(--contrast-color);
+  border: var(--measurement-small-30) solid var(--font-color-alpha-10);
+  border-radius: var(--measurement-medium-30);
+
+  &[data-active="true"] {
+    border-color: var(--font-color-alpha-30);
+  }
+`;
 
 function FragmentBubble({
   fragment,
-  isActiveFragment,
   onFragmentClick,
+  isActiveFragment,
 }: FragmentBubbleProps) {
-  return (
-    <Button variant="ghost" onClick={() => onFragmentClick(fragment)}>
-      {fragment?.sandboxUrl}
+  const filesKeys = getFilesKeys(fragment?.files as FilesProps | null);
 
-      {isActiveFragment && (
-        <Icon>
-          <PixelIcon.ChevronRight />
-        </Icon>
-      )}
-    </Button>
+  return (
+    <Accordion.Root>
+      <WrappedAccordion data-active={String(isActiveFragment)}>
+        <div className="flex align-center justify-between">
+          <Accordion.Trigger
+            value={String(fragment?.id)}
+            variant="ghost"
+            sizing="small"
+            style={{ justifyContent: "start", width: "100%" }}
+          >
+            <Icon>
+              <PixelIcon.ChevronDown />
+            </Icon>
+            {fragment?.title}
+          </Accordion.Trigger>
+
+          {!isActiveFragment && (
+            <Tooltip
+              content="Restore version"
+              onClick={() => onFragmentClick(fragment)}
+            >
+              <Button variant="ghost">
+                <Icon>
+                  <PixelIcon.CornerUpLeft />
+                </Icon>
+              </Button>
+            </Tooltip>
+          )}
+
+          {isActiveFragment && (
+            <Icon>
+              <PixelIcon.ChevronRight />
+            </Icon>
+          )}
+        </div>
+
+        <Accordion.Content
+          className="grid g-medium-60"
+          value={String(fragment?.id)}
+        >
+          <Divider className="m-t-medium-60" />
+          {filesKeys.map((fileKey) => {
+            const name = fileKey.split("/").at(-1);
+
+            return (
+              <div key={fileKey} className="flex align-center g-medium-10">
+                <Icon opacity={0.3}>
+                  <PixelIcon.File />
+                </Icon>
+                <span className="fs-medium-10">{name}</span>
+                <TextLimiter>
+                  <div className="fs-medium-10 opacity-default-60">
+                    {fileKey}
+                  </div>
+                </TextLimiter>
+              </div>
+            );
+          })}
+        </Accordion.Content>
+      </WrappedAccordion>
+    </Accordion.Root>
   );
 }
 
