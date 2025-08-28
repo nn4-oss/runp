@@ -13,8 +13,8 @@ export function getFirstFileKey(files: FilesProps | null): string | null {
 }
 
 function convertNode(node: TreeNode, name?: string): TreeItem | TreeItem[] {
-  const entries = Object.entries(node);
-  if (entries.length === 0) return name ?? "";
+  const entries = Object.entries(node).sort(([a], [b]) => a.localeCompare(b)); // Ensure stable child ordering
+  if (entries.length === 0) return name ? name : [];
 
   const children: TreeItem[] = [];
   for (const [key, value] of entries) {
