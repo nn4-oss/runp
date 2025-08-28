@@ -24,7 +24,7 @@ function ProjectPreview({
       key={sandboxKey}
       src={sandboxUrl}
       className="h-100 w-100"
-      sandbox="allow-forms allow-scripts"
+      sandbox="allow-forms allow-scripts allow-same-origin"
       title="Project preview"
       referrerPolicy="no-referrer"
       loading="lazy"
