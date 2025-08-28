@@ -44,7 +44,10 @@ function CopyCode({
 
   React.useEffect(() => {
     return () => {
-      if (timerRef.current != null) window.clearTimeout(timerRef.current);
+      if (timerRef.current != null) {
+        window.clearTimeout(timerRef.current);
+        timerRef.current = null;
+      }
     };
   }, []);
 
