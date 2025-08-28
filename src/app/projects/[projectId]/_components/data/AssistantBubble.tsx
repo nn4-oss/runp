@@ -8,7 +8,7 @@ import FragmentBubble from "./FragmentBubble";
 import { Field } from "@usefui/components";
 
 import { format } from "date-fns";
-import type { BubbleProps } from "../types";
+import type { BubbleProps } from "../../_types";
 
 const BubbleText = styled.p`
   font-weight: 500;

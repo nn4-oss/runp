@@ -3,13 +3,14 @@
 import React from "react";
 
 import ProjectPreview from "./ProjectPreview";
+import CodeEditorHeader from "../navigations/CodeEditorHeader";
 import FilesTree from "./FilesTree";
 
 import { Spinner, SplitScreen, CodeEditor, CopyCode } from "@/components";
 import { getFirstFileKey, convertFilesToTree } from "../../_utils";
 
 import type { Fragment } from "generated/prisma";
-import type { ViewProps } from "../types";
+import type { ViewProps } from "../../_types";
 
 function ViewContainer({
   fragment,
@@ -56,6 +57,7 @@ function ViewContainer({
   /** Auto-select first file */
   React.useEffect(() => setSelectedFile(getFirstFileKey(files)), [files]);
 
+  console.log(selectedFile);
   return (
     <div className="w-100 h-100">
       {isPending && (
@@ -85,9 +87,10 @@ function ViewContainer({
             <React.Fragment>
               {selectedFile && files && files[selectedFile] ? (
                 <React.Fragment>
-                  <div className="flex align-center justify-end p-medium-30">
-                    <CopyCode value={files[selectedFile]} />
-                  </div>
+                  <CodeEditorHeader
+                    path={selectedFile}
+                    code={files[selectedFile]}
+                  />
                   <CodeEditor
                     readOnly
                     value={files[selectedFile]}

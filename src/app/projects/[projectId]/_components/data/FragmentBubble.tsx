@@ -5,7 +5,7 @@ import React from "react";
 import { Button } from "@usefui/components";
 import { Icon, PixelIcon } from "@usefui/icons";
 
-import type { FragmentBubbleProps } from "../types";
+import type { FragmentBubbleProps } from "../../_types";
 
 function FragmentBubble({
   fragment,
