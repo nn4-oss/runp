@@ -6,25 +6,25 @@ import styled from "styled-components";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
+import { useKeyPress } from "@usefui/hooks";
 
 import { Icon, PixelIcon } from "@usefui/icons";
 import { PromptOptions, ReflectiveButton, Textarea } from "@/components";
 
 import { toast } from "sonner";
-import { useKeyPress } from "@usefui/hooks";
+import { PREDEFINED_FEATURES_PROMPTS } from "../_prompts/predefined-features-prompts";
 
 const PromptContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  max-width: var(--breakpoint-tablet);
+  margin: var(--measurement-large-20) auto var(--measurement-medium-60) auto;
 `;
 const PromptWrapper = styled.div`
   border: var(--measurement-small-30) solid var(--font-color-alpha-10);
   border-radius: var(--measurement-medium-60);
-
-  max-width: var(--breakpoint-tablet);
-  margin: var(--measurement-large-20) auto var(--measurement-medium-60) auto;
 
   background: var(--contrast-color);
 
@@ -62,7 +62,7 @@ function HomePrompt() {
   return (
     <PromptContainer>
       <PromptWrapper
-        className="p-medium-60 w-100"
+        className="p-medium-60 w-100 m-b-medium-60"
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
       >
@@ -100,6 +100,23 @@ function HomePrompt() {
           </div>
         </div>
       </PromptWrapper>
+
+      <div className="flex flex-wrap g-medium-10 justify-center align-center">
+        {PREDEFINED_FEATURES_PROMPTS.map((task) => (
+          <ReflectiveButton
+            sizing="medium"
+            variant="border"
+            key={task.label}
+            onClick={() => {
+              setValue(task.content);
+              createProject.mutate({ value: task.content });
+            }}
+          >
+            <span className="fs-medium-10">{task.emoji}</span>
+            <span className="fs-medium-10">{task.label}</span>
+          </ReflectiveButton>
+        ))}
+      </div>
     </PromptContainer>
   );
 }
