@@ -46,7 +46,7 @@ const EditorTheme = createTheme({
   settings: {
     background: "var(--contrast-color)",
     backgroundImage: "",
-    foreground: "",
+    foreground: "var(--font-color)",
     caret: "var(--font-color-alpha-60)",
     selection: "var(--font-color-alpha-10)",
     selectionMatch: "var(--font-color-alpha-10)",
@@ -87,20 +87,15 @@ function CodeEditor({
     (newValue: string) => {
       setValue?.(newValue);
 
-      try {
-        // Ensure code is not empty
-        if (!newValue.trim()) {
-          setError?.("Code cannot be empty");
-        } else {
-          setError?.(null);
-          onChange?.(newValue);
-        }
-      } catch (e) {
-        if (e instanceof Error) setError?.(e.message);
-        else setError?.(`Invalid ${language.toUpperCase()} code`);
+      if (!newValue.trim()) {
+        setError?.("Code cannot be empty");
+        return;
       }
+
+      setError?.(null);
+      onChange?.(newValue);
     },
-    [setValue, language, onChange, setError],
+    [setValue, onChange, setError],
   );
 
   return (
@@ -111,6 +106,7 @@ function CodeEditor({
         onChange={handleChange}
         extensions={[languageExtension]}
         readOnly={readOnly}
+        editable={readOnly ? false : true}
         theme={EditorTheme}
         basicSetup={{
           lineNumbers: true,
@@ -120,6 +116,7 @@ function CodeEditor({
           searchKeymap: false,
         }}
         className="fs-medium-10"
+        aria-label="Code editor"
       />
     </EditorWrapper>
   );
