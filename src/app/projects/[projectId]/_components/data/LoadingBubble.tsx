@@ -3,7 +3,7 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
 
-import { Avatar } from "@usefui/components";
+import { Badge } from "@usefui/components";
 import { AnimatedAgent } from "@/components";
 
 const Blink = keyframes`
@@ -41,9 +41,16 @@ function LoadingBubble() {
   return (
     <div className="grid p-medium-30">
       <div className="flex align-center g-medium-30">
-        <Avatar sizing="small" style={{ background: "var(--font-color)" }}>
-          <AnimatedAgent />
-        </Avatar>
+        <Badge
+          variant="border"
+          shape="round"
+          className="p-y-medium-30"
+          aria-hidden="true"
+        >
+          <span className="p-y-small-80 flex align-center justify-center">
+            <AnimatedAgent />
+          </span>
+        </Badge>
         <div
           className="grid"
           role="status"

@@ -17,7 +17,7 @@ function AnimatedAgent() {
   }, []);
 
   return (
-    <Icon fill="var(--body-color)">
+    <Icon aria-hidden="true">
       {isHandsUp ? <PixelIcon.HumanHandsup /> : <PixelIcon.HumanHandsdown />}
     </Icon>
   );
