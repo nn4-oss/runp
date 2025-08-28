@@ -23,7 +23,6 @@ function AssistantBubble({
   fragment,
   createdAt,
   isActiveFragment,
-  onFragmentClick,
 }: BubbleProps) {
   const sanitizedContent = content.replace(/<\/?task_summary>/g, "").trim();
 
@@ -47,7 +46,6 @@ function AssistantBubble({
             <FragmentBubble
               fragment={fragment}
               isActiveFragment={isActiveFragment}
-              onFragmentClick={onFragmentClick}
             />
           )}
         </div>
