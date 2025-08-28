@@ -30,18 +30,20 @@ function ProjectsHeader({
   setSandboxKey,
   setCurrentView,
 }: ProjectHeaderProps) {
-  const handleViewChange = () => {
-    if (currentView === "code") return setCurrentView("preview");
-    if (currentView === "preview") return setCurrentView("code");
-    return;
-  };
   const handleRefresh = () => setSandboxKey((k) => k + 1);
   const handleNewTab = () => {
     if (!fragment?.sandboxUrl) return;
     window.open(fragment?.sandboxUrl, "_blank", "noopener,noreferrer");
   };
+  const handleViewChange = () => {
+    const next = currentView === "code" ? "preview" : "code";
+    if (next === "preview" && !fragment?.sandboxUrl) return;
+    setCurrentView(next);
+  };
 
   const switchViewLabel = currentView === "code" ? "Preview" : "Code";
+  const disableIframeInteractions =
+    !fragment?.sandboxUrl || currentView === "code";
 
   return (
     <StyledMenu className="w-100 flex g-medium-10 align-center justify-between">
@@ -64,16 +66,14 @@ function ProjectsHeader({
       <Field
         variant="secondary"
         sizing="small"
-        className="w-100"
-        style={{ width: "100%" }}
         readOnly
-        disabled={!fragment?.sandboxUrl}
         value={fragment?.sandboxUrl ?? "/"}
+        style={{ width: "100%" }}
       />
 
       <Tooltip content="Open in new tab">
         <ReflectiveButton
-          disabled={!fragment?.sandboxUrl}
+          disabled={disableIframeInteractions}
           variant="border"
           sizing="small"
           aria-label="Open in new tab"
@@ -89,7 +89,7 @@ function ProjectsHeader({
 
       <Tooltip content="Refresh page">
         <ReflectiveButton
-          disabled={!fragment?.sandboxUrl}
+          disabled={disableIframeInteractions}
           variant="border"
           sizing="small"
           aria-label="Refresh page"
