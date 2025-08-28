@@ -46,7 +46,10 @@ function HomePrompt() {
 
   const createProject = useMutation(
     trpc.projects.create.mutationOptions({
-      onSuccess: (data) => router.push(`/projects/${data.id}`),
+      onSuccess: (data) => {
+        trpc.projects.getMany.queryOptions();
+        router.push(`/projects/${data.id}`);
+      },
       onError: () => toast.error("An error occurred."),
     }),
   );
