@@ -3,15 +3,9 @@
 import React from "react";
 import styled from "styled-components";
 
-import {
-  Badge,
-  Button,
-  DropdownMenu,
-  Field,
-  Page,
-  Tooltip,
-} from "@usefui/components";
+import { Field, Page, Tooltip } from "@usefui/components";
 import { Icon, PixelIcon, WebIcon } from "@usefui/icons";
+import { ReflectiveButton } from "@/components";
 
 import type { Fragment } from "generated/prisma";
 import type { ViewProps } from "../types";
@@ -52,7 +46,7 @@ function ProjectsHeader({
   return (
     <StyledMenu className="w-100 flex g-medium-10 align-center justify-between">
       <Tooltip content={`Show ${switchViewLabel}`}>
-        <Button
+        <ReflectiveButton
           disabled={!fragment?.sandboxUrl}
           variant="border"
           sizing="small"
@@ -65,7 +59,7 @@ function ProjectsHeader({
               {currentView === "preview" && <WebIcon.DataObject />}
             </Icon>
           </span>
-        </Button>
+        </ReflectiveButton>
       </Tooltip>
       <Field
         variant="secondary"
@@ -78,7 +72,7 @@ function ProjectsHeader({
       />
 
       <Tooltip content="Open in new tab">
-        <Button
+        <ReflectiveButton
           disabled={!fragment?.sandboxUrl}
           variant="border"
           sizing="small"
@@ -90,11 +84,11 @@ function ProjectsHeader({
               <PixelIcon.Open />
             </Icon>
           </span>
-        </Button>
+        </ReflectiveButton>
       </Tooltip>
 
       <Tooltip content="Refresh page">
-        <Button
+        <ReflectiveButton
           disabled={!fragment?.sandboxUrl}
           variant="border"
           sizing="small"
@@ -106,7 +100,7 @@ function ProjectsHeader({
               <PixelIcon.Reload />
             </Icon>
           </span>
-        </Button>
+        </ReflectiveButton>
       </Tooltip>
     </StyledMenu>
   );
