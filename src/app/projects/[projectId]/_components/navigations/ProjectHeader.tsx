@@ -42,12 +42,17 @@ function ProjectsHeader({
   };
 
   const switchViewLabel = currentView === "code" ? "Preview" : "Code";
+  const switchViewTooltip =
+    !fragment?.sandboxUrl && currentView === "code"
+      ? "Preview unavailable"
+      : `Show ${switchViewLabel}`;
+
   const disableIframeInteractions =
     !fragment?.sandboxUrl || currentView === "code";
 
   return (
     <StyledMenu className="w-100 flex g-medium-10 align-center justify-between">
-      <Tooltip content={`Show ${switchViewLabel}`}>
+      <Tooltip content={switchViewTooltip}>
         <ReflectiveButton
           disabled={!fragment?.sandboxUrl}
           variant="border"
