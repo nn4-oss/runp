@@ -1,11 +1,5 @@
 export const PREDEFINED_FEATURES_PROMPTS = [
   {
-    label: "Markdown Code Editor",
-    content:
-      "Generate a full-featured Markdown editor with syntax highlighting, live preview, and code block support.",
-    emoji: "📝",
-  },
-  {
     label: "Rich Text Editor",
     content:
       "Build a WYSIWYG editor with formatting toolbar, image upload, and collaborative editing.",
@@ -28,18 +22,6 @@ export const PREDEFINED_FEATURES_PROMPTS = [
     content:
       "Build a spreadsheet-like grid with inline editing, formulas, and drag-to-fill.",
     emoji: "📑",
-  },
-  {
-    label: "Global Search Bar",
-    content:
-      "Build a search bar with autocomplete, fuzzy matching, and keyboard shortcuts.",
-    emoji: "🔍",
-  },
-  {
-    label: "Faceted Filter Panel",
-    content:
-      "Generate a filter sidebar with checkboxes, sliders, and multi-select options.",
-    emoji: "🎛️",
   },
   {
     label: "AI-Powered Search",
