@@ -96,27 +96,23 @@ function Tree({ file, parentPath, selectedValue, onSelect }: TreeProps) {
 
 function FilesTree({ files, value, onSelect }: FilesTreeProps) {
   return (
-    <TreeWrapper scrollbar>
-      <header className="p-x-medium-30 p-t-medium-30">
+    <TreeWrapper scrollbar className="p-medium-30">
+      <header className="m-b-medium-30">
         <p className="fs-medium-10 opacity-default-30">Explorer</p>
       </header>
 
-      <Divider className="m-b-medium-60" />
-
-      <div className="p-x-medium-30 p-b-medium-30">
-        {files?.map((file) => {
-          const name = Array.isArray(file) ? file[0] : file;
-          return (
-            <Tree
-              key={name}
-              file={file}
-              selectedValue={value}
-              onSelect={onSelect}
-              parentPath=""
-            />
-          );
-        })}
-      </div>
+      {files?.map((file) => {
+        const name = Array.isArray(file) ? file[0] : file;
+        return (
+          <Tree
+            key={name}
+            file={file}
+            selectedValue={value}
+            onSelect={onSelect}
+            parentPath=""
+          />
+        );
+      })}
     </TreeWrapper>
   );
 }

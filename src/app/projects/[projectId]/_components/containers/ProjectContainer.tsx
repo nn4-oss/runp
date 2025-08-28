@@ -9,7 +9,7 @@ import { AppContainer } from "@/components";
 import { ViewsContainer } from "./ViewsContainer";
 
 import type { Fragment } from "generated/prisma";
-import type { ViewProps } from "../types";
+import type { ViewProps } from "../../_types";
 
 type ProjectContainerProps = {
   fragment: Fragment | null;

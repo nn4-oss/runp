@@ -1,4 +1,4 @@
-import type { FilesProps } from "../_components/types";
+import type { FilesProps } from "../_types";
 
 export type TreeItem = string | [string, ...TreeItem[]];
 export interface TreeNode {

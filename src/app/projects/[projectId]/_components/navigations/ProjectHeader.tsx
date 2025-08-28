@@ -8,7 +8,7 @@ import { Icon, PixelIcon, WebIcon } from "@usefui/icons";
 import { ReflectiveButton } from "@/components";
 
 import type { Fragment } from "generated/prisma";
-import type { ViewProps } from "../types";
+import type { ViewProps } from "../../_types";
 
 type ProjectHeaderProps = {
   fragment: Fragment | null;

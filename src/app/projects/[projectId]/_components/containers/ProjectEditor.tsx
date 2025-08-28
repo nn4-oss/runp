@@ -8,7 +8,7 @@ import ProjectContainer from "./ProjectContainer";
 import { SplitScreen } from "@/components";
 
 import type { Fragment } from "generated/prisma";
-import type { ViewProps } from "../types";
+import type { ViewProps } from "../../_types";
 
 function ProjectEditor({ projectId }: { projectId: string }) {
   const [currentView, setCurrentView] = React.useState<ViewProps>("preview");
