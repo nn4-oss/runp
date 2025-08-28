@@ -5,6 +5,7 @@ export { default as CodeEditor } from "./code-editor";
 export { default as ColorModes } from "./color-mode";
 export { default as CopyCode } from "./copy-code";
 export { default as Navigation } from "./navigation";
+export { default as PromptOptions } from "./prompt-options";
 export { default as ReflectiveButton } from "./reflective-button";
 export { default as SplitScreen } from "./split-screen";
 export { default as Textarea } from "./text-area";

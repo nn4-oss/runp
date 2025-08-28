@@ -4,7 +4,7 @@ import React from "react";
 
 import MessagesHeader from "../navigations/MessagesHeader";
 import MessagesStream from "./MessagesStream";
-import PromptForm from "../data/PromptForm";
+import MessagesPrompt from "../data/MessagesPrompt";
 
 import { Spinner } from "@/components";
 import { ScrollArea } from "@usefui/components";
@@ -39,7 +39,7 @@ function MessagesContainer({
         </React.Suspense>
       </ScrollArea>
 
-      <PromptForm projectId={projectId} />
+      <MessagesPrompt projectId={projectId} />
     </ViewsContainer>
   );
 }
