@@ -9,7 +9,7 @@ const BreadcrumbItem = styled.span`
 
 export const TextLimiter = styled.div`
   width: 100%;
-  max-width: var(--measurement-large-90);
+  max-width: var(--measurement-large-60);
 
   * {
     white-space: nowrap;
@@ -44,18 +44,20 @@ function Breadcrumbs({ path, capitalizeItems = true }: BreadcrumbsProps) {
   });
 
   return (
-    <TextLimiter className="flex align-center g-medium-30">
+    <div className="flex align-center g-medium-30">
       {items.map((item, key) => (
         <React.Fragment key={key}>
-          <BreadcrumbItem
-            className={`${!item.isLastItem ? "opacity-default-30" : "opacity-default-60"}`}
-          >
-            {item.label}
-          </BreadcrumbItem>
+          <TextLimiter>
+            <BreadcrumbItem
+              className={`${!item.isLastItem ? "opacity-default-30" : "opacity-default-60"}`}
+            >
+              {item.label}
+            </BreadcrumbItem>
+          </TextLimiter>
           {!item.isLastItem && <span className="opacity-default-10">\</span>}
         </React.Fragment>
       ))}
-    </TextLimiter>
+    </div>
   );
 }
 

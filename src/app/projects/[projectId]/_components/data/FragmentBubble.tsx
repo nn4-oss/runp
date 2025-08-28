@@ -4,7 +4,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { TextLimiter } from "@/components/breadcrumbs";
-import { Accordion, Divider } from "@usefui/components";
+import { Accordion, Button, Divider, Tooltip } from "@usefui/components";
 import { Icon, PixelIcon } from "@usefui/icons";
 
 import { getFilesKeys } from "../../_utils";
@@ -13,41 +13,62 @@ import type { FilesProps, FragmentBubbleProps } from "../../_types";
 
 const WrappedAccordion = styled(Accordion)`
   display: block;
-  width: fit-content;
-  min-width: var(--measurement-large-90);
+  width: 100%;
+  max-width: var(--breakpoint-mobile);
   padding: var(--measurement-medium-50);
 
   background: var(--contrast-color);
   border: var(--measurement-small-30) solid var(--font-color-alpha-10);
   border-radius: var(--measurement-medium-30);
+
+  &[data-active="true"] {
+    border-color: var(--font-color-alpha-30);
+  }
 `;
 
-function FragmentBubble({ fragment, isActiveFragment }: FragmentBubbleProps) {
-  const [scroll, setScroll] = React.useState<number>(0);
-
-  const lastFileRef = React.useRef<HTMLDivElement>(null);
+function FragmentBubble({
+  fragment,
+  onFragmentClick,
+  isActiveFragment,
+}: FragmentBubbleProps) {
   const filesKeys = getFilesKeys(fragment?.files as FilesProps | null);
-
-  React.useEffect(() => {
-    lastFileRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [scroll]);
-
-  console.log(fragment);
 
   return (
     <Accordion.Root>
       <WrappedAccordion data-active={String(isActiveFragment)}>
-        <Accordion.Trigger
-          value={String(fragment?.id)}
-          variant="ghost"
-          sizing="small"
-          onClick={() => isActiveFragment && setScroll(scroll + 1)}
-        >
-          <Icon>
-            <PixelIcon.ChevronDown />
-          </Icon>
-          {fragment?.title}
-        </Accordion.Trigger>
+        <div className="flex align-center justify-between">
+          <Accordion.Trigger
+            value={String(fragment?.id)}
+            variant="ghost"
+            sizing="small"
+            style={{ justifyContent: "start", width: "100%" }}
+          >
+            <Icon>
+              <PixelIcon.ChevronDown />
+            </Icon>
+            {fragment?.title}
+          </Accordion.Trigger>
+
+          {!isActiveFragment && (
+            <Tooltip
+              content="Restore version"
+              onClick={() => onFragmentClick(fragment)}
+            >
+              <Button variant="ghost">
+                <Icon>
+                  <PixelIcon.CornerUpLeft />
+                </Icon>
+              </Button>
+            </Tooltip>
+          )}
+
+          {isActiveFragment && (
+            <Icon>
+              <PixelIcon.ChevronRight />
+            </Icon>
+          )}
+        </div>
+
         <Accordion.Content
           className="grid g-medium-60"
           value={String(fragment?.id)}
@@ -57,24 +78,21 @@ function FragmentBubble({ fragment, isActiveFragment }: FragmentBubbleProps) {
             const name = fileKey.split("/").at(-1);
 
             return (
-              <TextLimiter
-                key={fileKey}
-                className="flex align-center g-medium-10"
-              >
+              <div key={fileKey} className="flex align-center g-medium-10">
                 <Icon opacity={0.3}>
                   <PixelIcon.File />
                 </Icon>
                 <span className="fs-medium-10">{name}</span>
-                <span className="fs-medium-10 opacity-default-60">
-                  {fileKey}
-                </span>
-              </TextLimiter>
+                <TextLimiter>
+                  <div className="fs-medium-10 opacity-default-60">
+                    {fileKey}
+                  </div>
+                </TextLimiter>
+              </div>
             );
           })}
         </Accordion.Content>
       </WrappedAccordion>
-
-      <div ref={lastFileRef} />
     </Accordion.Root>
   );
 }
