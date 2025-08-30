@@ -2,7 +2,7 @@
 
 import styled from "styled-components";
 
-import { Page, Button, Tooltip } from "@usefui/components";
+import { Page, Button, Tooltip, Badge } from "@usefui/components";
 import { Icon, PixelIcon, SocialIcon } from "@usefui/icons";
 
 import { ColorModes } from "../";
@@ -15,9 +15,13 @@ const StyledMenu = styled(Page.Navigation)`
 function Navigation() {
   return (
     <StyledMenu className="w-100 flex g-medium-60 p-x-medium-30 align-center justify-between">
-      <Icon width={24} height={24}>
-        <PixelIcon.HumanRun />
-      </Icon>
+      <div className="flex align-center g-medium-30">
+        <Icon>
+          <SocialIcon.Foundation />
+        </Icon>
+
+        <Badge variant="border">1.0.0</Badge>
+      </div>
 
       <div className="flex g-medium-60 align-center">
         <Tooltip content="Docs">
