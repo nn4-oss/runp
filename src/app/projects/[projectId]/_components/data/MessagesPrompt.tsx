@@ -8,7 +8,12 @@ import { useForm } from "react-hook-form";
 import { useKeyPress } from "@usefui/hooks";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { ReflectiveButton, Spinner, Textarea } from "@/components";
+import {
+  PromptOptions,
+  ReflectiveButton,
+  Spinner,
+  Textarea,
+} from "@/components";
 import { Icon, PixelIcon } from "@usefui/icons";
 
 import { z } from "zod";
@@ -38,7 +43,7 @@ const formSchema = z.object({
   value: utteranceValueSchema,
 });
 
-function PromptForm({ projectId }: { projectId: string }) {
+function MessagesPrompt({ projectId }: { projectId: string }) {
   const [isFocused, setIsFocused] = React.useState<boolean>(false);
   const shortcutControls = useKeyPress("Enter", true, "ctrlKey");
 
@@ -111,32 +116,36 @@ function PromptForm({ projectId }: { projectId: string }) {
         {...form.register("value")}
       />
 
-      <div className="flex justify-end align-center g-medium-30">
-        <kbd>
-          <span className="fs-small-50 opacity-default-30">
-            &#8963;&nbsp;+&nbsp;Enter
-          </span>
-        </kbd>
+      <div className="flex justify-between align-center g-medium-30">
+        <PromptOptions />
 
-        <ReflectiveButton
-          type="submit"
-          sizing="small"
-          variant="mono"
-          disabled={createMessage.isPending || !form.formState.isValid}
-        >
-          <span className="p-y-small-30">
-            {createMessage.isPending ? (
-              <Spinner />
-            ) : (
-              <Icon>
-                <PixelIcon.ArrowRight />
-              </Icon>
-            )}
-          </span>
-        </ReflectiveButton>
+        <div className="flex align-center g-medium-30">
+          <kbd>
+            <span className="fs-small-50 opacity-default-30">
+              &#8963;&nbsp;+&nbsp;Enter
+            </span>
+          </kbd>
+
+          <ReflectiveButton
+            type="submit"
+            sizing="small"
+            variant="mono"
+            disabled={createMessage.isPending || !form.formState.isValid}
+          >
+            <span className="p-y-small-30">
+              {createMessage.isPending ? (
+                <Spinner />
+              ) : (
+                <Icon>
+                  <PixelIcon.ArrowRight />
+                </Icon>
+              )}
+            </span>
+          </ReflectiveButton>
+        </div>
       </div>
     </PromptWrapper>
   );
 }
 
-export default PromptForm;
+export default MessagesPrompt;

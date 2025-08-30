@@ -12,7 +12,6 @@ import type { BubbleProps } from "../../_types";
 
 const BubbleText = styled.p`
   font-weight: 500;
-  letter-spacing: calc((1.1618px / 2) * -1);
   line-height: 1.1;
   word-break: keep-all;
 `;

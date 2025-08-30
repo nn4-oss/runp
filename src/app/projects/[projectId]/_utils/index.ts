@@ -6,8 +6,8 @@ export interface TreeNode {
 }
 
 export function getFilesKeys(files: FilesProps | null) {
-  if (files) return Object.keys(files);
-  return [];
+  if (!files) return [];
+  return Object.keys(files);
 }
 
 export function getFirstFileKey(files: FilesProps | null): string | null {

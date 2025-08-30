@@ -57,7 +57,6 @@ function ViewContainer({
   /** Auto-select first file */
   React.useEffect(() => setSelectedFile(getFirstFileKey(files)), [files]);
 
-  console.log(selectedFile);
   return (
     <div className="w-100 h-100">
       {isPending && (
