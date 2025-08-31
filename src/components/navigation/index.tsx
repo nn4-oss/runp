@@ -2,10 +2,12 @@
 
 import styled from "styled-components";
 
-import { Page, Button, Tooltip, Badge } from "@usefui/components";
-import { Icon, PixelIcon, SocialIcon } from "@usefui/icons";
+import SignedOutLinks from "./SignedOutLinks";
+import SignedOutActions from "./SignedOutActions";
+import SignedInActions from "./SignedInActions";
 
-import { ColorModes } from "../";
+import { Page, Button, Badge } from "@usefui/components";
+import { Icon, SocialIcon } from "@usefui/icons";
 
 const StyledMenu = styled(Page.Navigation)`
   border: none !important;
@@ -14,53 +16,25 @@ const StyledMenu = styled(Page.Navigation)`
 
 function Navigation() {
   return (
-    <StyledMenu className="w-100 flex g-medium-60 p-x-medium-30 align-center justify-between">
-      <div className="flex align-center g-medium-30">
-        <Icon>
+    <StyledMenu className="w-100 flex p-x-medium-30 align-center justify-between">
+      <div className="flex align-center g-medium-30 w-100">
+        <Icon width={18} height={18}>
           <SocialIcon.Foundation />
         </Icon>
 
-        <Badge variant="border">1.0.0</Badge>
+        <SignedInActions />
+        <SignedOutLinks />
       </div>
 
-      <div className="flex g-medium-60 align-center">
-        <Tooltip content="Docs">
-          <Button
-            className="flex g-medium-30 align-center"
-            variant="ghost"
-            onClick={() =>
-              window.open(
-                "https://usefui.dev/docs/introduction",
-                "_blank",
-                "noopener,noreferrer",
-              )
-            }
-          >
-            <Icon fillOpacity={0.6}>
-              <PixelIcon.BookOpen />
-            </Icon>
-          </Button>
-        </Tooltip>
-        <Tooltip content="Github">
-          <Button
-            className="flex g-medium-30 align-center"
-            variant="ghost"
-            onClick={() =>
-              window.open(
-                "https://github.com/foundation-ui",
-                "_blank",
-                "noopener,noreferrer",
-              )
-            }
-          >
-            <Icon viewBox="0 0 16 16">
-              <SocialIcon.Github />
-            </Icon>
-          </Button>
-        </Tooltip>
+      <div className="flex g-medium-30 align-center">
+        <Button variant="ghost" sizing="small">
+          <Icon viewBox="0 0 15 15">
+            <SocialIcon.Github />
+          </Icon>
+        </Button>
+        <Badge variant="border">&beta;&nbsp;1.0.0</Badge>
 
-        <span className="opacity-default-10">|</span>
-        <ColorModes />
+        <SignedOutActions />
       </div>
     </StyledMenu>
   );
