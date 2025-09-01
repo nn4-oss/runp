@@ -6,6 +6,7 @@ import styled from "styled-components";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
+import { useUser } from "@clerk/nextjs";
 import { useKeyPress } from "@usefui/hooks";
 
 import { Icon, PixelIcon } from "@usefui/icons";
@@ -40,6 +41,7 @@ function HomePrompt() {
   const [value, setValue] = React.useState<string>("");
   const [isFocused, setIsFocused] = React.useState<boolean>(false);
 
+  const user = useUser();
   const router = useRouter();
   const trpc = useTRPC();
   const shortcutControls = useKeyPress("Enter", true, "ctrlKey");
@@ -56,7 +58,19 @@ function HomePrompt() {
 
   const enableShortcutSubmit =
     shortcutControls && isFocused && !createProject.isPending;
-  const onSubmit = async () => createProject.mutate({ value });
+
+  const unauthenticatedFallback = () => router.push("/sign-in");
+  const onSubmit = async () => {
+    if (user.isSignedIn) createProject.mutate({ value });
+    else unauthenticatedFallback();
+  };
+
+  const onPredefinedPromptSelection = async (content: string) => {
+    if (user.isSignedIn) {
+      setValue(content);
+      createProject.mutate({ value: content });
+    } else unauthenticatedFallback();
+  };
 
   React.useEffect(() => {
     if (enableShortcutSubmit) void onSubmit();
@@ -110,10 +124,7 @@ function HomePrompt() {
             sizing="medium"
             variant="border"
             key={task.label}
-            onClick={() => {
-              setValue(task.content);
-              createProject.mutate({ value: task.content });
-            }}
+            onClick={() => onPredefinedPromptSelection(task.content)}
           >
             <span className="fs-medium-10">{task.emoji}</span>
             <span className="fs-medium-10">{task.label}</span>
