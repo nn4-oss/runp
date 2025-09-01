@@ -33,7 +33,7 @@ function UserAvatar() {
         </DropdownMenu.Trigger>
         <DropdownMenu.Content sizing="large">
           <div className="grid p-l-medium-30 p-t-medium-30">
-            <p className="fs-medium-10">Email Address</p>
+            <p className="fs-medium-10 opacity-default-30">Signed in as</p>
             <span className="fs-medium-10 opacity-default-60">
               {user?.primaryEmailAddress?.emailAddress}
             </span>
