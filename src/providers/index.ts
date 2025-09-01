@@ -1,1 +1,2 @@
-export { ClientProvider } from "./client-providers";
+export { ClientProvider } from "./client-provider";
+export { AuthProvider } from "./auth-provider";

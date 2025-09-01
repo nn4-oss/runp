@@ -1,8 +1,7 @@
 import StyledComponentsRegistry from "@/lib/styles-registry";
 
-import { ClientProvider } from "@/providers";
+import { ClientProvider, AuthProvider } from "@/providers";
 import { TRPCReactProvider } from "@/trpc/client";
-import { ClerkProvider } from "@clerk/nextjs";
 
 import { Toaster } from "sonner";
 
@@ -13,9 +12,9 @@ export default function RootLayout({
 }>) {
   return (
     <StyledComponentsRegistry>
-      <ClerkProvider>
-        <TRPCReactProvider>
-          <ClientProvider>
+      <ClientProvider>
+        <AuthProvider>
+          <TRPCReactProvider>
             <Toaster
               toastOptions={{
                 style: {
@@ -34,9 +33,9 @@ export default function RootLayout({
                 <div id="portal-container" />
               </body>
             </html>
-          </ClientProvider>
-        </TRPCReactProvider>
-      </ClerkProvider>
+          </TRPCReactProvider>
+        </AuthProvider>
+      </ClientProvider>
     </StyledComponentsRegistry>
   );
 }
