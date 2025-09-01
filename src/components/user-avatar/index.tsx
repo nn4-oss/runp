@@ -12,10 +12,10 @@ import { Icon, PixelIcon } from "@usefui/icons";
 import ColorModes from "../color-mode";
 
 const StyledAvatar = styled(Avatar)`
-  width: var(--measurement-medium-70) !important;
-  min-width: var(--measurement-medium-70) !important;
-  height: var(--measurement-medium-70) !important;
-  min-height: var(--measurement-medium-70) !important;
+  width: var(--measurement-medium-80) !important;
+  min-width: var(--measurement-medium-80) !important;
+  height: var(--measurement-medium-80) !important;
+  min-height: var(--measurement-medium-80) !important;
 
   img {
     opacity: 1 !important;
@@ -29,16 +29,21 @@ function UserAvatar() {
     <DropdownMenu.Root>
       <DropdownMenu>
         <DropdownMenu.Trigger>
-          <StyledAvatar src="/gradient.svg" />
+          <StyledAvatar src={user?.imageUrl ?? "/gradient.svg"} />
         </DropdownMenu.Trigger>
-        <DropdownMenu.Content sizing="large">
+        <DropdownMenu.Content sizing="medium">
           <div className="grid p-l-medium-30 p-t-medium-30">
-            <p className="fs-medium-10 opacity-default-30">Signed in as</p>
-            <span className="fs-medium-10 opacity-default-60">
-              {user?.primaryEmailAddress?.emailAddress}
-            </span>
+            {user?.username && (
+              <React.Fragment>
+                <p className="fs-medium-20">{user?.username}</p>
+                <span className="fs-medium-10 opacity-default-60">
+                  {user?.primaryEmailAddress?.emailAddress}
+                </span>
+
+                <Divider className="m-y-medium-50" />
+              </React.Fragment>
+            )}
           </div>
-          <Divider className="m-y-medium-50" />
 
           <DropdownMenu.Item className="w-100 flex align-center g-medium-30">
             <Icon>
@@ -50,22 +55,50 @@ function UserAvatar() {
             <Icon>
               <PixelIcon.Sliders />
             </Icon>
-            Settings
+            Preferences
           </DropdownMenu.Item>
-          <DropdownMenu.Item className="w-100 flex align-center g-medium-30">
-            <Icon>
-              <PixelIcon.BookOpen />
-            </Icon>
+          <DropdownMenu.Item className="flex align-center g-medium-30">
+            <span className="flex align-center justify-center">
+              <Icon>
+                <PixelIcon.BookOpen />
+              </Icon>
+            </span>
             Documentation
+            <div className="flex w-100 justify-end">
+              <Icon>
+                <PixelIcon.Open />
+              </Icon>
+            </div>
+          </DropdownMenu.Item>
+          <DropdownMenu.Item className="flex align-center g-medium-30">
+            <span className="flex align-center justify-center">
+              <Icon>
+                <PixelIcon.HumanHandsup />
+              </Icon>
+            </span>
+            Community
+            <div className="flex w-100 justify-end">
+              <Icon>
+                <PixelIcon.Open />
+              </Icon>
+            </div>
           </DropdownMenu.Item>
 
-          <Divider className="m-y-medium-50" />
-          <div className="flex justify-between align-center p-l-medium-30">
-            <span className="opacity-default-60">Appearance</span>
+          <Divider className="m-y-medium-20" />
 
-            <ColorModes />
-          </div>
-          <Divider className="m-y-medium-50" />
+          <DropdownMenu.Item className="flex align-center g-medium-30" radio>
+            <span className="flex align-center justify-center">
+              <Icon>
+                <PixelIcon.Contrast />
+              </Icon>
+            </span>
+            Theme
+            <div className="flex w-100 justify-end">
+              <ColorModes />
+            </div>
+          </DropdownMenu.Item>
+
+          <Divider className="m-y-medium-20" />
 
           <SignOutButton>
             <DropdownMenu.Item className="w-100 flex align-center g-medium-30">
