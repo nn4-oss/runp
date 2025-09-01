@@ -54,7 +54,7 @@ function Breadcrumbs({ path, capitalizeItems = true }: BreadcrumbsProps) {
               {item.label}
             </BreadcrumbItem>
           </TextLimiter>
-          {!item.isLastItem && <span className="opacity-default-10">\</span>}
+          {!item.isLastItem && <span className="opacity-default-10">/</span>}
         </React.Fragment>
       ))}
     </div>

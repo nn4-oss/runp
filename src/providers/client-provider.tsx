@@ -5,7 +5,6 @@ import React from "react";
 import { ColorModeProvider, js_design_tokens } from "@usefui/tokens";
 
 import {
-  generateAlpha,
   generateCSSVariables,
   generateDimensionClasses,
   generateFontSizesClasses,
@@ -27,50 +26,7 @@ const cssOpacityClasses = generateOpacityClasses(design_tokens.opacity);
 
 const cssVariables = generateCSSVariables({
   name: js_design_tokens.name,
-  design_tokens: {
-    color: [
-      ...design_tokens.color,
-      {
-        name: "mono-dark",
-        base: { hex: "#171717" },
-        alpha: generateAlpha("#171717"),
-        tint: [],
-        shade: [],
-      },
-      {
-        name: "mono-darker",
-        base: { hex: "#121212" },
-        alpha: generateAlpha("#121212"),
-        tint: [],
-        shade: [],
-      },
-      {
-        name: "mono-darkest",
-        base: { hex: "#0d0d0d" },
-        alpha: generateAlpha("#0d0d0d"),
-        tint: [],
-        shade: [],
-      },
-      {
-        name: "mono-white",
-        base: { hex: "#f5f5f5" },
-        alpha: generateAlpha("#f5f5f5"),
-        tint: [],
-        shade: [],
-      },
-      {
-        name: "mono-light",
-        base: { hex: "#e6e6e6" },
-        alpha: generateAlpha("#e6e6e6"),
-        tint: [],
-        shade: [],
-      },
-    ],
-    measurement: [...design_tokens.measurement],
-    fontsize: [...design_tokens.fontsize],
-    opacity: [...design_tokens.opacity],
-    depth: [...design_tokens.depth],
-  },
+  design_tokens,
 });
 
 const CSSRoot = createGlobalStyle`

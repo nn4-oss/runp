@@ -3,7 +3,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { Accordion, Button, Divider, ScrollArea } from "@usefui/components";
+import { Accordion, Button, ScrollArea } from "@usefui/components";
 import { Icon, PixelIcon } from "@usefui/icons";
 
 import type { TreeItem } from "../../_utils";

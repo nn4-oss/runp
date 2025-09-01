@@ -1,22 +1,26 @@
 import prisma from "@/lib/prisma";
 import { inngest } from "@/inngest/client";
 
-import { baseProcedure, createTRPCRouter } from "@/trpc/init";
+import { protectedProcedure, createTRPCRouter } from "@/trpc/init";
+import { TRPCError } from "@trpc/server";
 
 import { z } from "zod";
 import { utteranceValueSchema } from "@/schemas/utterances-schema";
 
 export const messagesRouter = createTRPCRouter({
-  getMany: baseProcedure
+  getMany: protectedProcedure
     .input(
       z.object({
         projectId: z.string().min(1, { message: "projectId is required" }),
       }),
     )
-    .query(async ({ input }) => {
+    .query(async ({ input, ctx }) => {
       const messages = await prisma.message.findMany({
         where: {
           projectId: input.projectId,
+          project: {
+            userId: ctx.auth.userId,
+          },
         },
         include: {
           fragment: true,
@@ -29,17 +33,31 @@ export const messagesRouter = createTRPCRouter({
       return messages;
     }),
 
-  create: baseProcedure
+  create: protectedProcedure
     .input(
       z.object({
         value: utteranceValueSchema,
         projectId: z.string().min(1, { message: "projectId is required" }),
       }),
     )
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
+      const isExisting = await prisma.project.findUnique({
+        where: {
+          id: input.projectId,
+          userId: ctx.auth.userId,
+        },
+      });
+
+      if (!isExisting) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Project not found.",
+        });
+      }
+
       const userMessage = await prisma.message.create({
         data: {
-          projectId: input.projectId,
+          projectId: isExisting.id,
           content: input.value,
           role: "USER",
           type: "RESULT",

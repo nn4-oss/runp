@@ -9,7 +9,7 @@ const Bubble = styled(Badge)`
   max-width: 80%;
   width: 100%;
   justify-self: flex-end;
-  padding: var(--measurement-medium-40) var(--measurement-medium-50) !important;
+  padding: var(--measurement-medium-60) !important;
   border-radius: var(--measurement-medium-60) !important;
   border-top-right-radius: 0 !important;
 
@@ -21,7 +21,7 @@ const Bubble = styled(Badge)`
 `;
 
 function UserBubble({ content }: { content: string }) {
-  return <Bubble variant="primary">{content}</Bubble>;
+  return <Bubble variant="border">{content}</Bubble>;
 }
 
 export default UserBubble;

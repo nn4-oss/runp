@@ -2,14 +2,14 @@
 
 import { useColorMode } from "@usefui/tokens";
 
-import { Badge, Button, Tooltip } from "@usefui/components";
+import { Button, Tooltip } from "@usefui/components";
 import { Icon, PixelIcon } from "@usefui/icons";
 
 function ColorModes() {
   const { setColorMode } = useColorMode();
 
   return (
-    <Badge variant="border">
+    <div className="flex align-center g-medium-10">
       <Tooltip content="Light">
         <Button variant="ghost" onClick={() => setColorMode("light")}>
           <Icon>
@@ -25,7 +25,7 @@ function ColorModes() {
           </Icon>
         </Button>
       </Tooltip>
-    </Badge>
+    </div>
   );
 }
 

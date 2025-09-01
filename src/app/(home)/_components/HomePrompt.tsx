@@ -6,12 +6,12 @@ import styled from "styled-components";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
+import { useClerk } from "@clerk/nextjs";
 import { useKeyPress } from "@usefui/hooks";
 
 import { Icon, PixelIcon } from "@usefui/icons";
 import { PromptOptions, ReflectiveButton, Textarea } from "@/components";
 
-import { toast } from "sonner";
 import { PREDEFINED_FEATURES_PROMPTS } from "../_prompts/predefined-features-prompts";
 
 const PromptContainer = styled.div`
@@ -42,6 +42,7 @@ function HomePrompt() {
 
   const router = useRouter();
   const trpc = useTRPC();
+  const clerk = useClerk();
   const shortcutControls = useKeyPress("Enter", true, "ctrlKey");
 
   const createProject = useMutation(
@@ -50,17 +51,36 @@ function HomePrompt() {
         trpc.projects.getMany.queryOptions();
         router.push(`/projects/${data.id}`);
       },
-      onError: () => toast.error("An error occurred."),
+      onError: (error) => {
+        if (error?.data?.code === "UNAUTHORIZED") clerk.openSignIn();
+      },
     }),
   );
 
   const enableShortcutSubmit =
     shortcutControls && isFocused && !createProject.isPending;
-  const onSubmit = async () => createProject.mutate({ value });
+
+  const onSubmit = React.useCallback(async () => {
+    createProject.mutate({ value });
+  }, [createProject, value]);
+
+  const onPredefinedPromptSelection = React.useCallback(
+    async (content: string) => {
+      setValue(content);
+      createProject.mutate({ value: content });
+    },
+    [setValue, createProject],
+  );
 
   React.useEffect(() => {
     if (enableShortcutSubmit) void onSubmit();
-  }, [shortcutControls, isFocused, createProject.isPending, onSubmit]);
+  }, [
+    enableShortcutSubmit,
+    shortcutControls,
+    isFocused,
+    createProject.isPending,
+    onSubmit,
+  ]);
 
   return (
     <PromptContainer>
@@ -110,10 +130,7 @@ function HomePrompt() {
             sizing="medium"
             variant="border"
             key={task.label}
-            onClick={() => {
-              setValue(task.content);
-              createProject.mutate({ value: task.content });
-            }}
+            onClick={() => onPredefinedPromptSelection(task.content)}
           >
             <span className="fs-medium-10">{task.emoji}</span>
             <span className="fs-medium-10">{task.label}</span>

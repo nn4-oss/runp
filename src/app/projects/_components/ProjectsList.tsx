@@ -3,87 +3,113 @@
 import React from "react";
 import styled from "styled-components";
 
-import Link from "next/link";
-
 import { useTRPC } from "@/trpc/client";
+import { useSearchParams } from "next/navigation";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
+import ProjectListActions from "./ProjectListActions";
+import ProjectsTable from "./ProjectsTable";
+
 import { AppContainer } from "@/components";
-import { Divider } from "@usefui/components";
+import { Field } from "@usefui/components";
+import { Icon, PixelIcon } from "@usefui/icons";
 
-import { formatDistanceToNow } from "date-fns";
-
-const Container = styled.div`
-  max-width: var(--breakpoint-desktop-small);
-  margin: 0 auto;
-`;
-const ListWrapper = styled.div`
-  display: grid;
-  grid-template-columns: repeat(
-    auto-fill,
-    minmax(var(--measurement-large-90), 1fr)
-  );
-  grid-gap: var(--measurement-medium-60) var(--measurement-medium-60);
-  box-sizing: border-box;
-
-  @media (max-width: 768px) {
-    grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
-  }
-`;
-const Card = styled(Link)`
-  text-decoration: none;
-  border: var(--measurement-small-30) solid var(--font-color-alpha-10);
-  border-radius: var(--measurement-medium-30);
+const FixedHeader = styled.hgroup`
+  position: sticky;
+  top: 0;
   background-color: var(--contrast-color);
-  padding: var(--measurement-medium-60);
+  border-bottom: var(--measurement-small-30) solid var(--font-color-alpha-10);
+  width: 100%;
+  z-index: var(--depth-default-10);
+`;
+const SearchContainer = styled.div`
+  width: 100%;
+  border-top: var(--measurement-small-30) solid var(--font-color-alpha-10);
 
-  min-height: var(--measurement-large-80);
+  input {
+    font-size: var(--fontsize-medium-20) !important;
+    width: 100% !important;
+  }
 `;
 
 function ProjectsList() {
   const trpc = useTRPC();
-
   const { data: projects } = useSuspenseQuery(
     trpc.projects.getMany.queryOptions(),
   );
 
-  return (
-    <AppContainer className="h-100 w-100 " scrollbar>
-      <hgroup className="p-t-medium-60 p-x-medium-60">
-        <p className="fs-medium-20">
-          All projects&nbsp;
-          <span className="opacity-default-30">({projects.length})</span>
-        </p>
-      </hgroup>
-      <Divider className="m-y-medium-60" />
-      <Container className="p-medium-60">
-        <ListWrapper>
-          {projects.map((project) => {
-            const lastUpdate = formatDistanceToNow(project.updatedAt, {
-              addSuffix: true,
-            });
+  const searchParams = useSearchParams();
+  const sortOption = searchParams.get("sortBy");
 
-            return (
-              <div key={project.id}>
-                <Card
-                  className="flex align-center justify-center m-b-medium-30"
-                  href={`/projects/${project.id}`}
-                >
-                  <span className="fs-medium-10 opacity-default-30">
-                    No screenshot available{}
-                  </span>
-                </Card>
-                <div className="grid">
-                  <p className="fs-medium-10">{project.name}</p>
-                  <p className="fs-medium-10 opacity-default-30">
-                    Updated&nbsp;{lastUpdate}
-                  </p>
-                </div>
-              </div>
-            );
-          })}
-        </ListWrapper>
-      </Container>
+  const [searchQuery, setSearchQuery] = React.useState<string>("");
+  const deferredSearchQuery = React.useDeferredValue<string>(searchQuery);
+
+  const sortedData = React.useMemo(() => {
+    return [...projects].sort((a, b) => {
+      const aTime = new Date(a.createdAt).getTime();
+      const bTime = new Date(b.createdAt).getTime();
+
+      const asc = aTime - bTime;
+      const desc = bTime - aTime;
+
+      if (sortOption === "desc") return desc;
+      else return asc;
+    });
+  }, [projects, sortOption]);
+
+  const tableData = React.useMemo(() => {
+    return sortedData.filter(
+      (item) =>
+        item.id.includes(deferredSearchQuery) ||
+        item.name.includes(deferredSearchQuery),
+    );
+  }, [sortedData, deferredSearchQuery]);
+
+  const hasData = tableData.length !== 0;
+
+  return (
+    <AppContainer
+      className="h-100 w-100 "
+      scrollbar
+      style={{ position: "relative" }}
+    >
+      <FixedHeader className="grid">
+        <div className="flex justify-between align-center p-y-medium-60 p-x-medium-60">
+          <p className="fs-medium-20">
+            All projects&nbsp;
+            <span className="opacity-default-30">
+              ({tableData.length}/{projects.length})
+            </span>
+          </p>
+
+          <ProjectListActions />
+        </div>
+
+        <SearchContainer className="flex align-center p-y-medium-30 p-x-medium-60">
+          <Field.Root>
+            <Icon>
+              <PixelIcon.Search />
+            </Icon>
+            <Field
+              variant="ghost"
+              sizing="small"
+              className="w-100"
+              placeholder="Search for a project.."
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.target.value)}
+            />
+          </Field.Root>
+        </SearchContainer>
+      </FixedHeader>
+
+      <div className="p-medium-30 grid w-100 ">
+        {!hasData && (
+          <div className="flex align-center justify-center w-100 p-y-large-10">
+            <p className="fs-medium-10 opacity-default-30">No project found</p>
+          </div>
+        )}
+        {hasData && <ProjectsTable data={tableData} />}
+      </div>
     </AppContainer>
   );
 }
