@@ -11,7 +11,7 @@ import ProjectListActions from "./ProjectListActions";
 import ProjectsTable from "./ProjectsTable";
 
 import { AppContainer } from "@/components";
-import { Field, Table } from "@usefui/components";
+import { Field } from "@usefui/components";
 import { Icon, PixelIcon } from "@usefui/icons";
 
 const FixedHeader = styled.hgroup`

@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import styled from "styled-components";
 
 import { Tooltip } from "@usefui/components";
 import { Icon, PixelIcon, SocialIcon } from "@usefui/icons";

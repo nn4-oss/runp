@@ -22,7 +22,7 @@ export function convertNode(
   name?: string,
 ): TreeItem | TreeItem[] {
   const entries = Object.entries(node).sort(([a], [b]) => a.localeCompare(b)); // Ensure stable child ordering
-  if (entries.length === 0) return name ? name : [];
+  if (entries.length === 0) return name ?? [];
 
   const children: TreeItem[] = [];
   for (const [key, value] of entries) {
@@ -55,13 +55,11 @@ export function convertFilesToTree(files: Record<string, string>): TreeItem[] {
 
   for (const filePath of sortedPaths) {
     const parts = filePath.split("/");
-    let current = tree;
+    const current = tree;
 
     for (let i = 0; i < parts.length - 1; i++) {
       const part = parts[i]!;
-
-      if (!current[part]) current[part] = {};
-      current = current[part];
+      current[part] ??= {};
     }
 
     const fileName = parts[parts.length - 1]!;

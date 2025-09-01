@@ -63,7 +63,13 @@ function MessagesStream({
       setActiveFragment(lastAssistantMessage.fragment);
       lastAssistantMsgRef.current = lastAssistantMessage.id;
     }
-  }, [messages, activeFragment?.id, setActiveFragment]);
+  }, [
+    messages,
+    activeFragment?.id,
+    lastAssistantMessage?.fragment,
+    lastAssistantMessage?.id,
+    setActiveFragment,
+  ]);
 
   return (
     <div className="grid g-large-10 p-t-large-10">

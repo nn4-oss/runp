@@ -72,12 +72,15 @@ function MessagesPrompt({ projectId }: { projectId: string }) {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    await createMessage.mutateAsync({
-      projectId,
-      value: values.value,
-    });
-  };
+  const onSubmit = React.useCallback(
+    async (values: z.infer<typeof formSchema>) => {
+      await createMessage.mutateAsync({
+        projectId,
+        value: values.value,
+      });
+    },
+    [createMessage, projectId],
+  );
 
   React.useEffect(() => {
     const enableShortcutSubmit =

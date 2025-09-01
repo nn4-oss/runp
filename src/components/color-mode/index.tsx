@@ -2,7 +2,7 @@
 
 import { useColorMode } from "@usefui/tokens";
 
-import { Badge, Button, Tooltip } from "@usefui/components";
+import { Button, Tooltip } from "@usefui/components";
 import { Icon, PixelIcon } from "@usefui/icons";
 
 function ColorModes() {

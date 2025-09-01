@@ -60,17 +60,27 @@ function HomePrompt() {
   const enableShortcutSubmit =
     shortcutControls && isFocused && !createProject.isPending;
 
-  const onSubmit = async () => {
+  const onSubmit = React.useCallback(async () => {
     createProject.mutate({ value });
-  };
-  const onPredefinedPromptSelection = async (content: string) => {
-    setValue(content);
-    createProject.mutate({ value: content });
-  };
+  }, [createProject, value]);
+
+  const onPredefinedPromptSelection = React.useCallback(
+    async (content: string) => {
+      setValue(content);
+      createProject.mutate({ value: content });
+    },
+    [setValue, createProject],
+  );
 
   React.useEffect(() => {
     if (enableShortcutSubmit) void onSubmit();
-  }, [shortcutControls, isFocused, createProject.isPending, onSubmit]);
+  }, [
+    enableShortcutSubmit,
+    shortcutControls,
+    isFocused,
+    createProject.isPending,
+    onSubmit,
+  ]);
 
   return (
     <PromptContainer>

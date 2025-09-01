@@ -1,15 +1,15 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import React from "react";
 import styled, { css } from "styled-components";
 
-interface ScrollContainerProps {
+type ScrollContainerProps = {
   $height?: string;
   $width?: string;
   $thumbColor?: string;
   $trackColor?: string;
   $thumbHoverColor?: string;
-}
+};
 
 const CustomScrollbar = css<ScrollContainerProps>`
   height: ${({ $height }) => $height ?? "100%"};
@@ -75,11 +75,9 @@ const TextAreaContainer = styled.textarea<ScrollContainerProps>`
   ${CustomScrollbar}
 `;
 
-export interface TextareaProps
-  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
-
+export type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement>;
 function Textarea({ onChange, ...props }: TextareaProps) {
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const textareaRef = React.useRef<HTMLTextAreaElement>(null);
 
   const adjustHeight = () => {
     const textarea = textareaRef.current;
@@ -94,7 +92,7 @@ function Textarea({ onChange, ...props }: TextareaProps) {
     onChange?.(e);
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     adjustHeight();
   }, [props.value]);
 
