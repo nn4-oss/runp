@@ -1,7 +1,7 @@
 import prisma from "@/lib/prisma";
 import { inngest } from "@/inngest/client";
 
-import { baseProcedure, createTRPCRouter } from "@/trpc/init";
+import { protectedProcedure, createTRPCRouter } from "@/trpc/init";
 import { TRPCError } from "@trpc/server";
 
 import { z } from "zod";
@@ -10,7 +10,7 @@ import { utteranceValueSchema } from "@/schemas/utterances-schema";
 import { generateSlug } from "random-word-slugs";
 
 export const projectsRouter = createTRPCRouter({
-  getUnique: baseProcedure
+  getUnique: protectedProcedure
     .input(
       z.object({
         id: z.string().min(1, { message: "Id is required" }),
@@ -32,7 +32,7 @@ export const projectsRouter = createTRPCRouter({
       return project;
     }),
 
-  getMany: baseProcedure.query(async () => {
+  getMany: protectedProcedure.query(async () => {
     const projects = await prisma.project.findMany({
       orderBy: {
         updatedAt: "asc",
@@ -42,7 +42,7 @@ export const projectsRouter = createTRPCRouter({
     return projects;
   }),
 
-  create: baseProcedure
+  create: protectedProcedure
     .input(
       z.object({
         value: utteranceValueSchema,
