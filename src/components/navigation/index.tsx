@@ -26,7 +26,7 @@ function Navigation() {
         <SignedOutLinks />
       </div>
 
-      <div className="flex g-medium-30 align-center">
+      <div className="flex g-medium-30 align-center justify-end w-100">
         <Button variant="ghost" sizing="small">
           <Icon viewBox="0 0 15 15">
             <SocialIcon.Github />

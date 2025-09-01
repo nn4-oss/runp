@@ -26,13 +26,7 @@ const cssOpacityClasses = generateOpacityClasses(design_tokens.opacity);
 
 const cssVariables = generateCSSVariables({
   name: js_design_tokens.name,
-  design_tokens: {
-    color: [...design_tokens.color],
-    measurement: [...design_tokens.measurement],
-    fontsize: [...design_tokens.fontsize],
-    opacity: [...design_tokens.opacity],
-    depth: [...design_tokens.depth],
-  },
+  design_tokens,
 });
 
 const CSSRoot = createGlobalStyle`

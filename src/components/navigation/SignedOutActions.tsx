@@ -13,12 +13,12 @@ function SignedOutActions() {
 
       <SignInButton>
         <ReflectiveButton variant="border" sizing="small">
-          Sign In
+          Sign&nbsp;In
         </ReflectiveButton>
       </SignInButton>
       <SignUpButton>
         <Button variant="primary" sizing="small">
-          Sign Up
+          Sign&nbsp;Up
         </Button>
       </SignUpButton>
     </SignedOut>

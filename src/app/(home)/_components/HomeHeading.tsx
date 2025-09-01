@@ -15,7 +15,7 @@ const HeadingGroup = styled.hgroup`
 
 function HomeHeading() {
   return (
-    <HeadingGroup className="grid align-center justify-center g-medium-10">
+    <HeadingGroup className="grid align-center justify-center">
       <h1>Ideas to features in seconds</h1>
       <p className="fs-medium-30 opacity-default-30">
         Create advanced features by chatting with AI
