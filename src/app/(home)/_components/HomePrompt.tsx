@@ -41,7 +41,8 @@ function HomePrompt() {
   const [value, setValue] = React.useState<string>("");
   const [isFocused, setIsFocused] = React.useState<boolean>(false);
 
-  const user = useUser();
+  const { isSignedIn } = useUser();
+
   const router = useRouter();
   const trpc = useTRPC();
   const shortcutControls = useKeyPress("Enter", true, "ctrlKey");
@@ -61,12 +62,12 @@ function HomePrompt() {
 
   const unauthenticatedFallback = () => router.push("/sign-in");
   const onSubmit = async () => {
-    if (user.isSignedIn) createProject.mutate({ value });
+    if (isSignedIn) createProject.mutate({ value });
     else unauthenticatedFallback();
   };
 
   const onPredefinedPromptSelection = async (content: string) => {
-    if (user.isSignedIn) {
+    if (isSignedIn) {
       setValue(content);
       createProject.mutate({ value: content });
     } else unauthenticatedFallback();
