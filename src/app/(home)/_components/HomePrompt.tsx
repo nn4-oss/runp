@@ -6,13 +6,12 @@ import styled from "styled-components";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
-import { useUser } from "@clerk/nextjs";
+import { useClerk } from "@clerk/nextjs";
 import { useKeyPress } from "@usefui/hooks";
 
 import { Icon, PixelIcon } from "@usefui/icons";
 import { PromptOptions, ReflectiveButton, Textarea } from "@/components";
 
-import { toast } from "sonner";
 import { PREDEFINED_FEATURES_PROMPTS } from "../_prompts/predefined-features-prompts";
 
 const PromptContainer = styled.div`
@@ -41,10 +40,9 @@ function HomePrompt() {
   const [value, setValue] = React.useState<string>("");
   const [isFocused, setIsFocused] = React.useState<boolean>(false);
 
-  const { isSignedIn } = useUser();
-
   const router = useRouter();
   const trpc = useTRPC();
+  const clerk = useClerk();
   const shortcutControls = useKeyPress("Enter", true, "ctrlKey");
 
   const createProject = useMutation(
@@ -53,24 +51,21 @@ function HomePrompt() {
         trpc.projects.getMany.queryOptions();
         router.push(`/projects/${data.id}`);
       },
-      onError: () => toast.error("An error occurred."),
+      onError: (error) => {
+        if (error?.data?.code === "UNAUTHORIZED") clerk.openSignIn();
+      },
     }),
   );
 
   const enableShortcutSubmit =
     shortcutControls && isFocused && !createProject.isPending;
 
-  const unauthenticatedFallback = () => router.push("/sign-in");
   const onSubmit = async () => {
-    if (isSignedIn) createProject.mutate({ value });
-    else unauthenticatedFallback();
+    createProject.mutate({ value });
   };
-
   const onPredefinedPromptSelection = async (content: string) => {
-    if (isSignedIn) {
-      setValue(content);
-      createProject.mutate({ value: content });
-    } else unauthenticatedFallback();
+    setValue(content);
+    createProject.mutate({ value: content });
   };
 
   React.useEffect(() => {
