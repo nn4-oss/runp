@@ -14,6 +14,15 @@ const BubbleText = styled.p`
   font-weight: 500;
   line-height: 1.1;
   word-break: keep-all;
+
+  font-size: var(--fontsize-medium-10) !important;
+
+  max-width: calc(var(--measurement-large-90) * 1.5);
+  width: 100%;
+
+  syntax: "*";
+  inherits: false;
+  initial-value: solid;
 `;
 
 function AssistantBubble({
@@ -39,9 +48,7 @@ function AssistantBubble({
 
       {type === "RESULT" && (
         <div className="grid g-medium-60">
-          <BubbleText className="fs-medium-20 w-80">
-            {sanitizedContent}
-          </BubbleText>
+          <BubbleText>{sanitizedContent}</BubbleText>
           {fragment && (
             <FragmentBubble
               fragment={fragment}
@@ -51,6 +58,8 @@ function AssistantBubble({
           )}
         </div>
       )}
+
+      <div className=""></div>
     </div>
   );
 }
