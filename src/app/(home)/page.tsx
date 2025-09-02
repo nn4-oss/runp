@@ -9,9 +9,11 @@ import HomePrompt from "./_components/HomePrompt";
 async function Page() {
   return (
     <HydrateClient>
-      <AppContainer className="h-100 w-100 p-t-large-60 p-b-large-10 p-x-medium-60">
-        <HomeHeading />
-        <HomePrompt />
+      <AppContainer className="h-100 w-100 flex align-center justify-center">
+        <section className="w-100 p-medium-60">
+          <HomeHeading />
+          <HomePrompt />
+        </section>
       </AppContainer>
     </HydrateClient>
   );
