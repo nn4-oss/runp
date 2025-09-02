@@ -8,6 +8,7 @@ import { z } from "zod";
 import { utteranceValueSchema } from "@/schemas/utterances-schema";
 
 import { generateSlug } from "random-word-slugs";
+import { revalidatePath } from "next/cache";
 
 export const projectsRouter = createTRPCRouter({
   getUnique: protectedProcedure
@@ -82,5 +83,22 @@ export const projectsRouter = createTRPCRouter({
       });
 
       return userProject;
+    }),
+
+  delete: protectedProcedure
+    .input(
+      z.object({
+        id: z.string().min(1, { message: "Id is required" }),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      await prisma.project.delete({
+        where: {
+          id: input.id,
+          userId: ctx.auth.userId,
+        },
+      });
+
+      revalidatePath("/projects");
     }),
 });
