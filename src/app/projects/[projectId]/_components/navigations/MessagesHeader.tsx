@@ -6,8 +6,11 @@ import styled from "styled-components";
 import { useTRPC } from "@/trpc/client";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
-import { DropdownMenu, Page } from "@usefui/components";
+import DeleteDialog from "../containers/DeleteDialog";
+
+import { Dialog, DropdownMenu, Page } from "@usefui/components";
 import { Icon, PixelIcon } from "@usefui/icons";
+
 import { format } from "date-fns";
 
 const StyledMenu = styled(Page.Navigation)`
@@ -22,53 +25,69 @@ const StyledMenu = styled(Page.Navigation)`
 
 function MessagesHeader({ projectId }: { projectId: string }) {
   const trpc = useTRPC();
+
   const { data: project } = useSuspenseQuery(
     trpc.projects.getUnique.queryOptions({ id: projectId }),
   );
 
   return (
-    <StyledMenu className="w-100 flex g-medium-30 p-x-medium-30 align-center justify-start">
-      <DropdownMenu.Root>
-        <DropdownMenu>
-          <DropdownMenu.Trigger variant="border" sizing="small">
-            <span className="flex align-center justify-center p-y-small-60">
-              <Icon>
-                <PixelIcon.SlidersVertical />
-              </Icon>
-            </span>
-          </DropdownMenu.Trigger>
+    <StyledMenu className="w-100 flex g-medium-30 p-x-medium-30 align-center justify-between">
+      <div className="w-100 flex g-medium-30 align-center justify-start">
+        <Dialog.Root>
+          <DropdownMenu.Root>
+            <DropdownMenu>
+              <DropdownMenu.Trigger variant="border" sizing="small">
+                <span className="flex align-center justify-center p-y-small-60">
+                  <Icon>
+                    <PixelIcon.SlidersVertical />
+                  </Icon>
+                </span>
+              </DropdownMenu.Trigger>
 
-          <DropdownMenu.Content>
-            <DropdownMenu.Item className="w-100 flex align-center g-medium-30">
-              <Icon>
-                <PixelIcon.EditBox />
-              </Icon>
-              Rename
-            </DropdownMenu.Item>
+              <DropdownMenu.Content>
+                <DropdownMenu.Item className="w-100 flex align-center g-medium-30">
+                  <Icon>
+                    <PixelIcon.EditBox />
+                  </Icon>
+                  Rename
+                </DropdownMenu.Item>
 
-            <DropdownMenu.Item className="w-100 flex align-center g-medium-30">
-              <Icon>
-                <PixelIcon.Duplicate />
-              </Icon>
-              Copy Project ID
-            </DropdownMenu.Item>
+                <DropdownMenu.Item className="w-100 flex align-center g-medium-30">
+                  <Icon>
+                    <PixelIcon.Duplicate />
+                  </Icon>
+                  Copy Project ID
+                </DropdownMenu.Item>
 
-            <DropdownMenu.Item className="w-100 flex align-center g-medium-30">
-              <Icon fill="var(--color-red)">
-                <PixelIcon.Delete />
-              </Icon>
-              <span style={{ color: "var(--color-red)" }}>Delete</span>
-            </DropdownMenu.Item>
-          </DropdownMenu.Content>
-        </DropdownMenu>
-      </DropdownMenu.Root>
-      <div className="grid">
-        <p className="fs-medium-10">{project.name}</p>
-        <span className="fs-small-60 opacity-default-30">
-          Created:&nbsp;
-          {format(project.createdAt, " MM/dd/yy 'at' HH:mm")}
-        </span>
+                <DropdownMenu.Item className="w-100 flex align-center g-medium-30">
+                  <Dialog.Trigger
+                    rawicon
+                    variant="ghost"
+                    style={{ width: "100%", justifyContent: "start" }}
+                  >
+                    <Icon>
+                      <PixelIcon.Delete />
+                    </Icon>
+                    Delete
+                  </Dialog.Trigger>
+                </DropdownMenu.Item>
+              </DropdownMenu.Content>
+            </DropdownMenu>
+          </DropdownMenu.Root>
+
+          <DeleteDialog projectId={projectId} />
+        </Dialog.Root>
+
+        <div className="grid">
+          <p className="fs-medium-10">{project.name}</p>
+          <span className="fs-small-60 opacity-default-30">
+            Created:&nbsp;
+            {format(project.createdAt, " MM/dd/yy 'at' HH:mm")}
+          </span>
+        </div>
       </div>
+
+      <DeleteDialog projectId={projectId} />
     </StyledMenu>
   );
 }
