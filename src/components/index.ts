@@ -11,5 +11,8 @@ export { default as SplitScreen } from "./split-screen";
 export { default as Textarea } from "./text-area";
 export { default as UserAvatar } from "./user-avatar";
 
+export { default as DeleteDialog } from "./dialogs/DeleteDialog";
+export { default as UpdateNameDialog } from "./dialogs/UpdateNameDialog";
+
 export { Spinner } from "./spinner";
 export { AppContainer } from "./container";
