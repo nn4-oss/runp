@@ -4,13 +4,40 @@ import React from "react";
 import styled from "styled-components";
 
 import { useRouter } from "next/navigation";
-import { Badge, Table } from "@usefui/components";
+
+import { DeleteDialog, UpdateNameDialog } from "@/components";
+import { Badge, Dialog, DropdownMenu, Table } from "@usefui/components";
+import { Icon, PixelIcon } from "@usefui/icons";
 
 import { format, formatDistanceToNow } from "date-fns";
 
-const RowLink = styled(Table.Row)`
+const LinkCell = styled(Table.Cell)`
   cursor: pointer;
 `;
+
+function Cell({
+  projectId,
+  children,
+  className,
+}: {
+  projectId?: string;
+  className?: string;
+
+  children: React.ReactNode;
+}) {
+  const router = useRouter();
+
+  const onClick = () => {
+    if (!projectId) return;
+    router.push(`/projects/${projectId}`);
+  };
+
+  return (
+    <LinkCell className={className} onClick={onClick}>
+      {children}
+    </LinkCell>
+  );
+}
 
 function ProjectsTable({
   data,
@@ -34,32 +61,100 @@ function ProjectsTable({
           });
 
           return (
-            <RowLink
-              key={project.id}
-              onClick={() => router.push(`/projects/${project.id}`)}
-            >
-              <Table.Cell>
-                <Badge variant="border">
-                  <span className="flex align-center g-medium-30">
-                    <code>{project.id.substring(0, 8)}</code>
-                  </span>
-                </Badge>
-              </Table.Cell>
-              <Table.Cell>
-                <p className="fs-medium-10">{project.name}</p>
-              </Table.Cell>
+            <React.Fragment key={project.id}>
+              <Table.Row>
+                <Cell projectId={project.id}>
+                  <Badge variant="border">
+                    <span className="flex align-center g-medium-30">
+                      <code>{project.id.substring(0, 8)}</code>
+                    </span>
+                  </Badge>
+                </Cell>
+                <Cell projectId={project.id}>
+                  <p className="fs-medium-10">{project.name}</p>
+                </Cell>
+                <Cell projectId={project.id}>
+                  <p className="fs-medium-10 opacity-default-30">
+                    Created&nbsp;{createdAt}
+                  </p>
+                </Cell>
+                <Cell projectId={project.id}>
+                  <p className="fs-medium-10 opacity-default-30">
+                    Updated&nbsp;{lastUpdate}
+                  </p>
+                </Cell>
+                <Cell className="flex justify-end">
+                  <Dialog.Root>
+                    <DropdownMenu.Root>
+                      <DropdownMenu>
+                        <DropdownMenu.Trigger variant="border" sizing="small">
+                          <span className="flex align-center justify-center p-y-small-60">
+                            <Icon>
+                              <PixelIcon.SlidersVertical />
+                            </Icon>
+                          </span>
+                        </DropdownMenu.Trigger>
+                        <DropdownMenu.Content>
+                          <DropdownMenu.Item
+                            className="w-100 flex align-center g-medium-30"
+                            onClick={() => {
+                              router.push(`/projects/${project.id}`);
+                            }}
+                          >
+                            <Icon>
+                              <PixelIcon.Eye />
+                            </Icon>
+                            Details
+                          </DropdownMenu.Item>
+                          <DropdownMenu.Item className="w-100 flex align-center g-medium-30">
+                            <Dialog.Trigger
+                              rawicon
+                              variant="ghost"
+                              style={{
+                                width: "100%",
+                                justifyContent: "start",
+                              }}
+                            >
+                              <Icon>
+                                <PixelIcon.EditBox />
+                              </Icon>
+                              Rename
+                            </Dialog.Trigger>
+                          </DropdownMenu.Item>
+                          <DropdownMenu.Item
+                            className="w-100 flex align-center g-medium-30"
+                            onClick={async () => {
+                              await navigator.clipboard.writeText(project.id);
+                            }}
+                          >
+                            <Icon>
+                              <PixelIcon.Duplicate />
+                            </Icon>
+                            Copy Project ID
+                          </DropdownMenu.Item>
+                        </DropdownMenu.Content>
+                      </DropdownMenu>
+                    </DropdownMenu.Root>
 
-              <Table.Cell>
-                <p className="fs-medium-10 opacity-default-30">
-                  Created&nbsp;{createdAt}
-                </p>
-              </Table.Cell>
-              <Table.Cell>
-                <p className="fs-medium-10 opacity-default-30">
-                  Updated&nbsp;{lastUpdate}
-                </p>
-              </Table.Cell>
-            </RowLink>
+                    <UpdateNameDialog
+                      currentName={project.name}
+                      projectId={project.id}
+                    />
+                  </Dialog.Root>
+
+                  <Dialog.Root>
+                    <Dialog.Trigger variant="border" sizing="small" rawicon>
+                      <span className="flex align-center justify-center p-y-small-60">
+                        <Icon fill="var(--color-red)">
+                          <PixelIcon.Delete />
+                        </Icon>
+                      </span>
+                    </Dialog.Trigger>
+                    <DeleteDialog projectId={project.id} />
+                  </Dialog.Root>
+                </Cell>
+              </Table.Row>
+            </React.Fragment>
           );
         })}
       </Table.Body>

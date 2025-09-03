@@ -6,10 +6,9 @@ import styled from "styled-components";
 import { useTRPC } from "@/trpc/client";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
-import DeleteDialog from "../containers/DeleteDialog";
-
-import { Dialog, DropdownMenu, Page } from "@usefui/components";
-import { Icon, PixelIcon } from "@usefui/icons";
+import { DeleteDialog, UpdateNameDialog } from "@/components";
+import { Dialog, DropdownMenu, Page, Tooltip } from "@usefui/components";
+import { Icon, PixelIcon, WebIcon } from "@usefui/icons";
 
 import { format } from "date-fns";
 
@@ -36,46 +35,49 @@ function MessagesHeader({ projectId }: { projectId: string }) {
         <Dialog.Root>
           <DropdownMenu.Root>
             <DropdownMenu>
-              <DropdownMenu.Trigger variant="border" sizing="small">
-                <span className="flex align-center justify-center p-y-small-60">
-                  <Icon>
-                    <PixelIcon.SlidersVertical />
-                  </Icon>
-                </span>
-              </DropdownMenu.Trigger>
+              <Tooltip content="Options">
+                <DropdownMenu.Trigger variant="border" sizing="small">
+                  <span className="flex align-center justify-center p-y-small-60">
+                    <Icon>
+                      <WebIcon.Option />
+                    </Icon>
+                  </span>
+                </DropdownMenu.Trigger>
+              </Tooltip>
 
               <DropdownMenu.Content>
-                <DropdownMenu.Item className="w-100 flex align-center g-medium-30">
-                  <Icon>
-                    <PixelIcon.EditBox />
-                  </Icon>
-                  Rename
-                </DropdownMenu.Item>
-
-                <DropdownMenu.Item className="w-100 flex align-center g-medium-30">
-                  <Icon>
-                    <PixelIcon.Duplicate />
-                  </Icon>
-                  Copy Project ID
-                </DropdownMenu.Item>
-
-                <DropdownMenu.Item className="w-100 flex align-center g-medium-30">
+                <DropdownMenu.Item
+                  className="w-100 flex align-center g-medium-30"
+                  radio
+                >
                   <Dialog.Trigger
                     rawicon
                     variant="ghost"
                     style={{ width: "100%", justifyContent: "start" }}
                   >
                     <Icon>
-                      <PixelIcon.Delete />
+                      <PixelIcon.EditBox />
                     </Icon>
-                    Delete
+                    Rename
                   </Dialog.Trigger>
+                </DropdownMenu.Item>
+
+                <DropdownMenu.Item
+                  className="w-100 flex align-center g-medium-30"
+                  onClick={async () => {
+                    await navigator.clipboard.writeText(project.id);
+                  }}
+                >
+                  <Icon>
+                    <PixelIcon.Duplicate />
+                  </Icon>
+                  Copy Project ID
                 </DropdownMenu.Item>
               </DropdownMenu.Content>
             </DropdownMenu>
           </DropdownMenu.Root>
 
-          <DeleteDialog projectId={projectId} />
+          <UpdateNameDialog currentName={project.name} projectId={projectId} />
         </Dialog.Root>
 
         <div className="grid">
@@ -86,8 +88,19 @@ function MessagesHeader({ projectId }: { projectId: string }) {
           </span>
         </div>
       </div>
+      <Dialog.Root>
+        <Tooltip content="Delete">
+          <Dialog.Trigger variant="border" sizing="small" rawicon>
+            <span className="flex align-center justify-center p-y-small-60">
+              <Icon fill="var(--color-red)">
+                <PixelIcon.Delete />
+              </Icon>
+            </span>
+          </Dialog.Trigger>
+        </Tooltip>
 
-      <DeleteDialog projectId={projectId} />
+        <DeleteDialog projectId={projectId} />
+      </Dialog.Root>
     </StyledMenu>
   );
 }
