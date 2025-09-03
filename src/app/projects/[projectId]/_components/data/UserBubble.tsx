@@ -17,7 +17,7 @@ const BubbleWrapper = styled.div`
 `;
 const Bubble = styled(Badge)`
   position: relative;
-  max-width: calc(var(--measurement-large-90) * 1.5);
+  max-width: var(--measurement-large-90);
 
   width: 100%;
   justify-self: flex-end;
