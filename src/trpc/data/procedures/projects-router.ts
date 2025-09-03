@@ -85,6 +85,54 @@ export const projectsRouter = createTRPCRouter({
       return userProject;
     }),
 
+  update: protectedProcedure
+    .input(
+      z.object({
+        id: z.string().min(1, { message: "Id is required" }),
+        name: z
+          .string()
+          .min(1, { message: "Name is required" })
+          .max(128, { message: "Name cannot exceed 128 characters" }),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      const project = await prisma.project.findUnique({
+        where: {
+          id: input.id,
+          userId: ctx.auth.userId,
+        },
+      });
+
+      if (!project)
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Project not found",
+        });
+
+      const updatedProject = await prisma.project.update({
+        data: {
+          name: input.name,
+        },
+        where: {
+          id: input.id,
+          userId: ctx.auth.userId,
+        },
+      });
+
+      if (!updatedProject)
+        throw new TRPCError({
+          code: "PRECONDITION_FAILED",
+          message: "Could not update project",
+        });
+
+      // Refresh data after the update is done
+      // Prevents cache to overwrite the current data after navigating
+      revalidatePath("/projects");
+      revalidatePath(`/projects/${input.id}`);
+
+      return updatedProject;
+    }),
+
   delete: protectedProcedure
     .input(
       z.object({
