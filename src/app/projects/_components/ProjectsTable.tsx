@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 
 import { DeleteDialog, UpdateNameDialog } from "@/components";
 import { Badge, Dialog, DropdownMenu, Table } from "@usefui/components";
-import { Icon, PixelIcon } from "@usefui/icons";
+import { Icon, PixelIcon, WebIcon } from "@usefui/icons";
 
 import { format, formatDistanceToNow } from "date-fns";
 
@@ -90,7 +90,7 @@ function ProjectsTable({
                         <DropdownMenu.Trigger variant="border" sizing="small">
                           <span className="flex align-center justify-center p-y-small-60">
                             <Icon>
-                              <PixelIcon.SlidersVertical />
+                              <WebIcon.Option />
                             </Icon>
                           </span>
                         </DropdownMenu.Trigger>
