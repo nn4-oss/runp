@@ -8,9 +8,21 @@ import { useMutation } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
 import { useClerk } from "@clerk/nextjs";
 import { useKeyPress } from "@usefui/hooks";
+import { useForm } from "react-hook-form";
 
 import { Icon, PixelIcon } from "@usefui/icons";
-import { PromptOptions, ReflectiveButton, Textarea } from "@/components";
+import {
+  PromptOptions,
+  ReflectiveButton,
+  Spinner,
+  Textarea,
+} from "@/components";
+
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { utteranceValueSchema } from "@/schemas/utterances-schema";
+
+import { toast } from "sonner";
 
 const PromptContainer = styled.div`
   display: flex;
@@ -34,8 +46,12 @@ const PromptWrapper = styled.div`
   }
 `;
 
+const formSchema = z.object({
+  content: utteranceValueSchema,
+});
+
 function HomePrompt() {
-  const [value, setValue] = React.useState<string>("");
+  // const [value, setValue] = React.useState<string>("");
   const [isFocused, setIsFocused] = React.useState<boolean>(false);
 
   const router = useRouter();
@@ -46,6 +62,7 @@ function HomePrompt() {
   const createProject = useMutation(
     trpc.projects.create.mutationOptions({
       onSuccess: (data) => {
+        toast.info("Redirecting...");
         trpc.projects.getMany.queryOptions();
         router.push(`/projects/${data.id}`);
       },
@@ -55,28 +72,40 @@ function HomePrompt() {
     }),
   );
 
-  const enableShortcutSubmit =
-    shortcutControls && isFocused && !createProject.isPending;
-
-  const onSubmit = React.useCallback(async () => {
-    createProject.mutate({ value });
-  }, [createProject, value]);
-
-  const onPredefinedPromptSelection = React.useCallback(
-    async (content: string) => {
-      setValue(content);
-      createProject.mutate({ value: content });
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    mode: "onChange",
+    defaultValues: {
+      content: "",
     },
-    [setValue, createProject],
+  });
+
+  const onSubmit = React.useCallback(
+    async (values: z.infer<typeof formSchema>) => {
+      await createProject.mutateAsync({
+        value: values.content,
+      });
+    },
+    [createProject],
   );
 
   React.useEffect(() => {
-    if (enableShortcutSubmit) void onSubmit();
+    const enableShortcutSubmit =
+      shortcutControls &&
+      isFocused &&
+      form.formState.isValid &&
+      !createProject.isPending;
+    if (enableShortcutSubmit) {
+      // Use RHF's handleSubmit to re-run validation before submit.
+      void form.handleSubmit(onSubmit)();
+    }
+    // Re-run when key state toggles or guard inputs change.
   }, [
-    enableShortcutSubmit,
     shortcutControls,
     isFocused,
+    form.formState.isValid,
     createProject.isPending,
+    form,
     onSubmit,
   ]);
 
@@ -84,16 +113,17 @@ function HomePrompt() {
     <PromptContainer>
       <PromptWrapper
         className="p-medium-60 w-100"
+        onSubmit={form.handleSubmit(onSubmit)}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
       >
         <Textarea
           autoComplete="off"
-          name="prompt-field"
-          placeholder="Ask Runp to..."
-          className="w-100"
-          value={value}
-          onChange={(event) => setValue(event.target.value)}
+          id="prompt-content"
+          placeholder="Ask runp to build.."
+          className="p-b-large-10"
+          disabled={createProject.isPending}
+          {...form.register("content")}
         />
 
         <div className="flex align-center justify-between">
@@ -106,16 +136,19 @@ function HomePrompt() {
               </span>
             </kbd>
             <ReflectiveButton
+              type="submit"
               sizing="small"
               variant="mono"
-              onClick={onSubmit}
-              disabled={createProject.isPending || value.trim().length === 0}
-              type="button"
+              disabled={createProject.isPending || !form.formState.isValid}
             >
-              <span className="p-y-small-60 flex align-center justify-center">
-                <Icon>
-                  <PixelIcon.ArrowRight />
-                </Icon>
+              <span className="p-y-small-30">
+                {createProject.isPending ? (
+                  <Spinner />
+                ) : (
+                  <Icon>
+                    <PixelIcon.ArrowRight />
+                  </Icon>
+                )}
               </span>
             </ReflectiveButton>
           </div>

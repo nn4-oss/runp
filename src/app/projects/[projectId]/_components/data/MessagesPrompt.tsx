@@ -112,6 +112,7 @@ function MessagesPrompt({ projectId }: { projectId: string }) {
       onBlur={() => setIsFocused(false)}
     >
       <Textarea
+        autoComplete="off"
         id="prompt-content"
         placeholder="Ask a follow up.."
         className="p-b-large-10"
