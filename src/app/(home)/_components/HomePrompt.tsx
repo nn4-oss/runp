@@ -51,7 +51,6 @@ const formSchema = z.object({
 });
 
 function HomePrompt() {
-  // const [value, setValue] = React.useState<string>("");
   const [isFocused, setIsFocused] = React.useState<boolean>(false);
 
   const router = useRouter();
@@ -62,11 +61,12 @@ function HomePrompt() {
   const createProject = useMutation(
     trpc.projects.create.mutationOptions({
       onSuccess: (data) => {
-        toast.info("Redirecting...");
+        form.reset();
         trpc.projects.getMany.queryOptions();
         router.push(`/projects/${data.id}`);
       },
       onError: (error) => {
+        form.reset();
         if (error?.data?.code === "UNAUTHORIZED") clerk.openSignIn();
       },
     }),
