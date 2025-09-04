@@ -43,7 +43,7 @@ function CredentialsTable({
           return (
             <Table.Row key={credential.id}>
               <Table.Cell>
-                <span className="flex flex-wrap align-center g-medium-10">
+                <span className="flex  align-center g-medium-10">
                   <p className="fs-medium-10">{credential.name}</p>
                   <span className="opacity-default-10">/</span>
 
@@ -90,7 +90,7 @@ function CredentialsTable({
               </Table.Cell>
 
               <Table.Cell>
-                <span className="flex flex-wrap g-medium-10 align-center">
+                <span className="flex  g-medium-10 align-center">
                   <Tooltip content="Created At">
                     <Badge variant="border">
                       <Icon>

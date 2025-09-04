@@ -1,10 +1,10 @@
 import React from "react";
-import AppLayout from "@/layouts/AppLayout";
+import SettingsLayout from "@/layouts/SettingsLayout";
 
 export default function Layout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <AppLayout>{children}</AppLayout>;
+  return <SettingsLayout>{children}</SettingsLayout>;
 }

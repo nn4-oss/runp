@@ -30,11 +30,7 @@ function CredentialsList() {
   const hasData = credentials?.length !== 0;
 
   return (
-    <AppContainer
-      className="h-100 w-100 "
-      scrollbar
-      style={{ position: "relative" }}
-    >
+    <section className="w-100 h-100">
       <FixedHeader className="grid">
         <div className="flex justify-between align-center p-y-medium-60 p-x-medium-60">
           <p className="fs-medium-20">API Keys&nbsp;</p>
@@ -52,7 +48,7 @@ function CredentialsList() {
 
         {hasData && <CredentialsTable data={credentials} />}
       </div>
-    </AppContainer>
+    </section>
   );
 }
 
