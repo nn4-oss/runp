@@ -74,7 +74,6 @@ function ProjectsTable({
 }) {
   const router = useRouter();
 
-  console.log(data);
   return (
     <Table className="w-100">
       <Table.Body>
@@ -126,7 +125,7 @@ function ProjectsTable({
                     </Tooltip>
                   )}
                 </Cell>
-                <Cell projectId={project.id}>
+                <Cell>
                   <span className="flex align-center g-medium-10">
                     <Badge variant="border">
                       <kbd className="fs-small-60">{project.id}</kbd>
