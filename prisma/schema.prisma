@@ -18,46 +18,103 @@ enum MessageType {
   ERROR
 }
 
+enum ThirdPartyServiceType {
+  OPENAI
+  ANTHROPIC
+  XAI
+  E2B
+  SLACK
+  DISCORD
+}
+
+
+// Projects belong to a user (via Clerk userId) and contain messages.
+// We index userId for fast lookups like "all projects for a user".
 model Project {
-  id String @id @default(uuid())
-  name String
+  id        String    @id @default(uuid())
+  name      String
+  userId    String    @db.VarChar(255) // Clerk userId
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 
-  userId String
+  messages  Message[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  messages Message[]
+  @@index([userId], name: "idx_project_userId")
 }
 
+
+// Messages belong to a project. Cascade delete ensures that when a project
+// is deleted, its messages are also removed.
 model Message {
-  id String @id @default(uuid())
+  id        String      @id @default(uuid())
+  content   String
+  role      MessageRole
+  type      MessageType
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
 
- 
-  content String
-  role MessageRole
-  type MessageType
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt // auto-update the field when the row gets updated
-
-  fragment Fragment? // Optional
-
+  fragment  Fragment?
   projectId String
-  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  project   Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId], name: "idx_message_projectId")
 }
 
-model Fragment {
-  id String @id @default(uuid())
 
-  messageId String @unique
-  message Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
+// Each message can have at most one fragment (1:1 relation).
+// Cascade delete ensures fragments are removed with their message.
+model Fragment {
+  id        String   @id @default(uuid())
+  messageId String   @unique
+  message   Message  @relation(fields: [messageId], references: [id], onDelete: Cascade)
 
   sandboxUrl String
-  title String
-  files Json
+  title      String
+  files      Json
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
+
+// Credentials belong to a user (via Clerk userId).
+// We enforce uniqueness on (userId, name) so a user cannot have two
+// credentials with the same name.
+// Indexed userId for fast lookups.
+model Credential {
+  id        String    @id @default(uuid())
+  userId    String    @db.VarChar(255)
+  name      String
+  value     String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  integrations Integration[]
+
+  @@unique([userId, name], name: "userId_name")
+  @@index([userId], name: "idx_credential_userId")
+}
+
+// Join table linking a user + service (enum) + credential.
+// Allows marking one credential as "primary" per service per user.
+// Indexed heavily for performance on common queries.
+model Integration {
+  id           String     @id @default(uuid())
+  service      ThirdPartyServiceType
+  credentialId String
+  userId       String     @db.VarChar(255)
+  isPrimary    Boolean    @default(false)
+
+  credential   Credential @relation(fields: [credentialId], references: [id], onDelete: Cascade)
+
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  // Ensure only one primary per service per user
+  @@unique([service, userId, isPrimary], name: "uq_primary_service_user")
+
+  // Indexes for common queries
+  @@index([userId], name: "idx_integration_userId")
+  @@index([service], name: "idx_integration_service")
+  @@index([credentialId], name: "idx_integration_credentialId")
+}
