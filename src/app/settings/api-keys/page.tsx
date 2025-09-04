@@ -5,6 +5,7 @@ import CredentialsList from "./_components/CredentialsList";
 
 async function Page() {
   prefetch(trpc.credentials.getMany.queryOptions());
+  prefetch(trpc.integrations.getMany.queryOptions());
 
   return (
     <HydrateClient>
