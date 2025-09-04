@@ -144,12 +144,15 @@ function CreateCredentialDialog() {
         </hgroup>
 
         <Banner variant="warning" className="m-b-medium-60">
-          <Badge variant="warning">
-            <Icon fill="var(--color-orange)">
-              <PixelIcon.Lock />
-            </Icon>
-          </Badge>
-          API Keys are stored encrypted to prevent unauthorized access
+          <div>
+            <Badge variant="warning">
+              <Icon fill="var(--color-orange)">
+                <PixelIcon.Lock />
+              </Icon>
+            </Badge>
+          </div>
+          API Keys are stored encrypted and only used to securely connect with
+          third‑party services
         </Banner>
 
         <form
