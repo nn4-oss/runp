@@ -5,11 +5,25 @@ import styled from "styled-components";
 
 import { useRouter } from "next/navigation";
 
-import { DeleteProjectDialog, UpdateNameDialog } from "@/components";
-import { Badge, Dialog, DropdownMenu, Table } from "@usefui/components";
+import {
+  CopyCode,
+  DeleteProjectDialog,
+  Spinner,
+  UpdateNameDialog,
+} from "@/components";
+import {
+  Badge,
+  Dialog,
+  DropdownMenu,
+  Table,
+  Tooltip,
+} from "@usefui/components";
 import { Icon, PixelIcon, WebIcon } from "@usefui/icons";
 
+import { maskKey } from "@/utils/data-tables";
 import { format, formatDistanceToNow } from "date-fns";
+
+import type { MessageRole, MessageType } from "generated/prisma";
 
 const LinkCell = styled(Table.Cell)`
   cursor: pointer;
@@ -47,14 +61,31 @@ function ProjectsTable({
     id: string;
     createdAt: Date;
     updatedAt: Date;
+    messages: {
+      id: string;
+      role: MessageRole;
+      content: string;
+      projectId: string;
+      type: MessageType;
+      createdAt: Date;
+      updatedAt: Date;
+    }[];
   }[];
 }) {
   const router = useRouter();
 
+  console.log(data);
   return (
     <Table className="w-100">
       <Table.Body>
         {data.map((project) => {
+          const hasMessages = project.messages.length !== 0;
+          const lastMessage = project.messages.at(-1);
+
+          const isFinished = hasMessages && lastMessage?.role === "ASSISTANT";
+          const isProjectError = isFinished && lastMessage?.type === "ERROR";
+          const isProjectReady = isFinished && lastMessage?.type === "RESULT";
+
           const createdAt = format(project.createdAt, "dd/MM/yyyy");
           const lastUpdate = formatDistanceToNow(project.updatedAt, {
             addSuffix: true,
@@ -64,25 +95,65 @@ function ProjectsTable({
             <React.Fragment key={project.id}>
               <Table.Row>
                 <Cell projectId={project.id}>
-                  <Badge variant="border">
-                    <span className="flex align-center g-medium-30">
-                      <code>{project.id.substring(0, 8)}</code>
-                    </span>
-                  </Badge>
-                </Cell>
-                <Cell projectId={project.id}>
                   <p className="fs-medium-10">{project.name}</p>
+                  <span className="opacity-default-10">/</span>
+                  <Badge variant="border">
+                    <kbd className="fs-small-60">
+                      {project.messages.length}&nbsp;Messages
+                    </kbd>
+                  </Badge>
+                  {!isFinished && (
+                    <Tooltip content="Pending">
+                      <Spinner />
+                    </Tooltip>
+                  )}
+                  {isProjectError && (
+                    <Tooltip content="Error">
+                      <Badge variant="error">
+                        <Icon fill="var(--color-red)">
+                          <PixelIcon.Alert />
+                        </Icon>
+                      </Badge>
+                    </Tooltip>
+                  )}
+                  {isProjectReady && (
+                    <Tooltip content="Ready">
+                      <Badge variant="success">
+                        <Icon fill="var(--color-green)">
+                          <PixelIcon.CheckDouble />
+                        </Icon>
+                      </Badge>
+                    </Tooltip>
+                  )}
                 </Cell>
                 <Cell projectId={project.id}>
-                  <p className="fs-medium-10 opacity-default-30">
-                    Created&nbsp;{createdAt}
-                  </p>
+                  <span className="flex align-center g-medium-10">
+                    <Badge variant="border">
+                      <kbd className="fs-small-60">{project.id}</kbd>
+                    </Badge>
+                    <CopyCode value={project.id} />
+                  </span>
                 </Cell>
+
                 <Cell projectId={project.id}>
-                  <p className="fs-medium-10 opacity-default-30">
-                    Updated&nbsp;{lastUpdate}
-                  </p>
+                  <Tooltip content="Created At">
+                    <Badge variant="border">
+                      <Icon>
+                        <PixelIcon.Calendar />
+                      </Icon>
+                      {createdAt}
+                    </Badge>
+                  </Tooltip>
+                  <Tooltip content="Updated At">
+                    <Badge variant="border">
+                      <Icon>
+                        <PixelIcon.Clock />
+                      </Icon>
+                      {lastUpdate}
+                    </Badge>
+                  </Tooltip>
                 </Cell>
+
                 <Cell className="flex justify-end">
                   <Dialog.Root>
                     <DropdownMenu.Root>
