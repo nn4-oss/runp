@@ -27,7 +27,7 @@ function CredentialsList() {
     trpc.credentials.getMany.queryOptions(),
   );
 
-  const hasData = credentials.length !== 0;
+  const hasData = credentials?.length !== 0;
 
   return (
     <AppContainer
