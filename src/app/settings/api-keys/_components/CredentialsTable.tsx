@@ -1,10 +1,19 @@
 "use client";
 
 import React from "react";
-import { Badge, Table } from "@usefui/components";
+import { Badge, Dialog, Table, Tooltip } from "@usefui/components";
+
+import { Icon, PixelIcon } from "@usefui/icons";
+import {
+  CopyCode,
+  UpdateCredentialDialog,
+  DeleteCredentialDialog,
+} from "@/components";
 
 import { format, formatDistanceToNow } from "date-fns";
-import { Icon, PixelIcon } from "@usefui/icons";
+import { maskKey } from "@/utils/data-tables";
+
+import type { ThirdPartyServiceType } from "generated/prisma";
 
 function CredentialsTable({
   data,
@@ -18,6 +27,7 @@ function CredentialsTable({
     updatedAt: Date;
     integrations: {
       isPrimary: boolean;
+      service: ThirdPartyServiceType;
     }[];
   }[];
 }) {
@@ -25,10 +35,6 @@ function CredentialsTable({
     <Table className="w-100">
       <Table.Body>
         {data.map((credential) => {
-          const isUsedAsPrimary = credential.integrations.some(
-            (integration) => integration.isPrimary,
-          );
-
           const createdAt = format(credential.createdAt, "dd/MM/yyyy");
           const lastUpdate = formatDistanceToNow(credential.updatedAt, {
             addSuffix: true,
@@ -37,40 +43,96 @@ function CredentialsTable({
           return (
             <Table.Row key={credential.id}>
               <Table.Cell>
-                <p className="fs-medium-10">{credential.name}</p>
+                <span className="flex flex-wrap align-center g-medium-10">
+                  <p className="fs-medium-10">{credential.name}</p>
+                  <span className="opacity-default-10">/</span>
+
+                  {credential.integrations.map((integration, index) => (
+                    <React.Fragment key={index}>
+                      <Badge variant="border">
+                        <kbd className="fs-small-60">{integration.service}</kbd>
+                      </Badge>
+                      {integration.isPrimary ? (
+                        <Tooltip content="Active">
+                          <Badge variant="success">
+                            <Icon
+                              fill="var(--color-green)"
+                              width={12}
+                              height={12}
+                            >
+                              <PixelIcon.CheckDouble />
+                            </Icon>
+                          </Badge>
+                        </Tooltip>
+                      ) : (
+                        <Tooltip content="Inactive">
+                          <Badge variant="border">
+                            <Icon width={12} height={12}>
+                              <PixelIcon.EyeClosed />
+                            </Icon>
+                          </Badge>
+                        </Tooltip>
+                      )}
+                    </React.Fragment>
+                  ))}
+                </span>
               </Table.Cell>
+
               <Table.Cell>
-                {isUsedAsPrimary && (
-                  <Badge variant="success">
-                    <Icon fill="var(--color-green)">
-                      <PixelIcon.Check />
-                    </Icon>
-                    Active
+                <span className="flex align-center g-medium-10">
+                  <Badge variant="border">
+                    <kbd className="fs-small-60">
+                      {maskKey(credential.value)}
+                    </kbd>
                   </Badge>
-                )}
-                {!isUsedAsPrimary && (
-                  <Badge variant="secondary">
-                    <Icon fill="var(--font-color)">
-                      <PixelIcon.Lock />
-                    </Icon>
-                    Inactive
-                  </Badge>
-                )}
+                  <CopyCode value={credential.value} />
+                </span>
               </Table.Cell>
+
               <Table.Cell>
-                <p className="fs-medium-10 opacity-default-60">
-                  {credential.integrations.length}&nbsp;integration(s)
-                </p>
+                <span className="flex flex-wrap g-medium-10 align-center">
+                  <Tooltip content="Created At">
+                    <Badge variant="border">
+                      <Icon>
+                        <PixelIcon.Calendar />
+                      </Icon>
+                      {createdAt}
+                    </Badge>
+                  </Tooltip>
+                  <Tooltip content="Updated At">
+                    <Badge variant="border">
+                      <Icon>
+                        <PixelIcon.Clock />
+                      </Icon>
+                      {lastUpdate}
+                    </Badge>
+                  </Tooltip>
+                </span>
               </Table.Cell>
-              <Table.Cell>
-                <p className="fs-medium-10 opacity-default-30">
-                  Created&nbsp;{createdAt}
-                </p>
-              </Table.Cell>
-              <Table.Cell>
-                <p className="fs-medium-10 opacity-default-30">
-                  Updated&nbsp;{lastUpdate}
-                </p>
+
+              <Table.Cell className="flex justify-end">
+                <Dialog.Root>
+                  <Dialog.Trigger variant="border" sizing="small" rawicon>
+                    <span className="flex align-center justify-center p-y-small-60">
+                      <Icon>
+                        <PixelIcon.EditBox />
+                      </Icon>
+                    </span>
+                  </Dialog.Trigger>
+
+                  <UpdateCredentialDialog credentialId={credential.id} />
+                </Dialog.Root>
+                <Dialog.Root>
+                  <Dialog.Trigger variant="border" sizing="small" rawicon>
+                    <span className="flex align-center justify-center p-y-small-60">
+                      <Icon fill="var(--color-red)">
+                        <PixelIcon.Delete />
+                      </Icon>
+                    </span>
+                  </Dialog.Trigger>
+
+                  <DeleteCredentialDialog credentialName={credential.name} />
+                </Dialog.Root>
               </Table.Cell>
             </Table.Row>
           );

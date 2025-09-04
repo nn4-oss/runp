@@ -5,6 +5,7 @@ export { default as CodeEditor } from "./code-editor";
 export { default as ColorModes } from "./color-mode";
 export { default as CopyCode } from "./copy-code";
 export { default as CreateCredentialDialog } from "./dialogs/CreateCredentialDialog";
+export { default as UpdateCredentialDialog } from "./dialogs/UpdateCredentialDialog";
 export { default as DeleteProjectDialog } from "./dialogs/DeleteProjectDialog";
 export { default as DeleteCredentialDialog } from "./dialogs/DeleteCredentialDialog";
 export { default as UpdateNameDialog } from "./dialogs/UpdateNameDialog";
