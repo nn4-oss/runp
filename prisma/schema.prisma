@@ -110,10 +110,6 @@ model Integration {
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
 
-  // Ensure only one primary per service per user
-  @@unique([service, userId, isPrimary], name: "uq_primary_service_user")
-
-  // Indexes for common queries
   @@index([userId], name: "idx_integration_userId")
   @@index([service], name: "idx_integration_service")
   @@index([credentialId], name: "idx_integration_credentialId")
