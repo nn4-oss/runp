@@ -20,7 +20,7 @@ const DangerButton = styled(Button)`
   }
 `;
 
-function DeleteDialog({ projectId }: { projectId: string }) {
+function DeleteProjectDialog({ projectId }: { projectId: string }) {
   const trpc = useTRPC();
   const router = useRouter();
 
@@ -67,4 +67,4 @@ function DeleteDialog({ projectId }: { projectId: string }) {
   );
 }
 
-export default DeleteDialog;
+export default DeleteProjectDialog;

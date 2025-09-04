@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { useTRPC } from "@/trpc/client";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
-import { DeleteDialog, UpdateNameDialog } from "@/components";
+import { DeleteProjectDialog, UpdateNameDialog } from "@/components";
 import { Dialog, DropdownMenu, Page, Tooltip } from "@usefui/components";
 import { Icon, PixelIcon, WebIcon } from "@usefui/icons";
 
@@ -99,7 +99,7 @@ function MessagesHeader({ projectId }: { projectId: string }) {
           </Dialog.Trigger>
         </Tooltip>
 
-        <DeleteDialog projectId={projectId} />
+        <DeleteProjectDialog projectId={projectId} />
       </Dialog.Root>
     </StyledMenu>
   );

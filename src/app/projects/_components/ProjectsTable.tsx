@@ -5,7 +5,7 @@ import styled from "styled-components";
 
 import { useRouter } from "next/navigation";
 
-import { DeleteDialog, UpdateNameDialog } from "@/components";
+import { DeleteProjectDialog, UpdateNameDialog } from "@/components";
 import { Badge, Dialog, DropdownMenu, Table } from "@usefui/components";
 import { Icon, PixelIcon, WebIcon } from "@usefui/icons";
 
@@ -150,7 +150,7 @@ function ProjectsTable({
                         </Icon>
                       </span>
                     </Dialog.Trigger>
-                    <DeleteDialog projectId={project.id} />
+                    <DeleteProjectDialog projectId={project.id} />
                   </Dialog.Root>
                 </Cell>
               </Table.Row>
