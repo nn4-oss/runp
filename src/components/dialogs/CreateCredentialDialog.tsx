@@ -9,7 +9,6 @@ import { useForm } from "react-hook-form";
 
 import {
   Portal,
-  Dialog,
   Field,
   useDialog,
   Checkbox,
@@ -18,7 +17,6 @@ import {
   ScrollArea,
 } from "@usefui/components";
 import { PrivacyField, ReflectiveButton, Spinner } from "../";
-import { Icon, PixelIcon } from "@usefui/icons";
 
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -44,14 +42,7 @@ const CheckboxWrapper = styled(Field.Wrapper)`
   }
 `;
 
-const serviceEnum = z.enum([
-  "OPENAI",
-  "ANTHROPIC",
-  "XAI",
-  "E2B",
-  "SLACK",
-  "DISCORD",
-]);
+const serviceEnum = z.enum(["OPENAI", "E2B"]);
 
 const formSchema = z.object({
   name: z
