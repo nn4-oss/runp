@@ -10,22 +10,22 @@ import { useForm } from "react-hook-form";
 import {
   Portal,
   Dialog,
-  Button,
   Field,
   useDialog,
   Checkbox,
   Badge,
+  Sheet,
+  ScrollArea,
 } from "@usefui/components";
-import { Spinner } from "../spinner";
+import { PrivacyField, ReflectiveButton, Spinner } from "../";
+import { Icon, PixelIcon } from "@usefui/icons";
 
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { Icon, PixelIcon } from "@usefui/icons";
-import PrivacyField from "../privacy-field";
 
 const Banner = styled(Badge)`
-  width: 100% !important;
+  /* width: 100% !important; */
   justify-content: start !important;
   padding: var(--measurement-medium-60) !important;
   gap: var(--measurement-medium-60) !important;
@@ -118,9 +118,11 @@ function CreateCredentialDialog() {
         }
 
         // Invalidate only after the full flow is done
-        // No need to invalidate integrations separately unless used elsewhere
         await queryClient.invalidateQueries(
           trpc.credentials.getMany.queryOptions(),
+        );
+        await queryClient.invalidateQueries(
+          trpc.integrations.getMany.queryOptions(),
         );
 
         form.reset();
@@ -141,152 +143,155 @@ function CreateCredentialDialog() {
 
   return (
     <Portal container="portal-container">
-      <Dialog sizing="small">
-        <hgroup className="m-b-medium-30 grid g-medium-10">
-          <h6>New API Key</h6>
-          <p className="fs-medium-10 opacity-default-60">
-            Securely store your API key for third-party integrations
-          </p>
-        </hgroup>
+      <Sheet
+        sizing="large"
+        closeOnInteract
+        side="right"
+        shortcut
+        hotkey="a"
+        bindkey="ctrlKey"
+      >
+        <ScrollArea className="h-100 w-100">
+          <hgroup className="m-b-medium-30 grid g-medium-10">
+            <h6>New API Key</h6>
+            <p className="fs-medium-10 opacity-default-60">
+              Securely store your API key for third-party integrations
+            </p>
+          </hgroup>
 
-        <Banner variant="warning" className="m-b-medium-60">
-          <div>
-            <Badge variant="warning">
-              <Icon fill="var(--color-orange)">
-                <PixelIcon.Lock />
-              </Icon>
-            </Badge>
-          </div>
-          API Keys are stored encrypted and only used to securely connect with
-          third-party services
-        </Banner>
+          <Banner variant="warning" className="m-b-medium-60">
+            API Keys are stored encrypted and only used to securely connect with
+            third-party services
+          </Banner>
 
-        <form
-          className="grid w-100 m-b-large-10 g-medium-60"
-          onSubmit={form.handleSubmit(onSubmit)}
-        >
-          <Field.Root>
-            <Field.Wrapper className="grid g-medium-30">
-              <Field.Label className="fs-medium-20" htmlFor="credential-name">
-                API Key Name
-              </Field.Label>
-              <Field
-                id="credential-name"
-                autoComplete="off"
-                variant="secondary"
-                sizing="medium"
-                placeholder="e.g., OPEN_AI_RUNP_KEY"
-                style={{ width: "auto" }}
-                {...form.register("name")}
-              />
-              <Field.Meta variant="hint">
-                Choose a descriptive name to identify this key
-              </Field.Meta>
-            </Field.Wrapper>
-          </Field.Root>
-
-          <Field.Root>
-            <Field.Wrapper className="grid g-medium-30">
-              <Field.Label
-                className="fs-medium-20"
-                htmlFor="credential-service"
-              >
-                Service
-              </Field.Label>
-              <Field
-                id="credential-service"
-                autoComplete="off"
-                variant="secondary"
-                sizing="medium"
-                style={{ width: "auto" }}
-                {...{ as: Select }}
-                {...form.register("service")}
-              >
-                {serviceEnum.options.map((service) => (
-                  <option key={service} value={service}>
-                    {service.toLowerCase()}
-                  </option>
-                ))}
-              </Field>
-            </Field.Wrapper>
-          </Field.Root>
-
-          <Field.Root>
-            <Field.Wrapper className="grid g-medium-30">
-              <Field.Label className="fs-medium-20" htmlFor="credential-value">
-                API Key
-              </Field.Label>
-              <PrivacyField
-                id="credential-value"
-                variant="secondary"
-                sizing="medium"
-                placeholder="sk-***"
-                style={{ width: "auto" }}
-                {...form.register("value")}
-              />
-            </Field.Wrapper>
-          </Field.Root>
-
-          <Checkbox.Root>
-            <CheckboxWrapper className="flex align-start g-medium-30">
-              <div className="p-y-small-60">
-                <Checkbox
-                  id="isPrimary"
+          <form
+            className="grid w-100 m-b-large-10 g-medium-60"
+            onSubmit={form.handleSubmit(onSubmit)}
+          >
+            <Field.Root>
+              <Field.Wrapper className="grid g-medium-30">
+                <Field.Label className="fs-medium-20" htmlFor="credential-name">
+                  API Key Name
+                </Field.Label>
+                <Field
+                  id="credential-name"
+                  autoComplete="off"
+                  variant="secondary"
                   sizing="medium"
-                  variant="border"
-                  onChange={(event) => {
-                    form.setValue("isPrimary", Boolean(event.target.checked));
-                  }}
+                  placeholder="e.g., OPEN_AI_RUNP_KEY"
+                  style={{ width: "auto" }}
+                  {...form.register("name")}
+                />
+                <Field.Meta variant="hint">
+                  Choose a descriptive name to identify this key
+                </Field.Meta>
+              </Field.Wrapper>
+            </Field.Root>
+
+            <Field.Root>
+              <Field.Wrapper className="grid g-medium-30">
+                <Field.Label
+                  className="fs-medium-20"
+                  htmlFor="credential-service"
                 >
-                  <Checkbox.Indicator />
-                </Checkbox>
-              </div>
+                  Service
+                </Field.Label>
+                <Field
+                  id="credential-service"
+                  autoComplete="off"
+                  variant="secondary"
+                  sizing="medium"
+                  style={{ width: "auto" }}
+                  {...{ as: Select }}
+                  {...form.register("service")}
+                >
+                  {serviceEnum.options.map((service) => (
+                    <option key={service} value={service}>
+                      {service.toLowerCase()}
+                    </option>
+                  ))}
+                </Field>
+              </Field.Wrapper>
+            </Field.Root>
 
-              <Field.Label
-                className="grid g-medium-10 "
-                htmlFor="isPrimary"
-                optional
-              >
-                <span className="fs-medium-20">Set as primary key</span>
+            <Field.Root>
+              <Field.Wrapper className="grid g-medium-30">
+                <Field.Label
+                  className="fs-medium-20"
+                  htmlFor="credential-value"
+                >
+                  API Key
+                </Field.Label>
+                <PrivacyField
+                  id="credential-value"
+                  variant="secondary"
+                  sizing="medium"
+                  placeholder="sk-***"
+                  style={{ width: "auto" }}
+                  {...form.register("value")}
+                />
+              </Field.Wrapper>
+            </Field.Root>
 
-                <span className="fs-medium-10 opacity-default-30">
-                  Primary keys will be used during workflows run instead of
-                  Foudation UIs key.
-                </span>
-              </Field.Label>
-            </CheckboxWrapper>
-          </Checkbox.Root>
-        </form>
+            <Checkbox.Root>
+              <CheckboxWrapper className="flex align-start g-medium-30">
+                <div className="p-y-small-60">
+                  <Checkbox
+                    id="isPrimary"
+                    sizing="medium"
+                    variant="border"
+                    onChange={(event) => {
+                      form.setValue("isPrimary", Boolean(event.target.checked));
+                    }}
+                  >
+                    <Checkbox.Indicator />
+                  </Checkbox>
+                </div>
 
-        <div className="flex align-center justify-end g-medium-10">
-          <Dialog.Control
-            variant="border"
-            sizing="medium"
-            onClick={() => form.reset()}
-          >
-            Cancel
-          </Dialog.Control>
-          <Button
-            type="submit"
-            variant="border"
-            sizing="medium"
-            disabled={
-              createCredential.isPending ||
-              linkIntegration.isPending ||
-              setPrimaryIntegration.isPending ||
-              !form.formState.isValid
-            }
-            onClick={form.handleSubmit(onSubmit)}
-          >
-            Add
-            {(createCredential.isPending ||
-              linkIntegration.isPending ||
-              setPrimaryIntegration.isPending) && <Spinner />}
-          </Button>
-        </div>
-      </Dialog>
+                <Field.Label
+                  className="grid g-medium-10 "
+                  htmlFor="isPrimary"
+                  optional
+                >
+                  <span className="fs-medium-20">Set as primary key</span>
 
-      <Dialog.Overlay closeOnInteract onClick={() => form.reset()} />
+                  <span className="fs-medium-10 opacity-default-30">
+                    Primary keys will be used during workflows run instead of
+                    Foudation UIs key.
+                  </span>
+                </Field.Label>
+              </CheckboxWrapper>
+            </Checkbox.Root>
+          </form>
+
+          <div className="flex align-center justify-end g-medium-10 p-b-large-10">
+            <Sheet.Trigger
+              variant="border"
+              sizing="medium"
+              onClick={() => form.reset()}
+            >
+              Cancel
+            </Sheet.Trigger>
+            <ReflectiveButton
+              type="submit"
+              variant="mono"
+              sizing="medium"
+              disabled={
+                createCredential.isPending ||
+                linkIntegration.isPending ||
+                setPrimaryIntegration.isPending ||
+                !form.formState.isValid
+              }
+              onClick={form.handleSubmit(onSubmit)}
+            >
+              Add
+              {(createCredential.isPending ||
+                linkIntegration.isPending ||
+                setPrimaryIntegration.isPending) && <Spinner />}
+            </ReflectiveButton>
+          </div>
+        </ScrollArea>
+      </Sheet>
     </Portal>
   );
 }
