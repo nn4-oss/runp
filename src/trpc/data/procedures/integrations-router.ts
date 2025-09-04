@@ -3,14 +3,7 @@ import prisma from "@/lib/prisma";
 import { protectedProcedure, createTRPCRouter } from "@/trpc/init";
 import { z } from "zod";
 
-const serviceEnum = z.enum([
-  "OPENAI",
-  "ANTHROPIC",
-  "XAI",
-  "E2B",
-  "SLACK",
-  "DISCORD",
-]);
+const serviceEnum = z.enum(["OPENAI", "E2B"]);
 
 export const integrationsRouter = createTRPCRouter({
   getMany: protectedProcedure.query(async ({ ctx }) => {
@@ -85,6 +78,27 @@ export const integrationsRouter = createTRPCRouter({
           },
           data: { isPrimary: true },
         });
+      });
+    }),
+
+  resetPrimary: protectedProcedure
+    .input(
+      z.object({
+        credentialId: z.string().uuid(),
+        service: serviceEnum,
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      return prisma.integration.updateMany({
+        where: {
+          userId: ctx.auth.userId,
+          service: input.service,
+          credentialId: input.credentialId,
+          isPrimary: true, // only reset if it was primary
+        },
+        data: {
+          isPrimary: false,
+        },
       });
     }),
 });
