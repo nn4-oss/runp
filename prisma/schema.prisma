@@ -20,11 +20,7 @@ enum MessageType {
 
 enum ThirdPartyServiceType {
   OPENAI
-  ANTHROPIC
-  XAI
   E2B
-  SLACK
-  DISCORD
 }
 
 
