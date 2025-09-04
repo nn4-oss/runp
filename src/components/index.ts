@@ -9,6 +9,7 @@ export { default as DeleteProjectDialog } from "./dialogs/DeleteProjectDialog";
 export { default as UpdateNameDialog } from "./dialogs/UpdateNameDialog";
 export { default as Navigation } from "./navigation";
 export { default as PromptOptions } from "./prompt-options";
+export { default as PrivacyField } from "./privacy-field";
 export { default as ReflectiveButton } from "./reflective-button";
 export { default as SplitScreen } from "./split-screen";
 export { default as Textarea } from "./text-area";
