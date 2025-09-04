@@ -1,0 +1,53 @@
+erDiagram
+
+    Project {
+        string id PK
+        string name
+        string userId
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    Message {
+        string id PK
+        string content
+        string role "MessageRole"
+        string type "MessageType"
+        datetime createdAt
+        datetime updatedAt
+        string projectId FK
+    }
+
+    Fragment {
+        string id PK
+        string messageId FK
+        string sandboxUrl
+        string title
+        string files
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    Credential {
+        string id PK
+        string userId
+        string name
+        string value
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    Integration {
+        string id PK
+        enum service "ThirdPartyServiceType"
+        string credentialId FK
+        string userId
+        boolean isPrimary
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    %% Relationships
+    Project ||--o{ Message : has_many
+    Message ||--|| Fragment : has_one
+    Credential ||--o{ Integration : has_many
