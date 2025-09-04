@@ -66,6 +66,56 @@ export const credentialsRouter = createTRPCRouter({
       return newCredential;
     }),
 
+  update: protectedProcedure
+    .input(
+      z.object({
+        id: z.string().min(1, { message: "Id is required" }),
+        name: z
+          .string()
+          .min(1, { message: "Name is required" })
+          .max(128, { message: "Name cannot exceed 128 characters" }),
+        value: z
+          .string()
+          .min(1, { message: "Name is required" })
+          .max(256, { message: "Value cannot exceed 256 characters" }),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      const credential = await prisma.credential.findUnique({
+        where: {
+          id: input.id,
+          userId: ctx.auth.userId,
+        },
+      });
+
+      if (!credential)
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Credential not found",
+        });
+
+      const encryptedValue = symetricEncryption(input.value);
+      const updatedCredential = await prisma.credential.update({
+        data: {
+          name: input.name,
+          value: encryptedValue,
+        },
+        where: {
+          id: input.id,
+          userId: ctx.auth.userId,
+        },
+      });
+
+      if (!updatedCredential)
+        throw new TRPCError({
+          code: "PRECONDITION_FAILED",
+          message: "Could not update credential.",
+        });
+
+      revalidatePath("/settings/api-keys");
+      return updatedCredential;
+    }),
+
   delete: protectedProcedure
     .input(
       z.object({
