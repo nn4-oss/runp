@@ -4,15 +4,15 @@ export { default as Breadcrumbs } from "./breadcrumbs";
 export { default as CodeEditor } from "./code-editor";
 export { default as ColorModes } from "./color-mode";
 export { default as CopyCode } from "./copy-code";
+export { default as CreateCredentialDialog } from "./dialogs/CreateCredentialDialog";
+export { default as DeleteProjectDialog } from "./dialogs/DeleteProjectDialog";
+export { default as UpdateNameDialog } from "./dialogs/UpdateNameDialog";
 export { default as Navigation } from "./navigation";
 export { default as PromptOptions } from "./prompt-options";
 export { default as ReflectiveButton } from "./reflective-button";
 export { default as SplitScreen } from "./split-screen";
 export { default as Textarea } from "./text-area";
 export { default as UserAvatar } from "./user-avatar";
-
-export { default as DeleteDialog } from "./dialogs/DeleteDialog";
-export { default as UpdateNameDialog } from "./dialogs/UpdateNameDialog";
 
 export { Spinner } from "./spinner";
 export { AppContainer } from "./container";
