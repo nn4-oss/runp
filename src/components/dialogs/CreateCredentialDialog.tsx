@@ -73,17 +73,8 @@ function CreateCredentialDialog() {
 
   const createCredential = useMutation(
     trpc.credentials.create.mutationOptions({
-      onSuccess: async () => {
-        await queryClient.invalidateQueries(
-          trpc.credentials.getMany.queryOptions(),
-        );
-        await queryClient.invalidateQueries(
-          trpc.integrations.getMany.queryOptions(),
-        );
-
-        form.reset();
-        dialog.methods?.toggleDialog?.();
-      },
+      // Invalidation has to be made after every queries and mutation are done.
+      // On success is disabled because fired too early in this case
       onError: (error) => toast.error(error.message),
     }),
   );
@@ -106,31 +97,46 @@ function CreateCredentialDialog() {
 
   const onSubmit = React.useCallback(
     async (values: z.infer<typeof formSchema>) => {
-      // Create credential
-      const credential = await createCredential.mutateAsync({
-        name: values.name,
-        value: values.value,
-      });
+      try {
+        const credential = await createCredential.mutateAsync({
+          name: values.name,
+          value: values.value,
+        });
 
-      if (!credential?.id) return;
+        if (!credential?.id) return;
 
-      // Link to service (integration)
-      await linkIntegration.mutateAsync({
-        service: values.service,
-        credentialId: credential.id,
-      });
-
-      // If marked as primary, set it
-      if (values.isPrimary) {
-        await setPrimaryIntegration.mutateAsync({
+        await linkIntegration.mutateAsync({
           service: values.service,
           credentialId: credential.id,
         });
-      }
 
-      toast.success("Credential created and linked successfully");
+        if (values.isPrimary) {
+          await setPrimaryIntegration.mutateAsync({
+            service: values.service,
+            credentialId: credential.id,
+          });
+        }
+
+        // Invalidate only after the full flow is done
+        // No need to invalidate integrations separately unless used elsewhere
+        await queryClient.invalidateQueries(
+          trpc.credentials.getMany.queryOptions(),
+        );
+
+        form.reset();
+        dialog.methods?.toggleDialog?.();
+      } catch (err: any) {
+        toast.error(err.message || "Something went wrong");
+      }
     },
-    [createCredential, linkIntegration, setPrimaryIntegration],
+    [
+      createCredential,
+      linkIntegration,
+      setPrimaryIntegration,
+      queryClient,
+      dialog,
+      form,
+    ],
   );
 
   return (
@@ -152,7 +158,7 @@ function CreateCredentialDialog() {
             </Badge>
           </div>
           API Keys are stored encrypted and only used to securely connect with
-          third‑party services
+          third-party services
         </Banner>
 
         <form

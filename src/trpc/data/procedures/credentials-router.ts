@@ -13,7 +13,12 @@ export const credentialsRouter = createTRPCRouter({
       where: { userId: ctx.auth.userId },
       orderBy: { name: "asc" },
       include: {
-        integrations: true,
+        integrations: {
+          select: {
+            isPrimary: true,
+            service: true,
+          },
+        },
       },
     });
 
