@@ -10,11 +10,11 @@ import { useForm } from "react-hook-form";
 import {
   Portal,
   Field,
-  useDialog,
   Checkbox,
   Badge,
   Sheet,
   ScrollArea,
+  useSheet,
 } from "@usefui/components";
 import { PrivacyField, ReflectiveButton, Spinner } from "../";
 
@@ -60,7 +60,7 @@ const formSchema = z.object({
 function CreateCredentialDialog() {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
-  const dialog = useDialog();
+  const sheet = useSheet();
 
   const createCredential = useMutation(
     trpc.credentials.create.mutationOptions({
@@ -117,7 +117,7 @@ function CreateCredentialDialog() {
         );
 
         form.reset();
-        dialog.methods?.toggleDialog?.();
+        sheet.methods?.toggle?.();
       } catch (err: any) {
         toast.error(err.message || "Something went wrong");
       }
@@ -127,7 +127,7 @@ function CreateCredentialDialog() {
       linkIntegration,
       setPrimaryIntegration,
       queryClient,
-      dialog,
+      sheet,
       form,
     ],
   );
