@@ -9,6 +9,7 @@ import { utteranceValueSchema } from "@/schemas/utterances-schema";
 
 import { generateSlug } from "random-word-slugs";
 import { revalidatePath } from "next/cache";
+import { consumePoints } from "@/trpc/services/usage-services";
 
 export const projectsRouter = createTRPCRouter({
   getUnique: protectedProcedure
@@ -57,6 +58,25 @@ export const projectsRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ input, ctx }) => {
+      // Consume points before sending message to ensure the rate limit isn't reached
+      try {
+        await consumePoints();
+      } catch (error) {
+        // Internal error
+        if (error instanceof Error) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Something went wrong.",
+          });
+        }
+
+        // Rate limit response
+        throw new TRPCError({
+          code: "TOO_MANY_REQUESTS",
+          message: "Message Rate Limit",
+        });
+      }
+
       const userProject = await prisma.project.create({
         data: {
           userId: ctx.auth.userId,
