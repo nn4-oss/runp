@@ -110,3 +110,10 @@ model Integration {
   @@index([service], name: "idx_integration_service")
   @@index([credentialId], name: "idx_integration_credentialId")
 }
+
+// Rate limiting per user's projets/messages.
+model Usage {
+  key String     @id @default(uuid())
+  points Int
+  expire DateTime?
+}
