@@ -6,13 +6,14 @@ import styled from "styled-components";
 import { useTRPC } from "@/trpc/client";
 import { useForm } from "react-hook-form";
 import { useKeyPress } from "@usefui/hooks";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import {
   PromptOptions,
   ReflectiveButton,
   Spinner,
   Textarea,
+  UsageBanner,
 } from "@/components";
 import { Icon, PixelIcon } from "@usefui/icons";
 
@@ -58,11 +59,21 @@ function MessagesPrompt({ projectId }: { projectId: string }) {
         await queryClient.invalidateQueries(
           trpc.messages.getMany.queryOptions({ projectId }),
         );
+        await queryClient.invalidateQueries(trpc.usage.status.queryOptions());
       },
 
-      onError: (error) => toast.error(error.message),
+      onError: (error) => {
+        toast.error(error.message);
+
+        if (error.data?.code === "TOO_MANY_REQUESTS") {
+          toast.error("Rate limit exceeded");
+        }
+      },
     }),
   );
+
+  const { data: usage } = useQuery(trpc.usage.status.queryOptions());
+  const showUsageBanner = !!usage;
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -119,6 +130,15 @@ function MessagesPrompt({ projectId }: { projectId: string }) {
         disabled={createMessage.isPending}
         {...form.register("value")}
       />
+
+      {showUsageBanner && (
+        <div className="w-100 m-b-medium-30">
+          <UsageBanner
+            points={usage.remainingPoints}
+            beforeNext={usage.msBeforeNext}
+          />
+        </div>
+      )}
 
       <div className="flex justify-between align-center g-medium-30">
         <PromptOptions />

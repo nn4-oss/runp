@@ -4,7 +4,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { useRouter } from "next/navigation";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
 import { useClerk } from "@clerk/nextjs";
 import { useKeyPress } from "@usefui/hooks";
@@ -55,19 +55,29 @@ function HomePrompt() {
 
   const router = useRouter();
   const trpc = useTRPC();
+  const queryClient = useQueryClient();
   const clerk = useClerk();
   const shortcutControls = useKeyPress("Enter", true, "ctrlKey");
 
   const createProject = useMutation(
     trpc.projects.create.mutationOptions({
-      onSuccess: (data) => {
+      onSuccess: async (data) => {
         form.reset();
+
         trpc.projects.getMany.queryOptions();
+        await queryClient.invalidateQueries(trpc.usage.status.queryOptions());
+
         router.push(`/projects/${data.id}`);
       },
       onError: (error) => {
-        form.reset();
-        if (error?.data?.code === "UNAUTHORIZED") clerk.openSignIn();
+        toast.error(error.message);
+
+        if (error?.data?.code === "UNAUTHORIZED") {
+          clerk.openSignIn();
+        }
+        if (error.data?.code === "TOO_MANY_REQUESTS") {
+          toast.error("Rate limit exceeded");
+        }
       },
     }),
   );
