@@ -74,10 +74,6 @@ export const credentialsRouter = createTRPCRouter({
           .string()
           .min(1, { message: "Name is required" })
           .max(128, { message: "Name cannot exceed 128 characters" }),
-        value: z
-          .string()
-          .min(1, { message: "Name is required" })
-          .max(256, { message: "Value cannot exceed 256 characters" }),
       }),
     )
     .mutation(async ({ input, ctx }) => {
@@ -94,11 +90,9 @@ export const credentialsRouter = createTRPCRouter({
           message: "Credential not found",
         });
 
-      const encryptedValue = symetricEncryption(input.value);
       const updatedCredential = await prisma.credential.update({
         data: {
           name: input.name,
-          value: encryptedValue,
         },
         where: {
           id: input.id,

@@ -11,7 +11,7 @@ import {
 import { useForm } from "react-hook-form";
 
 import { Checkbox, Dialog, Field, Portal, useDialog } from "@usefui/components";
-import { PrivacyField, ReflectiveButton, Spinner } from "@/components";
+import { ReflectiveButton, Spinner } from "@/components";
 
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,7 +19,6 @@ import { toast } from "sonner";
 
 const formSchema = z.object({
   name: z.string().max(128, { message: "Name cannot exceed 128 characters" }),
-  value: z.string().max(256, { message: "Value cannot exceed 256 characters" }),
   isPrimary: z.boolean().default(false),
 });
 
@@ -55,7 +54,6 @@ function UpdateCredentialDialog({ credentialId }: { credentialId: string }) {
     mode: "onChange",
     defaultValues: {
       name: targetIntegrationMetadata?.credential.name ?? "",
-      value: targetIntegrationMetadata?.credential.value ?? "",
       isPrimary: targetIntegrationMetadata?.isPrimary ?? false,
     },
   });
@@ -67,7 +65,7 @@ function UpdateCredentialDialog({ credentialId }: { credentialId: string }) {
           const credential = await updateCredential.mutateAsync({
             id: targetIntegrationMetadata.credentialId,
             name: values.name,
-            value: values.value,
+            // value: values.value,
           });
 
           if (!credential?.id) return;
@@ -84,6 +82,7 @@ function UpdateCredentialDialog({ credentialId }: { credentialId: string }) {
               credentialId: credential.id,
             });
           }
+
           // Invalidate only after the full flow is done
           await queryClient.invalidateQueries(
             trpc.credentials.getMany.queryOptions(),
@@ -134,29 +133,6 @@ function UpdateCredentialDialog({ credentialId }: { credentialId: string }) {
             </Field.Wrapper>
           </Field.Root>
 
-          <Field.Root>
-            <Field.Wrapper className="grid g-medium-30">
-              <Field.Label
-                className="fs-medium-20"
-                htmlFor="credential-value"
-                optional
-              >
-                Key
-              </Field.Label>
-              <PrivacyField
-                id="credential-value"
-                variant="secondary"
-                sizing="medium"
-                placeholder="sk-***"
-                style={{ width: "auto" }}
-                {...form.register("value")}
-              />
-              <Field.Meta variant="hint">
-                The displayed key is encrypted
-              </Field.Meta>
-            </Field.Wrapper>
-          </Field.Root>
-
           <Checkbox.Root>
             <Field.Wrapper className="flex align-start g-medium-30">
               <div className="p-y-small-60">
@@ -188,6 +164,7 @@ function UpdateCredentialDialog({ credentialId }: { credentialId: string }) {
             </Field.Wrapper>
           </Checkbox.Root>
         </form>
+
         <div className="flex align-center justify-end g-medium-10">
           <Dialog.Control variant="border" sizing="medium">
             Cancel
