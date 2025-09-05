@@ -18,7 +18,7 @@ function PromptOptions() {
           </span>
         </ReflectiveButton>
       </Tooltip>
-      <Tooltip content="System prompt">
+      <Tooltip content="Prompt templates">
         <ReflectiveButton variant="border" sizing="small">
           <span className="p-y-small-60 flex align-center justify-center">
             <Icon>

@@ -9,7 +9,7 @@ function ColorModes() {
   const { setColorMode } = useColorMode();
 
   return (
-    <div className="flex align-center g-medium-10">
+    <div className="flex align-center g-small-60">
       <Tooltip content="Light">
         <Button variant="ghost" onClick={() => setColorMode("light")}>
           <Icon>
@@ -22,6 +22,14 @@ function ColorModes() {
         <Button variant="ghost" onClick={() => setColorMode("dark")}>
           <Icon>
             <PixelIcon.Moon />
+          </Icon>
+        </Button>
+      </Tooltip>
+      <span className="opacity-default-10 fs-medium-10 p-x-medium-10">|</span>
+      <Tooltip content="System">
+        <Button variant="ghost" onClick={() => setColorMode("system")}>
+          <Icon>
+            <PixelIcon.Contrast />
           </Icon>
         </Button>
       </Tooltip>

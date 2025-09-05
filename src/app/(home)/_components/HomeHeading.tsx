@@ -15,10 +15,10 @@ const HeadingGroup = styled.hgroup`
 
 function HomeHeading() {
   return (
-    <HeadingGroup className="grid align-center justify-center">
+    <HeadingGroup className="grid align-center justify-center m-b-medium-60">
       <h1>Ideas to features in seconds</h1>
       <p className="fs-medium-30 opacity-default-30">
-        Create advanced features by chatting with AI
+        Build features using Foundation UI's stack by chatting with AI.
       </p>
     </HeadingGroup>
   );

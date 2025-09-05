@@ -1,26 +1,42 @@
 "use client";
 
+import React from "react";
 import styled from "styled-components";
+
+import { useRouter } from "next/navigation";
 
 import SignedOutLinks from "./SignedOutLinks";
 import SignedOutActions from "./SignedOutActions";
 import SignedInActions from "./SignedInActions";
 
-import { Page, Button, Badge } from "@usefui/components";
+import { Page, Button, Badge, Avatar } from "@usefui/components";
 import { Icon, SocialIcon } from "@usefui/icons";
 
 const StyledMenu = styled(Page.Navigation)`
   border: none !important;
-  background-color: transparent;
+  background: transparent !important;
+`;
+const BrandAvatar = styled(Avatar)`
+  background-color: var(--font-color) !important;
+  width: var(--measurement-medium-80) !important;
+  min-width: var(--measurement-medium-80) !important;
+  height: var(--measurement-medium-80) !important;
+  min-height: var(--measurement-medium-80) !important;
 `;
 
 function Navigation() {
+  const router = useRouter();
+
   return (
     <StyledMenu className="w-100 flex p-x-medium-30 align-center justify-between">
       <div className="flex align-center g-medium-30 w-100">
-        <Icon width={18} height={18}>
-          <SocialIcon.Foundation />
-        </Icon>
+        <Button variant="ghost" rawicon onClick={() => router.push("/")}>
+          <BrandAvatar sizing="small">
+            <Icon fill="var(--body-color)">
+              <SocialIcon.Foundation />
+            </Icon>
+          </BrandAvatar>
+        </Button>
 
         <SignedInActions />
         <SignedOutLinks />

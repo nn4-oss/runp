@@ -1,9 +1,21 @@
 "use client";
 
 import React from "react";
+import styled from "styled-components";
 
 import { Page } from "@usefui/components";
 import { Navigation } from "@/components";
+
+const NoiseBackground = styled(Page.Content)`
+  background-image: url(/vignette.webp);
+  background-size: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center bottom;
+
+  background-blend-mode: overlay;
+  mix-blend-mode: overlay;
+`;
 
 function AppLayout({
   children,
@@ -12,7 +24,7 @@ function AppLayout({
 }>) {
   return (
     <Page>
-      <Page.Content>
+      <NoiseBackground>
         <Navigation />
         <Page.Wrapper
           $navigations={1.1}
@@ -20,7 +32,7 @@ function AppLayout({
         >
           {children}
         </Page.Wrapper>
-      </Page.Content>
+      </NoiseBackground>
     </Page>
   );
 }

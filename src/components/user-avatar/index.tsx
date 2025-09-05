@@ -6,10 +6,11 @@ import styled from "styled-components";
 import { useUser } from "@clerk/nextjs";
 
 import { SignOutButton } from "@clerk/nextjs";
-import { Avatar, Divider, DropdownMenu } from "@usefui/components";
-import { Icon, PixelIcon } from "@usefui/icons";
+import { Avatar, Divider, DropdownMenu, ScrollArea } from "@usefui/components";
+import { Icon, PixelIcon, SocialIcon } from "@usefui/icons";
 
 import ColorModes from "../color-mode";
+import { useRouter } from "next/navigation";
 
 const StyledAvatar = styled(Avatar)`
   width: var(--measurement-medium-80) !important;
@@ -23,6 +24,7 @@ const StyledAvatar = styled(Avatar)`
 `;
 
 function UserAvatar() {
+  const router = useRouter();
   const { user } = useUser();
 
   return (
@@ -31,7 +33,7 @@ function UserAvatar() {
         <DropdownMenu.Trigger>
           <StyledAvatar src={user?.imageUrl ?? "/gradient.svg"} />
         </DropdownMenu.Trigger>
-        <DropdownMenu.Content sizing="medium">
+        <ScrollArea as={DropdownMenu.Content} sizing="medium">
           <div className="grid p-l-medium-30 p-t-medium-30">
             {user?.username && (
               <React.Fragment>
@@ -45,19 +47,29 @@ function UserAvatar() {
             )}
           </div>
 
-          <DropdownMenu.Item className="w-100 flex align-center g-medium-30">
+          <DropdownMenu.Item
+            className="w-100 flex align-center g-medium-30"
+            onClick={() => router.push("/profile")}
+          >
             <Icon>
               <PixelIcon.User />
             </Icon>
             Profile
           </DropdownMenu.Item>
-          <DropdownMenu.Item className="w-100 flex align-center g-medium-30">
+          <DropdownMenu.Item
+            className="w-100 flex align-center g-medium-30"
+            onClick={() => router.push("/settings")}
+          >
             <Icon>
               <PixelIcon.Sliders />
             </Icon>
-            Preferences
+            Settings
           </DropdownMenu.Item>
-          <DropdownMenu.Item className="flex align-center g-medium-30">
+
+          <DropdownMenu.Item
+            className="flex align-center g-medium-30"
+            onClick={() => router.push("/docs/introduction")}
+          >
             <span className="flex align-center justify-center">
               <Icon>
                 <PixelIcon.BookOpen />
@@ -70,13 +82,18 @@ function UserAvatar() {
               </Icon>
             </div>
           </DropdownMenu.Item>
-          <DropdownMenu.Item className="flex align-center g-medium-30">
+          <Divider className="m-y-medium-10" />
+
+          <DropdownMenu.Item
+            className="flex align-center g-medium-30"
+            onClick={() => router.push("/settings/api-keys")}
+          >
             <span className="flex align-center justify-center">
               <Icon>
-                <PixelIcon.HumanHandsup />
+                <SocialIcon.OpenAi />
               </Icon>
             </span>
-            Community
+            API&nbsp;Keys
             <div className="flex w-100 justify-end">
               <Icon>
                 <PixelIcon.Open />
@@ -84,7 +101,7 @@ function UserAvatar() {
             </div>
           </DropdownMenu.Item>
 
-          <Divider className="m-y-medium-20" />
+          <Divider className="m-y-medium-10" />
 
           <DropdownMenu.Item className="flex align-center g-medium-30" radio>
             <span className="flex align-center justify-center">
@@ -98,17 +115,17 @@ function UserAvatar() {
             </div>
           </DropdownMenu.Item>
 
-          <Divider className="m-y-medium-20" />
+          <Divider className="m-y-medium-10" />
 
           <SignOutButton>
             <DropdownMenu.Item className="w-100 flex align-center g-medium-30">
               <Icon>
                 <PixelIcon.Logout />
               </Icon>
-              Sign Out
+              Sign&nbsp;Out
             </DropdownMenu.Item>
           </SignOutButton>
-        </DropdownMenu.Content>
+        </ScrollArea>
       </DropdownMenu>
     </DropdownMenu.Root>
   );
