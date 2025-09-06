@@ -6,7 +6,6 @@ import styled from "styled-components";
 import { useRouter } from "next/navigation";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
-import { useClerk } from "@clerk/nextjs";
 import { useKeyPress } from "@usefui/hooks";
 import { useForm } from "react-hook-form";
 
@@ -58,7 +57,6 @@ function HomePrompt() {
   const router = useRouter();
   const trpc = useTRPC();
   const queryClient = useQueryClient();
-  const clerk = useClerk();
   const shortcutControls = useKeyPress("Enter", true, "ctrlKey");
 
   const { data: usage } = useQuery(trpc.usage.status.queryOptions());
@@ -76,7 +74,7 @@ function HomePrompt() {
       },
       onError: (error) => {
         if (error?.data?.code === "UNAUTHORIZED") {
-          clerk.openSignIn();
+          router.push("/signup");
         }
         if (error.data?.code === "TOO_MANY_REQUESTS") {
           setShowUsage(true);
