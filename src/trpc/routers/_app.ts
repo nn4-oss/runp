@@ -5,6 +5,7 @@ import {
   projectsRouter,
   integrationsRouter,
   usageRouter,
+  userRouter,
 } from "../data";
 
 export const appRouter = createTRPCRouter({
@@ -14,6 +15,7 @@ export const appRouter = createTRPCRouter({
   credentials: credentialsRouter,
   integrations: integrationsRouter,
   usage: usageRouter,
+  user: userRouter,
 });
 
 export type AppRouter = typeof appRouter;
