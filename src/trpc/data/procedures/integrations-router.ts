@@ -8,7 +8,7 @@ const serviceEnum = z.enum(["OPENAI", "E2B"]);
 export const integrationsRouter = createTRPCRouter({
   getMany: protectedProcedure.query(async ({ ctx }) => {
     return prisma.integration.findMany({
-      where: { userId: ctx.auth.userId },
+      where: { userId: ctx.user.id },
       include: {
         credential: true,
       },
@@ -26,7 +26,7 @@ export const integrationsRouter = createTRPCRouter({
     .mutation(async ({ input, ctx }) => {
       return prisma.integration.create({
         data: {
-          userId: ctx.auth.userId,
+          userId: ctx.user.id,
           service: input.service,
           credentialId: input.credentialId,
         },
@@ -43,7 +43,7 @@ export const integrationsRouter = createTRPCRouter({
     .mutation(async ({ input, ctx }) => {
       return prisma.integration.deleteMany({
         where: {
-          userId: ctx.auth.userId,
+          userId: ctx.user.id,
           service: input.service,
           credentialId: input.credentialId,
         },
@@ -62,7 +62,7 @@ export const integrationsRouter = createTRPCRouter({
         // Reset existing primary for this service
         await tx.integration.updateMany({
           where: {
-            userId: ctx.auth.userId,
+            userId: ctx.user.id,
             service: input.service,
             isPrimary: true,
           },
@@ -72,7 +72,7 @@ export const integrationsRouter = createTRPCRouter({
         // Set new primary
         return tx.integration.updateMany({
           where: {
-            userId: ctx.auth.userId,
+            userId: ctx.user.id,
             service: input.service,
             credentialId: input.credentialId,
           },
@@ -91,7 +91,7 @@ export const integrationsRouter = createTRPCRouter({
     .mutation(async ({ input, ctx }) => {
       return prisma.integration.updateMany({
         where: {
-          userId: ctx.auth.userId,
+          userId: ctx.user.id,
           service: input.service,
           credentialId: input.credentialId,
           isPrimary: true, // only reset if it was primary

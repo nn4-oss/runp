@@ -22,7 +22,7 @@ export const projectsRouter = createTRPCRouter({
       const project = await prisma.project.findUnique({
         where: {
           id: input.id,
-          userId: ctx.auth.userId,
+          userId: ctx.user.id,
         },
       });
 
@@ -38,7 +38,7 @@ export const projectsRouter = createTRPCRouter({
   getMany: protectedProcedure.query(async ({ ctx }) => {
     const projects = await prisma.project.findMany({
       where: {
-        userId: ctx.auth.userId,
+        userId: ctx.user.id,
       },
       orderBy: {
         updatedAt: "asc",
@@ -79,7 +79,7 @@ export const projectsRouter = createTRPCRouter({
 
       const userProject = await prisma.project.create({
         data: {
-          userId: ctx.auth.userId,
+          userId: ctx.user.id,
           name: generateSlug(2, {
             format: "kebab",
             categories: {
@@ -122,7 +122,7 @@ export const projectsRouter = createTRPCRouter({
       const project = await prisma.project.findUnique({
         where: {
           id: input.id,
-          userId: ctx.auth.userId,
+          userId: ctx.user.id,
         },
       });
 
@@ -138,7 +138,7 @@ export const projectsRouter = createTRPCRouter({
         },
         where: {
           id: input.id,
-          userId: ctx.auth.userId,
+          userId: ctx.user.id,
         },
       });
 
@@ -166,7 +166,7 @@ export const projectsRouter = createTRPCRouter({
       await prisma.project.delete({
         where: {
           id: input.id,
-          userId: ctx.auth.userId,
+          userId: ctx.user.id,
         },
       });
 
