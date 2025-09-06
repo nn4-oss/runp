@@ -4,7 +4,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { useRouter } from "next/navigation";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
 import { useClerk } from "@clerk/nextjs";
 import { useKeyPress } from "@usefui/hooks";
@@ -16,6 +16,7 @@ import {
   ReflectiveButton,
   Spinner,
   Textarea,
+  UsageBanner,
 } from "@/components";
 
 import { z } from "zod";
@@ -52,12 +53,16 @@ const formSchema = z.object({
 
 function HomePrompt() {
   const [isFocused, setIsFocused] = React.useState<boolean>(false);
+  const [showUsage, setShowUsage] = React.useState<boolean>(false);
 
   const router = useRouter();
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const clerk = useClerk();
   const shortcutControls = useKeyPress("Enter", true, "ctrlKey");
+
+  const { data: usage } = useQuery(trpc.usage.status.queryOptions());
+  const showUsageBanner = !!usage && showUsage;
 
   const createProject = useMutation(
     trpc.projects.create.mutationOptions({
@@ -70,12 +75,11 @@ function HomePrompt() {
         router.push(`/projects/${data.id}`);
       },
       onError: (error) => {
-        toast.error(error.message);
-
         if (error?.data?.code === "UNAUTHORIZED") {
           clerk.openSignIn();
         }
         if (error.data?.code === "TOO_MANY_REQUESTS") {
+          setShowUsage(true);
           toast.error("Rate limit exceeded");
         }
       },
@@ -164,6 +168,14 @@ function HomePrompt() {
           </div>
         </div>
       </PromptWrapper>
+      {showUsageBanner && (
+        <div className="m-y-medium-30 w-100">
+          <UsageBanner
+            points={usage.remainingPoints}
+            beforeNext={usage.msBeforeNext}
+          />
+        </div>
+      )}
     </PromptContainer>
   );
 }
