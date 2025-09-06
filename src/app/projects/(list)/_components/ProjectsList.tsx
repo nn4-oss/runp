@@ -10,18 +10,10 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import ProjectListActions from "./ProjectListActions";
 import ProjectsTable from "./ProjectsTable";
 
-import { AppContainer } from "@/components";
+import { AppContainer, FixedHeader } from "@/components";
 import { Field } from "@usefui/components";
 import { Icon, PixelIcon } from "@usefui/icons";
 
-const FixedHeader = styled.hgroup`
-  position: sticky;
-  top: 0;
-  background-color: var(--contrast-color);
-  border-bottom: var(--measurement-small-30) solid var(--font-color-alpha-10);
-  width: 100%;
-  z-index: var(--depth-default-10);
-`;
 const SearchContainer = styled.div`
   width: 100%;
   border-top: var(--measurement-small-30) solid var(--font-color-alpha-10);

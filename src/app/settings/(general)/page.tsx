@@ -1,8 +1,14 @@
 import React from "react";
+
 import { HydrateClient } from "@/trpc/server";
+import SettingsList from "./_components/SettingsList";
 
 async function Page() {
-  return <HydrateClient>General</HydrateClient>;
+  return (
+    <HydrateClient>
+      <SettingsList />
+    </HydrateClient>
+  );
 }
 
 export default Page;

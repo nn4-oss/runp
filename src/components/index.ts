@@ -20,3 +20,4 @@ export { default as UsageBanner } from "./usage-banner";
 
 export { Spinner } from "./spinner";
 export { AppContainer } from "./container";
+export { FixedHeader } from "./fixed-header";
