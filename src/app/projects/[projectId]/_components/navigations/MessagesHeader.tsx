@@ -25,6 +25,12 @@ const StyledMenu = styled(Page.Navigation)`
 
   z-index: var(--depth-default-90);
 `;
+const Truncate = styled.p`
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+`;
 
 function MessagesHeader({ projectId }: { projectId: string }) {
   const trpc = useTRPC();
@@ -87,8 +93,7 @@ function MessagesHeader({ projectId }: { projectId: string }) {
 
           <UpdateNameDialog currentName={project.name} projectId={projectId} />
         </Dialog.Root>
-
-        <p className="fs-medium-10">{project.name}</p>
+        <Truncate className="fs-medium-10">{project.name}</Truncate>
       </div>
       <Dialog.Root>
         <Tooltip content="Delete">
