@@ -10,8 +10,15 @@ import {
 } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 
-import { Checkbox, Dialog, Field, Portal, useDialog } from "@usefui/components";
-import { ReflectiveButton, Spinner } from "@/components";
+import {
+  Button,
+  Checkbox,
+  Dialog,
+  Field,
+  Portal,
+  useDialog,
+} from "@usefui/components";
+import { Spinner } from "@/components";
 
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -169,7 +176,7 @@ function UpdateCredentialDialog({ credentialId }: { credentialId: string }) {
           <Dialog.Control variant="border" sizing="medium">
             Cancel
           </Dialog.Control>
-          <ReflectiveButton
+          <Button
             type="submit"
             sizing="medium"
             variant="mono"
@@ -181,7 +188,7 @@ function UpdateCredentialDialog({ credentialId }: { credentialId: string }) {
             <span>Update</span>
             {(updateCredential.isPending ||
               setPrimaryIntegration.isPending) && <Spinner />}
-          </ReflectiveButton>
+          </Button>
         </div>
       </Dialog>
 

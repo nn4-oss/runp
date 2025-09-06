@@ -15,8 +15,9 @@ import {
   Sheet,
   ScrollArea,
   useSheet,
+  Button,
 } from "@usefui/components";
-import { PrivacyField, ReflectiveButton, Spinner } from "../";
+import { PrivacyField, Spinner } from "../";
 
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -263,7 +264,7 @@ function CreateCredentialDialog() {
             >
               Cancel
             </Sheet.Trigger>
-            <ReflectiveButton
+            <Button
               type="submit"
               variant="mono"
               sizing="medium"
@@ -279,7 +280,7 @@ function CreateCredentialDialog() {
               {(createCredential.isPending ||
                 linkIntegration.isPending ||
                 setPrimaryIntegration.isPending) && <Spinner />}
-            </ReflectiveButton>
+            </Button>
           </div>
         </ScrollArea>
       </Sheet>

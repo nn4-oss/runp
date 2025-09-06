@@ -3,11 +3,12 @@
 import React from "react";
 import styled from "styled-components";
 
-import { Badge, Button } from "@usefui/components";
+import { useRouter } from "next/navigation";
+
+import { Badge, Dialog } from "@usefui/components";
+import { UpgradeScopeDialog } from "../";
 
 import { formatDuration, intervalToDuration } from "date-fns";
-import { Icon, PixelIcon } from "@usefui/icons";
-import { useRouter } from "next/navigation";
 
 const Banner = styled(Badge)`
   flex-wrap: wrap;
@@ -68,18 +69,13 @@ function UsageBanner({ points, beforeNext }: UsageBannerProps) {
         </span>
       </div>
 
-      <Button
-        variant="primary"
-        sizing="small"
-        onClick={() => {
-          router.push("/settings");
-        }}
-      >
-        Increase Limit
-        <Icon>
-          <PixelIcon.LockOpen />
-        </Icon>
-      </Button>
+      <Dialog.Root>
+        <Dialog.Trigger variant="primary" sizing="medium">
+          Upgrade
+        </Dialog.Trigger>
+
+        <UpgradeScopeDialog />
+      </Dialog.Root>
     </Banner>
   );
 }

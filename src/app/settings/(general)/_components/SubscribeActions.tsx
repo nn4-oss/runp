@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Dialog } from "@usefui/components";
+import { UpgradeScopeDialog } from "@/components";
 
 function SubscribeActions() {
   return (
@@ -11,7 +12,7 @@ function SubscribeActions() {
           Upgrade
         </Dialog.Trigger>
 
-        {/* <UpgradeScopeDialog /> */}
+        <UpgradeScopeDialog />
       </Dialog.Root>
     </div>
   );
