@@ -8,6 +8,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum ScopeEnum {
+  FREE
+  PRO
+  ENTERPRISE
+}
+
 enum MessageRole {
   USER
   ASSISTANT
@@ -23,6 +29,27 @@ enum ThirdPartyServiceType {
   E2B
 }
 
+// Represents an application user, with identity managed by Clerk.
+// We store references to Clerk’s userId and related metadata, along with
+// application-specific fields such as scope, projects, and integrations.
+// - `idx_user_scope`: Optimizes queries by user scope.
+// - `idx_user_scopeKey`: Optimizes lookups by scopeKey.
+model User {
+  id        String    @id // Clerk userId
+
+  scope     ScopeEnum    @default(FREE)
+  scopeKey  String   // Opaque secret reference (env keys)
+
+  email    String?
+  name     String?
+  imageUrl String?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([scope], name: "idx_user_scope")
+  @@index([scopeKey], name: "idx_user_scopeKey")
+}
 
 // Projects belong to a user (via Clerk userId) and contain messages.
 // We index userId for fast lookups like "all projects for a user".
@@ -101,10 +128,10 @@ model Integration {
   userId       String     @db.VarChar(255)
   isPrimary    Boolean    @default(false)
 
-  credential   Credential @relation(fields: [credentialId], references: [id], onDelete: Cascade)
-
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
+
+  credential   Credential @relation(fields: [credentialId], references: [id], onDelete: Cascade)
 
   @@index([userId], name: "idx_integration_userId")
   @@index([service], name: "idx_integration_service")
