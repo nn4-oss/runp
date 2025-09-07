@@ -15,6 +15,7 @@ import {
   Divider,
   Button,
   useDialog,
+  Badge,
 } from "@usefui/components";
 import { Icon, PixelIcon } from "@usefui/icons";
 
@@ -55,6 +56,9 @@ function UpgradeScopeDialog() {
       onSuccess: async (data) => {
         await queryClient.invalidateQueries(trpc.user.get.queryOptions());
         await queryClient.invalidateQueries(trpc.usage.status.queryOptions());
+        await queryClient.invalidateQueries(
+          trpc.usage.getMetadata.queryOptions(),
+        );
 
         dialog.methods?.toggleDialog?.();
         toast.success(`Thank you for using Runp ${data.scope}!`, {
@@ -93,6 +97,7 @@ function UpgradeScopeDialog() {
             )}
           </p>
         </hgroup>
+
         <PlansWrapper className="m-b-medium-60">
           <Tabs.Root>
             <Tabs defaultOpen={ScopeEnum.FREE}>
@@ -136,7 +141,12 @@ function UpgradeScopeDialog() {
               </Tabs.Content>
 
               <Tabs.Content value={ScopeEnum.PRO}>
-                <PlanHeader scope="Pro" />
+                <header className="w-100 flex align-start justify-between g-large-10">
+                  <PlanHeader scope="Pro" />
+                  <Badge variant="success" shape="round">
+                    Recommended
+                  </Badge>
+                </header>
                 <div className="grid g-medium-30 m-b-large-10">
                   {SCOPES_FEATURES.PRO.map((feat, key) => (
                     <span
@@ -164,6 +174,7 @@ function UpgradeScopeDialog() {
             </Tabs>
           </Tabs.Root>
         </PlansWrapper>
+
         <footer className="flex align-center justify-start g-medium-10">
           <span className="fs-medium-10 flex align-center g-medium-10 opacity-default-30">
             Compare plans and options on our
