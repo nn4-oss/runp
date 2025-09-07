@@ -1,5 +1,5 @@
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
-import { getUsageStatus } from "@/trpc/services/usage-services";
+import { getUsageStatus } from "@/services/usage-services";
 
 export const usageRouter = createTRPCRouter({
   status: protectedProcedure.query(async () => {

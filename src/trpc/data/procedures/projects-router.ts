@@ -9,7 +9,7 @@ import { utteranceValueSchema } from "@/schemas/utterances-schema";
 
 import { generateSlug } from "random-word-slugs";
 import { revalidatePath } from "next/cache";
-import { consumePoints } from "@/trpc/services/usage-services";
+import { consumePoints } from "@/services/usage-services";
 
 export const projectsRouter = createTRPCRouter({
   getUnique: protectedProcedure

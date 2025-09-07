@@ -6,7 +6,7 @@ import { TRPCError } from "@trpc/server";
 
 import { z } from "zod";
 import { utteranceValueSchema } from "@/schemas/utterances-schema";
-import { consumePoints } from "@/trpc/services/usage-services";
+import { consumePoints } from "@/services/usage-services";
 
 export const messagesRouter = createTRPCRouter({
   getMany: protectedProcedure
