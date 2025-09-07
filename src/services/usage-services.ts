@@ -4,17 +4,16 @@ import { RateLimiterPrisma } from "rate-limiter-flexible";
 import { getCurrentUserViaTRPC } from "@/security/current-user";
 
 import { ScopeEnum } from "generated/prisma";
+import { POINTS_PER_SCOPE } from "@/utils/scope-features";
 
 const UTTERANCE_COST = 1;
-const TIME_INTERVAL = 60 * 24 * 60 * 60; // 2,592,000s = 30d
-const FREE_SCOPE_POINTS = 10;
-const PRO_SCOPE_POINTS = 200;
+const TIME_INTERVAL = 30 * 24 * 60 * 60; // 2,592,000s = 30d
 
 async function getScopePoints(scope: ScopeEnum) {
-  if (scope === ScopeEnum.FREE) return FREE_SCOPE_POINTS;
-  if (scope === ScopeEnum.PRO) return PRO_SCOPE_POINTS;
+  if (scope === ScopeEnum.FREE) return POINTS_PER_SCOPE.FREE;
+  if (scope === ScopeEnum.PRO) return POINTS_PER_SCOPE.PRO;
 
-  return FREE_SCOPE_POINTS;
+  return POINTS_PER_SCOPE.FREE;
 }
 
 /**

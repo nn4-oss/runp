@@ -1,15 +1,18 @@
+export const POINTS_PER_SCOPE = {
+  FREE: 10,
+  PRO: 200,
+} as const;
+
 export const SCOPES_FEATURES = {
   FREE: [
-    "5 Free messages per month",
-    "Create up to 20 projects",
-    "Prompt configurations",
-    "End-to-end encryption",
+    `${POINTS_PER_SCOPE.FREE} messages /month`,
+    "Customizable System Prompts",
+    "End-to-end Encryption",
   ],
   PRO: [
-    "Unlimited messages",
-    "Unlimited projects",
-    "Access to API configurations",
-    "Customized Runp Tech Stack",
+    `${POINTS_PER_SCOPE.PRO} messages /month`,
+    "Access to API Configurations",
+    "Custom Docker Image and Sandbox",
   ],
-  ENTERPRISE: [],
+  // ENTERPRISE: [],
 };
