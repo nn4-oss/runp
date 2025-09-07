@@ -6,8 +6,8 @@ import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { currentUser } from "@clerk/nextjs/server";
 
-import { symetricEncryption } from "@/lib/encryption";
-import { DEFAULT_SCOPE, scopesMapping } from "@/lib/tamper-resistance";
+import { symetricEncryption } from "@/security/encryption";
+import { DEFAULT_SCOPE, scopesMapping } from "@/security/tamper-resistance";
 
 import type { ScopeEnum } from "generated/prisma";
 

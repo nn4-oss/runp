@@ -3,8 +3,8 @@ import prisma from "@/lib/prisma";
 import { currentUser } from "@clerk/nextjs/server";
 import { TRPCError } from "@trpc/server";
 
-import { scopesMapping, DEFAULT_SCOPE } from "@/lib/tamper-resistance";
-import { symetricEncryption } from "@/lib/encryption";
+import { scopesMapping, DEFAULT_SCOPE } from "./tamper-resistance";
+import { symetricEncryption } from ".//encryption";
 
 import type { ScopeEnum } from "generated/prisma";
 

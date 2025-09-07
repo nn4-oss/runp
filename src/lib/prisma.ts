@@ -1,6 +1,9 @@
 import { PrismaClient } from "../../generated/prisma";
-import { assertTamperResistance, scopesMapping } from "./tamper-resistance";
-import { symetricEncryption } from "@/lib/encryption";
+import {
+  assertTamperResistance,
+  scopesMapping,
+} from "@/security/tamper-resistance";
+import { symetricEncryption } from "@/security/encryption";
 
 const globalForPrisma = global as unknown as {
   prisma: PrismaClient;

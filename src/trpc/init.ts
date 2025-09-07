@@ -4,7 +4,7 @@ import { cache } from "react";
 import { auth } from "@clerk/nextjs/server";
 
 import { initTRPC, TRPCError } from "@trpc/server";
-import { ensureUser } from "@/lib/ensure-user";
+import { ensureUser } from "@/security/ensure-user";
 
 export const createTRPCContext = cache(async () => {
   /**

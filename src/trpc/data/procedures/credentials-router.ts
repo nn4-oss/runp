@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 
-import { symetricEncryption } from "@/lib/encryption";
+import { symetricEncryption } from "@/security/encryption";
 import { protectedProcedure, createTRPCRouter } from "@/trpc/init";
 import { TRPCError } from "@trpc/server";
 
