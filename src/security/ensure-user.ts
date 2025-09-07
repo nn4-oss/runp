@@ -1,3 +1,5 @@
+import "server-only";
+
 import prisma from "@/lib/prisma";
 
 import { currentUser } from "@clerk/nextjs/server";
