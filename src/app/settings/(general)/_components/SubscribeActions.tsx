@@ -9,7 +9,7 @@ function SubscribeActions() {
     <div className="flex align-center g-medium-10">
       <Dialog.Root>
         <Dialog.Trigger variant="primary" sizing="medium">
-          Upgrade
+          Update plan
         </Dialog.Trigger>
 
         <UpgradeScopeDialog />
