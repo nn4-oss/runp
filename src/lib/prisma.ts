@@ -29,7 +29,7 @@ const globalForPrisma = global as unknown as {
  * Notes:
  *
  * Even if TRPC middleware is bypassed, Prisma itself enforces security and any DB tampering is detected immediately when reading users
- * This is a last line of defense. Combined with TRPC middleware (`ensureUser`) and DB constraints, it provides protection for sensitive data.
+ * This is a last line of defense. Combined with TRPC middleware (`ensureUserInDatabase`) and DB constraints, it provides protection for sensitive data.
  */
 
 /**

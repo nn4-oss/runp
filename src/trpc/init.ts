@@ -4,7 +4,7 @@ import { cache } from "react";
 import { auth } from "@clerk/nextjs/server";
 
 import { initTRPC, TRPCError } from "@trpc/server";
-import { ensureUser } from "@/security/ensure-user";
+import { ensureUserInDatabase } from "@/security/ensure-user";
 
 export const createTRPCContext = cache(async () => {
   /**
@@ -32,7 +32,7 @@ const isAuthenticated = t.middleware(({ next, ctx }) => {
   return next({ ctx: { auth: ctx.auth } });
 });
 const withUser = t.middleware(async ({ ctx, next }) => {
-  const user = await ensureUser(ctx.auth.userId!);
+  const user = await ensureUserInDatabase(ctx.auth.userId!);
   return next({
     ctx: {
       ...ctx,

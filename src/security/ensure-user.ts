@@ -16,7 +16,7 @@ import type { ScopeEnum } from "generated/prisma";
  * - If exists in neither -> throws.
  */
 
-export async function ensureUser(userId: string) {
+export async function ensureUserInDatabase(userId: string) {
   if (!userId) {
     throw new TRPCError({
       code: "UNAUTHORIZED",
