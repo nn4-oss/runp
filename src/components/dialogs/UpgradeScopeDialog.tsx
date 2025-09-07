@@ -4,15 +4,23 @@ import React from "react";
 import styled from "styled-components";
 
 import { useTRPC } from "@/trpc/client";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import Link from "next/link";
 
-import { Portal, Dialog, Tabs, Divider, Button } from "@usefui/components";
+import {
+  Portal,
+  Dialog,
+  Tabs,
+  Divider,
+  Button,
+  useDialog,
+} from "@usefui/components";
 import { Icon, PixelIcon } from "@usefui/icons";
 
 import { ScopeEnum } from "generated/prisma";
 import { SCOPES_FEATURES } from "@/utils/scope-features";
+import { toast } from "sonner";
 
 const PlanTag = styled.b`
   text-transform: capitalize;
@@ -38,9 +46,36 @@ function PlanHeader({ scope }: { scope: string }) {
 
 function UpgradeScopeDialog() {
   const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const dialog = useDialog();
+
   const { data: user } = useQuery(trpc.user.get.queryOptions());
+  const updateUser = useMutation(
+    trpc.user.update.mutationOptions({
+      onSuccess: async (data) => {
+        await queryClient.invalidateQueries(trpc.user.get.queryOptions());
+        await queryClient.invalidateQueries(trpc.usage.status.queryOptions());
+
+        dialog.methods?.toggleDialog?.();
+        toast.success(`Thank you for using Runp ${data.scope}!`, {
+          id: "upgrade-scope",
+        });
+      },
+
+      onError: (error) => toast.error(error.message),
+    }),
+  );
 
   const isFreeScope = user?.scope === ScopeEnum.FREE;
+
+  const onSubmit = React.useCallback(
+    async (selectedScope: ScopeEnum) => {
+      await updateUser.mutateAsync({
+        scope: selectedScope,
+      });
+    },
+    [updateUser],
+  );
 
   return (
     <Portal container="portal-container">
@@ -90,9 +125,10 @@ function UpgradeScopeDialog() {
                 </div>
 
                 <Button
-                  disabled={isFreeScope}
+                  disabled={isFreeScope || updateUser.isPending}
                   sizing="medium"
                   variant={isFreeScope ? "mono" : "primary"}
+                  onClick={() => onSubmit(ScopeEnum.FREE)}
                   style={{ width: "100%" }}
                 >
                   {isFreeScope ? "Current plan" : "Use Runp for Free"}
@@ -116,10 +152,11 @@ function UpgradeScopeDialog() {
                 </div>
 
                 <Button
-                  disabled={!isFreeScope}
+                  disabled={!isFreeScope || updateUser.isPending}
                   sizing="medium"
                   variant={isFreeScope ? "primary" : "mono"}
                   style={{ width: "100%" }}
+                  onClick={() => onSubmit(ScopeEnum.PRO)}
                 >
                   {isFreeScope ? "Upgrade to Runp Pro" : "Current plan"}
                 </Button>
