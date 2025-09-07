@@ -59,6 +59,7 @@ function HomePrompt() {
   const queryClient = useQueryClient();
   const shortcutControls = useKeyPress("Enter", true, "ctrlKey");
 
+  const { data: user } = useQuery(trpc.user.get.queryOptions());
   const { data: usage } = useQuery(trpc.usage.status.queryOptions());
   const showUsageBanner = !!usage && showUsage;
 
@@ -69,6 +70,9 @@ function HomePrompt() {
 
         trpc.projects.getMany.queryOptions();
         await queryClient.invalidateQueries(trpc.usage.status.queryOptions());
+        await queryClient.invalidateQueries(
+          trpc.usage.getMetadata.queryOptions(),
+        );
 
         router.push(`/projects/${data.id}`);
       },
@@ -78,7 +82,7 @@ function HomePrompt() {
         }
         if (error.data?.code === "TOO_MANY_REQUESTS") {
           setShowUsage(true);
-          toast.error("Rate limit exceeded");
+          // toast.error("Rate limit exceeded");
         }
       },
     }),
@@ -117,15 +121,16 @@ function HomePrompt() {
     isFocused,
     form.formState.isValid,
     createProject.isPending,
-    form,
-    onSubmit,
   ]);
 
   return (
     <PromptContainer>
       <PromptWrapper
         className="p-medium-60 w-100"
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={(e) => {
+          e.preventDefault();
+          form.handleSubmit(onSubmit);
+        }}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
       >
@@ -169,6 +174,7 @@ function HomePrompt() {
       {showUsageBanner && (
         <div className="m-y-medium-30 w-100">
           <UsageBanner
+            scope={user?.scope ?? "FREE"}
             points={usage.remainingPoints}
             beforeNext={usage.msBeforeNext}
           />

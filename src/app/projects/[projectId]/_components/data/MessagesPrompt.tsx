@@ -60,19 +60,23 @@ function MessagesPrompt({ projectId }: { projectId: string }) {
           trpc.messages.getMany.queryOptions({ projectId }),
         );
         await queryClient.invalidateQueries(trpc.usage.status.queryOptions());
+        await queryClient.invalidateQueries(
+          trpc.usage.getMetadata.queryOptions(),
+        );
       },
 
       onError: (error) => {
-        toast.error(error.message);
-
-        if (error.data?.code === "TOO_MANY_REQUESTS") {
-          toast.error("Rate limit exceeded");
-        }
+        // toast.error(error.message);
+        // if (error.data?.code === "TOO_MANY_REQUESTS") {
+        //   toast.error("Rate limit exceeded");
+        // }
       },
     }),
   );
 
+  const { data: user } = useQuery(trpc.user.get.queryOptions());
   const { data: usage } = useQuery(trpc.usage.status.queryOptions());
+
   const showUsageBanner = !!usage;
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -109,8 +113,6 @@ function MessagesPrompt({ projectId }: { projectId: string }) {
     isFocused,
     form.formState.isValid,
     createMessage.isPending,
-    form,
-    onSubmit,
   ]);
 
   return (
@@ -118,7 +120,10 @@ function MessagesPrompt({ projectId }: { projectId: string }) {
       id="prompt-form"
       name="prompt-form"
       className="grid align-end w-100 p-medium-30"
-      onSubmit={form.handleSubmit(onSubmit)}
+      onSubmit={(e) => {
+        e.preventDefault();
+        form.handleSubmit(onSubmit);
+      }}
       onFocus={() => setIsFocused(true)}
       onBlur={() => setIsFocused(false)}
     >
@@ -134,6 +139,7 @@ function MessagesPrompt({ projectId }: { projectId: string }) {
       {showUsageBanner && (
         <div className="w-100 m-b-medium-30">
           <UsageBanner
+            scope={user?.scope ?? "FREE"}
             points={usage.remainingPoints}
             beforeNext={usage.msBeforeNext}
           />
