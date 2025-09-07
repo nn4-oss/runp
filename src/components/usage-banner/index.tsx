@@ -3,10 +3,12 @@
 import React from "react";
 import styled from "styled-components";
 
-import { useRouter } from "next/navigation";
+import { useTRPC } from "@/trpc/client";
+import { useQuery } from "@tanstack/react-query";
 
-import { Badge, Dialog } from "@usefui/components";
 import { UpgradeScopeDialog } from "../";
+import { Badge, Button, Dialog, Tooltip } from "@usefui/components";
+import { Icon, PixelIcon } from "@usefui/icons";
 
 import { formatDuration, intervalToDuration } from "date-fns";
 
@@ -36,26 +38,40 @@ const Banner = styled(Badge)`
 
 type UsageBannerProps = {
   points: number;
+  scope: string;
   beforeNext: number;
 };
 
-function UsageBanner({ points, beforeNext }: UsageBannerProps) {
-  const router = useRouter();
+function UsageBanner({ scope, points, beforeNext }: UsageBannerProps) {
+  const [show, setShow] = React.useState(true);
+
+  const trpc = useTRPC();
+  const { data: usage } = useQuery(trpc.usage.getMetadata.queryOptions());
 
   const getVariant = () => {
-    if (points === 0) return "error";
-    if (points <= 2) return "warning";
-    if (points >= 3) return "meta";
+    const usagePercentage = usage?.percentage ?? 0;
+
+    const dangerThreshold = usagePercentage >= 0.9; // Less than 10% of total points
+    const warningThreshold = usagePercentage >= 0.7; // Less than 30% of total points
+
+    if (dangerThreshold) return "error";
+    if (warningThreshold) return "warning";
+
+    return "meta";
   };
 
-  const duration = intervalToDuration({
-    start: new Date(),
-    end: new Date(Date.now() + beforeNext),
-  });
+  const resetInterval = formatDuration(
+    intervalToDuration({
+      start: new Date(),
+      end: new Date(Date.now() + beforeNext),
+    }),
+    {
+      format: ["months", "days", "hours"],
+    },
+  );
 
-  const resetInterval = formatDuration(duration, {
-    format: ["months", "days", "hours"],
-  });
+  if (!show) return <React.Fragment />;
+  if (getVariant() === "meta") return <React.Fragment />;
 
   return (
     <Banner variant={getVariant()} data-mode={getVariant()}>
@@ -69,13 +85,23 @@ function UsageBanner({ points, beforeNext }: UsageBannerProps) {
         </span>
       </div>
 
-      <Dialog.Root>
-        <Dialog.Trigger variant="primary" sizing="medium">
-          Upgrade
-        </Dialog.Trigger>
+      <div className="flex align-center g-medium-30">
+        <Dialog.Root>
+          <Dialog.Trigger variant="primary" sizing="medium">
+            Upgrade
+          </Dialog.Trigger>
 
-        <UpgradeScopeDialog />
-      </Dialog.Root>
+          <UpgradeScopeDialog />
+        </Dialog.Root>
+
+        <Tooltip content="Hide">
+          <Button variant="ghost" onClick={() => setShow(false)}>
+            <Icon>
+              <PixelIcon.Close />
+            </Icon>
+          </Button>
+        </Tooltip>
+      </div>
     </Banner>
   );
 }
