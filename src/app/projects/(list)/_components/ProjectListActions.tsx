@@ -12,7 +12,7 @@ function ProjectListActions() {
   const router = useRouter();
 
   const handSort = (value: string) => {
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(searchParams.toString());
 
     params.set("sortBy", value);
     router.push(`?${params.toString()}`);
