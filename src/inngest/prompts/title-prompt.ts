@@ -1,3 +1,5 @@
+import "server-only";
+
 export const TITLE_PROMPT = `
 You are an assistant that generates a short, descriptive title for a code fragment based on its <task_summary>.
 The title should be:
