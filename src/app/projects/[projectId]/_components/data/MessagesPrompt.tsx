@@ -44,7 +44,7 @@ const formSchema = z.object({
 
 function MessagesPrompt({ projectId }: { projectId: string }) {
   const [isFocused, setIsFocused] = React.useState<boolean>(false);
-  const shortcutControls = useKeyPress("Enter", true, "ctrlKey");
+  const shortcutControls = useKeyPress("Enter", true, "metaKey");
 
   const trpc = useTRPC();
   const queryClient = useQueryClient();
@@ -105,23 +105,15 @@ function MessagesPrompt({ projectId }: { projectId: string }) {
       // Use RHF's handleSubmit to re-run validation before submit.
       void form.handleSubmit(onSubmit)();
     }
-    // Re-run when key state toggles or guard inputs change.
-  }, [
-    shortcutControls,
-    isFocused,
-    form.formState.isValid,
-    createMessage.isPending,
-  ]);
+    // Re-run when shortcutControls fires.
+  }, [shortcutControls]);
 
   return (
     <PromptWrapper
       id="prompt-form"
       name="prompt-form"
       className="grid align-end w-100 p-medium-30"
-      onSubmit={(e) => {
-        e.preventDefault();
-        form.handleSubmit(onSubmit);
-      }}
+      onSubmit={form.handleSubmit(onSubmit)}
       onFocus={() => setIsFocused(true)}
       onBlur={() => setIsFocused(false)}
     >
@@ -150,7 +142,7 @@ function MessagesPrompt({ projectId }: { projectId: string }) {
         <div className="flex align-center g-medium-30">
           <kbd>
             <span className="fs-small-50 opacity-default-30">
-              &#8963;&nbsp;+&nbsp;Enter
+              &#8984;&nbsp;+&nbsp;Enter
             </span>
           </kbd>
 
@@ -158,6 +150,7 @@ function MessagesPrompt({ projectId }: { projectId: string }) {
             type="submit"
             sizing="small"
             variant="mono"
+            onClick={form.handleSubmit(onSubmit)}
             disabled={createMessage.isPending || !form.formState.isValid}
           >
             <span className="p-y-small-30">

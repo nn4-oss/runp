@@ -57,7 +57,7 @@ function HomePrompt() {
   const router = useRouter();
   const trpc = useTRPC();
   const queryClient = useQueryClient();
-  const shortcutControls = useKeyPress("Enter", true, "ctrlKey");
+  const shortcutControls = useKeyPress("Enter", true, "metaKey");
 
   const { data: user } = useQuery(trpc.user.get.queryOptions());
   const { data: usage } = useQuery(trpc.usage.status.queryOptions());
@@ -115,22 +115,14 @@ function HomePrompt() {
       // Use RHF's handleSubmit to re-run validation before submit.
       void form.handleSubmit(onSubmit)();
     }
-    // Re-run when key state toggles or guard inputs change.
-  }, [
-    shortcutControls,
-    isFocused,
-    form.formState.isValid,
-    createProject.isPending,
-  ]);
+    // Re-run when shortcutControls fires.
+  }, [shortcutControls]);
 
   return (
     <PromptContainer>
       <PromptWrapper
         className="p-medium-60 w-100"
-        onSubmit={(e) => {
-          e.preventDefault();
-          form.handleSubmit(onSubmit);
-        }}
+        onSubmit={form.handleSubmit(onSubmit)}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
       >
@@ -149,13 +141,15 @@ function HomePrompt() {
           <div className="flex align-center g-medium-30">
             <kbd>
               <span className="fs-small-50 opacity-default-30">
-                &#8963;&nbsp;+&nbsp;Enter
+                &#8984;&nbsp;+&nbsp;Enter
               </span>
             </kbd>
+
             <ReflectiveButton
               type="submit"
               sizing="small"
               variant="mono"
+              onClick={form.handleSubmit(onSubmit)}
               disabled={createProject.isPending || !form.formState.isValid}
             >
               <span className="p-y-small-30">

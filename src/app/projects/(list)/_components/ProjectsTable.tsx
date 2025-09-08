@@ -78,12 +78,9 @@ function ProjectsTable({
     <Table className="w-100">
       <Table.Body>
         {data.map((project) => {
-          const hasMessages = project.messages.length !== 0;
           const lastMessage = project.messages.at(-1);
-
-          const isFinished = hasMessages && lastMessage?.role === "ASSISTANT";
-          const isProjectError = isFinished && lastMessage?.type === "ERROR";
-          const isProjectReady = isFinished && lastMessage?.type === "RESULT";
+          const isProjectError = lastMessage?.type === "ERROR";
+          const isProjectReady = lastMessage?.type === "RESULT";
 
           const createdAt = format(project.createdAt, "dd/MM/yyyy");
           const lastUpdate = formatDistanceToNow(project.updatedAt, {
@@ -101,11 +98,6 @@ function ProjectsTable({
                       {project.messages.length}&nbsp;Messages
                     </kbd>
                   </Badge>
-                  {!isFinished && (
-                    <Tooltip content="Pending">
-                      <Spinner />
-                    </Tooltip>
-                  )}
                   {isProjectError && (
                     <Tooltip content="Error">
                       <Badge variant="error">
