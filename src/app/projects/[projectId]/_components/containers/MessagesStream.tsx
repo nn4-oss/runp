@@ -22,6 +22,8 @@ function MessagesStream({
   activeFragment,
   setActiveFragment,
 }: MessagesStreamProps) {
+  const [enableRefetch, setEnableRefetch] = React.useState(true);
+
   const streamEndRef = React.useRef<HTMLDivElement>(null);
   const lastAssistantMsgRef = React.useRef<string | null>(null);
 
@@ -30,8 +32,7 @@ function MessagesStream({
     trpc.messages.getMany.queryOptions(
       { projectId },
       {
-        /** [TODO] Create WS server instead of polling every 5s to avoid extra DB load */
-        refetchInterval: 5000,
+        refetchInterval: enableRefetch ? 1000 : false,
         refetchOnWindowFocus: true,
       },
     ),
@@ -48,6 +49,12 @@ function MessagesStream({
   const lastAssistantMessage =
     (messages as any).findLast?.(predicate) ??
     [...messages].reverse().find(predicate);
+
+  /** Reset Auto-Fetch is lastMessage is from assistant */
+  React.useEffect(() => {
+    if (lastMessage?.role === "USER") setEnableRefetch(true);
+    if (lastMessage?.role === "ASSISTANT") setEnableRefetch(false);
+  }, [messages.length]);
 
   /** Auto-scroll to bottom when messages change */
   React.useEffect(() => {
