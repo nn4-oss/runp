@@ -44,7 +44,7 @@ export const invokeCodeAgent = inngest.createFunction(
       // Retrieve project's existing messages
       const messages = await prisma.message.findMany({
         where: {
-          projectId: event.data.prodjectId,
+          projectId: event.data.projectId,
         },
         orderBy: {
           createdAt: "asc",
@@ -98,7 +98,13 @@ export const invokeCodeAgent = inngest.createFunction(
     const titleAgent = createTitleAgent();
     const responseAgent = createResponseAgent();
 
-    /* Extract title and response agents outputs */
+    /* 
+    % */
+
+    /**
+     * Extract title and response agents outputs,
+     * do not stop the chain if those runs fails since these values have fallbacks.
+     */
     const { output: title } = await titleAgent.run(result.state.data.summary);
     const { output: response } = await responseAgent.run(
       result.state.data.summary,
@@ -162,7 +168,7 @@ export const invokeCodeAgent = inngest.createFunction(
       url: sandboxUrl,
       title: titleContent,
       files: result.state.data.files,
-      summary: result.state.data.summary,
+      summary: summaryContent,
     };
   },
 );
