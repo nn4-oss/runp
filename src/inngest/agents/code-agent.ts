@@ -8,7 +8,7 @@ import {
   readFilesAgentToolHandler,
 } from "../tools";
 
-import { SYSTEM_PROMPT } from "../config/system.-prompt";
+import { SYSTEM_PROMPT } from "../prompts/system-prompt";
 import { CODE_AGENT_PARAMETERS } from "../config/parameters";
 
 import type { AgentState } from "../types";
