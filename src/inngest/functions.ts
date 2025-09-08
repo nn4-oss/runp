@@ -14,7 +14,11 @@ import {
 
 import { getParsedAgentOutput } from "./utils";
 
-import { SANDBOX_NAME, SANDBOX_PORT } from "./config/sandbox-variables";
+import {
+  SANDBOX_NAME,
+  SANDBOX_PORT,
+  // SANDBOX_TIMEOUT,
+} from "./config/sandbox-variables";
 import {
   MAX_ITERATION,
   TITLE_AGENT_FALLBACK,
@@ -32,6 +36,15 @@ export const invokeCodeAgent = inngest.createFunction(
     /* Create a Sandbox Environment using the E2B NextJS Template Docker Image */
     const sandboxId = await step.run("get-sandbox-id", async () => {
       const sandbox = await Sandbox.create(SANDBOX_NAME);
+
+      /**
+       * Extend the default ttl of the sandbox environment.
+       * The longer it get the more credits gets spent on E2B.
+       *
+       * [TODO]: Add sandbox_timeout control to user's settings
+       */
+      // await sandbox.setTimeout(SANDBOX_TIMEOUT);
+
       return sandbox.sandboxId;
     });
 
@@ -97,9 +110,6 @@ export const invokeCodeAgent = inngest.createFunction(
     /* Invole the title and response agents */
     const titleAgent = createTitleAgent();
     const responseAgent = createResponseAgent();
-
-    /* 
-    % */
 
     /**
      * Extract title and response agents outputs,
