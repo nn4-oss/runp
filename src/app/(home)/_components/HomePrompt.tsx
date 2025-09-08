@@ -157,7 +157,7 @@ function HomePrompt() {
                   <Spinner />
                 ) : (
                   <Icon>
-                    <PixelIcon.ArrowRight />
+                    <PixelIcon.ArrowUp />
                   </Icon>
                 )}
               </span>

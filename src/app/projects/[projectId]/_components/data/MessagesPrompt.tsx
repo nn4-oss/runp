@@ -158,7 +158,7 @@ function MessagesPrompt({ projectId }: { projectId: string }) {
                 <Spinner />
               ) : (
                 <Icon>
-                  <PixelIcon.ArrowRight />
+                  <PixelIcon.ArrowUp />
                 </Icon>
               )}
             </span>
