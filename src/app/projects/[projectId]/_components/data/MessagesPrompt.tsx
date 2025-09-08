@@ -6,21 +6,20 @@ import styled from "styled-components";
 import { useTRPC } from "@/trpc/client";
 import { useForm } from "react-hook-form";
 import { useKeyPress } from "@usefui/hooks";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import {
   PromptOptions,
   ReflectiveButton,
   Spinner,
   Textarea,
+  UsageBanner,
 } from "@/components";
 import { Icon, PixelIcon } from "@usefui/icons";
 
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { utteranceValueSchema } from "@/schemas/utterances-schema";
-
-import { toast } from "sonner";
 
 const PromptWrapper = styled.form`
   border: var(--measurement-small-30) solid var(--font-color-alpha-10);
@@ -58,11 +57,25 @@ function MessagesPrompt({ projectId }: { projectId: string }) {
         await queryClient.invalidateQueries(
           trpc.messages.getMany.queryOptions({ projectId }),
         );
+        await queryClient.invalidateQueries(trpc.usage.status.queryOptions());
+        await queryClient.invalidateQueries(
+          trpc.usage.getMetadata.queryOptions(),
+        );
       },
 
-      onError: (error) => toast.error(error.message),
+      onError: (error) => {
+        // toast.error(error.message);
+        // if (error.data?.code === "TOO_MANY_REQUESTS") {
+        //   toast.error("Rate limit exceeded");
+        // }
+      },
     }),
   );
+
+  const { data: user } = useQuery(trpc.user.get.queryOptions());
+  const { data: usage } = useQuery(trpc.usage.status.queryOptions());
+
+  const showUsageBanner = !!usage;
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -98,8 +111,6 @@ function MessagesPrompt({ projectId }: { projectId: string }) {
     isFocused,
     form.formState.isValid,
     createMessage.isPending,
-    form,
-    onSubmit,
   ]);
 
   return (
@@ -107,7 +118,10 @@ function MessagesPrompt({ projectId }: { projectId: string }) {
       id="prompt-form"
       name="prompt-form"
       className="grid align-end w-100 p-medium-30"
-      onSubmit={form.handleSubmit(onSubmit)}
+      onSubmit={(e) => {
+        e.preventDefault();
+        form.handleSubmit(onSubmit);
+      }}
       onFocus={() => setIsFocused(true)}
       onBlur={() => setIsFocused(false)}
     >
@@ -119,6 +133,16 @@ function MessagesPrompt({ projectId }: { projectId: string }) {
         disabled={createMessage.isPending}
         {...form.register("value")}
       />
+
+      {showUsageBanner && (
+        <div className="w-100 m-b-medium-30">
+          <UsageBanner
+            scope={user?.scope ?? "FREE"}
+            points={usage.remainingPoints}
+            beforeNext={usage.msBeforeNext}
+          />
+        </div>
+      )}
 
       <div className="flex justify-between align-center g-medium-30">
         <PromptOptions />

@@ -9,6 +9,7 @@ import { utteranceValueSchema } from "@/schemas/utterances-schema";
 
 import { generateSlug } from "random-word-slugs";
 import { revalidatePath } from "next/cache";
+import { consumePoints } from "@/services/usage-services";
 
 export const projectsRouter = createTRPCRouter({
   getUnique: protectedProcedure
@@ -21,7 +22,7 @@ export const projectsRouter = createTRPCRouter({
       const project = await prisma.project.findUnique({
         where: {
           id: input.id,
-          userId: ctx.auth.userId,
+          userId: ctx.user.id,
         },
       });
 
@@ -37,7 +38,7 @@ export const projectsRouter = createTRPCRouter({
   getMany: protectedProcedure.query(async ({ ctx }) => {
     const projects = await prisma.project.findMany({
       where: {
-        userId: ctx.auth.userId,
+        userId: ctx.user.id,
       },
       orderBy: {
         updatedAt: "asc",
@@ -57,9 +58,30 @@ export const projectsRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ input, ctx }) => {
+      // Consume points before sending message to ensure the rate limit isn't reached
+      try {
+        await consumePoints();
+      } catch (error) {
+        // Internal error
+        if (error instanceof Error) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Something went wrong.",
+          });
+        }
+
+        // Preserve upstream TRPC error
+        if (error instanceof TRPCError) throw error;
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Something went wrong.",
+          cause: error,
+        });
+      }
+
       const userProject = await prisma.project.create({
         data: {
-          userId: ctx.auth.userId,
+          userId: ctx.user.id,
           name: generateSlug(2, {
             format: "kebab",
             categories: {
@@ -102,7 +124,7 @@ export const projectsRouter = createTRPCRouter({
       const project = await prisma.project.findUnique({
         where: {
           id: input.id,
-          userId: ctx.auth.userId,
+          userId: ctx.user.id,
         },
       });
 
@@ -118,7 +140,7 @@ export const projectsRouter = createTRPCRouter({
         },
         where: {
           id: input.id,
-          userId: ctx.auth.userId,
+          userId: ctx.user.id,
         },
       });
 
@@ -146,7 +168,7 @@ export const projectsRouter = createTRPCRouter({
       await prisma.project.delete({
         where: {
           id: input.id,
-          userId: ctx.auth.userId,
+          userId: ctx.user.id,
         },
       });
 

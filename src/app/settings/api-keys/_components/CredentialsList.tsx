@@ -4,22 +4,12 @@ import React from "react";
 import styled from "styled-components";
 
 import { useTRPC } from "@/trpc/client";
-import { useSearchParams } from "next/navigation";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
 import CredentialsListActions from "./CredentialsListActions";
 import CredentialsTable from "./CredentialsTable";
 
-import { AppContainer } from "@/components";
-
-const FixedHeader = styled.hgroup`
-  position: sticky;
-  top: 0;
-  background-color: var(--contrast-color);
-  border-bottom: var(--measurement-small-30) solid var(--font-color-alpha-10);
-  width: 100%;
-  z-index: var(--depth-default-10);
-`;
+import { FixedHeader } from "@/components";
 
 function CredentialsList() {
   const trpc = useTRPC();
@@ -33,7 +23,7 @@ function CredentialsList() {
     <section className="w-100 h-100">
       <FixedHeader className="grid">
         <div className="flex justify-between align-center p-y-medium-60 p-x-medium-60">
-          <p className="fs-medium-20">API Keys&nbsp;</p>
+          <p className="fs-medium-20">API Keys</p>
 
           <CredentialsListActions />
         </div>

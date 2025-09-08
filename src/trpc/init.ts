@@ -4,6 +4,7 @@ import { cache } from "react";
 import { auth } from "@clerk/nextjs/server";
 
 import { initTRPC, TRPCError } from "@trpc/server";
+import { ensureUserInDatabase } from "@/security/ensure-user";
 
 export const createTRPCContext = cache(async () => {
   /**
@@ -21,16 +22,30 @@ const t = initTRPC.context<Context>().create({
   transformer: superjson,
 });
 
+// TRPC Routers
+export const createTRPCRouter = t.router;
+export const createCallerFactory = t.createCallerFactory;
+
+// TRPC Middlewares
 const isAuthenticated = t.middleware(({ next, ctx }) => {
   if (!ctx.auth.userId) throw new TRPCError({ code: "UNAUTHORIZED" });
   return next({ ctx: { auth: ctx.auth } });
 });
+const withUser = t.middleware(async ({ ctx, next }) => {
+  const user = await ensureUserInDatabase(ctx.auth.userId!);
+  return next({
+    ctx: {
+      ...ctx,
+      user, // attach DB user to context
+    },
+  });
+});
 
-// Base router and procedure helpers
-export const createTRPCRouter = t.router;
-export const createCallerFactory = t.createCallerFactory;
+// Procedures
 export const baseProcedure = t.procedure;
-export const protectedProcedure = t.procedure.use(isAuthenticated);
+export const protectedProcedure = t.procedure
+  .use(isAuthenticated)
+  .use(withUser);
 
 // Types
 export type Context = Awaited<ReturnType<typeof createTRPCContext>>;

@@ -4,9 +4,8 @@ import React from "react";
 import styled from "styled-components";
 
 import { useRouter } from "next/navigation";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
-import { useClerk } from "@clerk/nextjs";
 import { useKeyPress } from "@usefui/hooks";
 import { useForm } from "react-hook-form";
 
@@ -16,6 +15,7 @@ import {
   ReflectiveButton,
   Spinner,
   Textarea,
+  UsageBanner,
 } from "@/components";
 
 import { z } from "zod";
@@ -32,7 +32,7 @@ const PromptContainer = styled.div`
   max-width: var(--breakpoint-tablet);
   margin: 0 auto;
 `;
-const PromptWrapper = styled.div`
+const PromptWrapper = styled.form`
   border: var(--measurement-small-30) solid var(--font-color-alpha-10);
   border-radius: var(--measurement-medium-60);
 
@@ -52,22 +52,38 @@ const formSchema = z.object({
 
 function HomePrompt() {
   const [isFocused, setIsFocused] = React.useState<boolean>(false);
+  const [showUsage, setShowUsage] = React.useState<boolean>(false);
 
   const router = useRouter();
   const trpc = useTRPC();
-  const clerk = useClerk();
+  const queryClient = useQueryClient();
   const shortcutControls = useKeyPress("Enter", true, "ctrlKey");
+
+  const { data: user } = useQuery(trpc.user.get.queryOptions());
+  const { data: usage } = useQuery(trpc.usage.status.queryOptions());
+  const showUsageBanner = !!usage && showUsage;
 
   const createProject = useMutation(
     trpc.projects.create.mutationOptions({
-      onSuccess: (data) => {
+      onSuccess: async (data) => {
         form.reset();
+
         trpc.projects.getMany.queryOptions();
+        await queryClient.invalidateQueries(trpc.usage.status.queryOptions());
+        await queryClient.invalidateQueries(
+          trpc.usage.getMetadata.queryOptions(),
+        );
+
         router.push(`/projects/${data.id}`);
       },
       onError: (error) => {
-        form.reset();
-        if (error?.data?.code === "UNAUTHORIZED") clerk.openSignIn();
+        if (error?.data?.code === "UNAUTHORIZED") {
+          router.push("/signup");
+        }
+        if (error.data?.code === "TOO_MANY_REQUESTS") {
+          setShowUsage(true);
+          // toast.error("Rate limit exceeded");
+        }
       },
     }),
   );
@@ -105,15 +121,16 @@ function HomePrompt() {
     isFocused,
     form.formState.isValid,
     createProject.isPending,
-    form,
-    onSubmit,
   ]);
 
   return (
     <PromptContainer>
       <PromptWrapper
         className="p-medium-60 w-100"
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={(e) => {
+          e.preventDefault();
+          form.handleSubmit(onSubmit);
+        }}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
       >
@@ -154,6 +171,15 @@ function HomePrompt() {
           </div>
         </div>
       </PromptWrapper>
+      {showUsageBanner && (
+        <div className="m-y-medium-30 w-100">
+          <UsageBanner
+            scope={user?.scope ?? "FREE"}
+            points={usage.remainingPoints}
+            beforeNext={usage.msBeforeNext}
+          />
+        </div>
+      )}
     </PromptContainer>
   );
 }

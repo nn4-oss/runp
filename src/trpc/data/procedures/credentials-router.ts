@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 
-import { symetricEncryption } from "@/lib/encryption";
+import { symetricEncryption } from "@/security/encryption";
 import { protectedProcedure, createTRPCRouter } from "@/trpc/init";
 import { TRPCError } from "@trpc/server";
 
@@ -10,7 +10,7 @@ import { revalidatePath } from "next/cache";
 export const credentialsRouter = createTRPCRouter({
   getMany: protectedProcedure.query(async ({ ctx }) => {
     const credentials = await prisma.credential.findMany({
-      where: { userId: ctx.auth.userId },
+      where: { userId: ctx.user.id },
       orderBy: { name: "asc" },
       include: {
         integrations: {
@@ -49,7 +49,7 @@ export const credentialsRouter = createTRPCRouter({
       const encryptedValue = symetricEncryption(input.value);
       const newCredential = await prisma.credential.create({
         data: {
-          userId: ctx.auth.userId,
+          userId: ctx.user.id,
           name: input.name,
           value: encryptedValue,
         },
@@ -80,7 +80,7 @@ export const credentialsRouter = createTRPCRouter({
       const credential = await prisma.credential.findUnique({
         where: {
           id: input.id,
-          userId: ctx.auth.userId,
+          userId: ctx.user.id,
         },
       });
 
@@ -96,7 +96,7 @@ export const credentialsRouter = createTRPCRouter({
         },
         where: {
           id: input.id,
-          userId: ctx.auth.userId,
+          userId: ctx.user.id,
         },
       });
 
@@ -121,7 +121,7 @@ export const credentialsRouter = createTRPCRouter({
         where: {
           // Composite key https://www.prisma.io/docs/orm/prisma-client/special-fields-and-types/working-with-composite-ids-and-constraints
           userId_name: {
-            userId: ctx.auth.userId,
+            userId: ctx.user.id,
             name: input.name,
           },
         },

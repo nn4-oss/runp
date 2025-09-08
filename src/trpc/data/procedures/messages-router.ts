@@ -6,6 +6,7 @@ import { TRPCError } from "@trpc/server";
 
 import { z } from "zod";
 import { utteranceValueSchema } from "@/schemas/utterances-schema";
+import { consumePoints } from "@/services/usage-services";
 
 export const messagesRouter = createTRPCRouter({
   getMany: protectedProcedure
@@ -19,7 +20,7 @@ export const messagesRouter = createTRPCRouter({
         where: {
           projectId: input.projectId,
           project: {
-            userId: ctx.auth.userId,
+            userId: ctx.user.id,
           },
         },
         include: {
@@ -44,7 +45,7 @@ export const messagesRouter = createTRPCRouter({
       const isExisting = await prisma.project.findUnique({
         where: {
           id: input.projectId,
-          userId: ctx.auth.userId,
+          userId: ctx.user.id,
         },
       });
 
@@ -52,6 +53,25 @@ export const messagesRouter = createTRPCRouter({
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Project not found.",
+        });
+      }
+
+      // Consume points before sending message to ensure the rate limit isn't reached
+      try {
+        await consumePoints();
+      } catch (error) {
+        // Internal error
+        if (error instanceof Error) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Something went wrong.",
+          });
+        }
+
+        // Rate limit response
+        throw new TRPCError({
+          code: "TOO_MANY_REQUESTS",
+          message: "Message Rate Limit",
         });
       }
 
