@@ -16,7 +16,7 @@ import {
 } from "@usefui/components";
 import { Icon, PixelIcon, SocialIcon } from "@usefui/icons";
 import { SignOutButton } from "@clerk/nextjs";
-import { ColorModes } from "..";
+import { ColorModes, Spinner } from "..";
 
 import { formatDuration, intervalToDuration } from "date-fns";
 

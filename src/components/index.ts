@@ -15,6 +15,7 @@ export { default as PromptOptions } from "./prompt-options";
 export { default as PrivacyField } from "./privacy-field";
 export { default as ReflectiveButton } from "./reflective-button";
 export { default as SplitScreen } from "./split-screen";
+export { default as SkeletonLoader } from "./skeleton";
 export { default as Textarea } from "./text-area";
 export { default as UserAvatar } from "./user-avatar";
 export { default as UsageBanner } from "./usage-banner";

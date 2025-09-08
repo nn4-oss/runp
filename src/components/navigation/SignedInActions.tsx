@@ -9,7 +9,7 @@ import { useTRPC } from "@/trpc/client";
 import { SignedIn } from "@clerk/nextjs";
 import { Button, Dialog, Tooltip } from "@usefui/components";
 import { Icon, PixelIcon } from "@usefui/icons";
-import { UpgradeScopeDialog, UserAvatar } from "../";
+import { SkeletonLoader, UpgradeScopeDialog, UserAvatar } from "../";
 
 import { ScopeEnum } from "generated/prisma";
 
