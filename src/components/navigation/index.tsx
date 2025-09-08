@@ -30,7 +30,7 @@ function Navigation() {
   return (
     <StyledMenu className="w-100 flex p-x-medium-30 align-center justify-between">
       <div className="flex align-center g-medium-30 w-100">
-        <Button variant="ghost" rawicon onClick={() => router.push("/")}>
+        <Button variant="ghost" rawicon onMouseDown={() => router.push("/")}>
           <BrandAvatar sizing="small">
             <Icon fill="var(--body-color)">
               <SocialIcon.Foundation />

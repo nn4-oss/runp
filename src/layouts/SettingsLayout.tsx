@@ -66,7 +66,7 @@ function SettingsLayout({
                   showfirstchild
                   className="flex align-center g-medium-30"
                   key={link.label}
-                  onClick={() => router.push(link.path)}
+                  onMouseDown={() => router.push(link.path)}
                 >
                   <Icon>{link.icon}</Icon>
                   <span className="fs-medium-10">{link.label}</span>

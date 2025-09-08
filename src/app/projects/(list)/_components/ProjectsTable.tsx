@@ -159,7 +159,7 @@ function ProjectsTable({
                         <DropdownMenu.Content>
                           <DropdownMenu.Item
                             className="w-100 flex align-center g-medium-30"
-                            onClick={() => {
+                            onMouseDown={() => {
                               router.push(`/projects/${project.id}`);
                             }}
                           >

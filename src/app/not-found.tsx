@@ -31,7 +31,7 @@ function NotFoundPage() {
           <Button
             variant="border"
             sizing="large"
-            onClick={() => router.push("/")}
+            onMouseDown={() => router.push("/")}
           >
             Go back
           </Button>

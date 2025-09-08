@@ -21,5 +21,6 @@ export { default as UserAvatar } from "./user-avatar";
 export { default as UsageBanner } from "./usage-banner";
 
 export { Spinner } from "./spinner";
+export { Pill } from "./pill";
 export { AppContainer } from "./container";
 export { FixedHeader } from "./fixed-header";

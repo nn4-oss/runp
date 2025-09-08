@@ -150,7 +150,7 @@ function UserAvatar() {
 
           <DropdownMenu.Item
             className="w-100 flex align-center g-medium-30"
-            onClick={() => router.push("/profile")}
+            onMouseDown={() => router.push("/profile")}
           >
             <Icon>
               <PixelIcon.User />
@@ -159,7 +159,7 @@ function UserAvatar() {
           </DropdownMenu.Item>
           <DropdownMenu.Item
             className="w-100 flex align-center g-medium-30"
-            onClick={() => router.push("/settings")}
+            onMouseDown={() => router.push("/settings")}
           >
             <Icon>
               <PixelIcon.Sliders />
@@ -169,7 +169,7 @@ function UserAvatar() {
 
           <DropdownMenu.Item
             className="flex align-center g-medium-30"
-            onClick={() => router.push("/docs/introduction")}
+            onMouseDown={() => router.push("/docs/introduction")}
           >
             <span className="flex align-center justify-center">
               <Icon>
@@ -187,7 +187,7 @@ function UserAvatar() {
 
           <DropdownMenu.Item
             className="flex align-center g-medium-30"
-            onClick={() => router.push("/settings/api-keys")}
+            onMouseDown={() => router.push("/settings/api-keys")}
           >
             <span className="flex align-center justify-center">
               <Icon>

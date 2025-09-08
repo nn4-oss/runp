@@ -9,7 +9,7 @@ import { useTRPC } from "@/trpc/client";
 import { SignedIn } from "@clerk/nextjs";
 import { Button, Dialog, Tooltip } from "@usefui/components";
 import { Icon, PixelIcon } from "@usefui/icons";
-import { SkeletonLoader, UpgradeScopeDialog, UserAvatar } from "../";
+import { Pill, UpgradeScopeDialog, UserAvatar } from "../";
 
 import { ScopeEnum } from "generated/prisma";
 
@@ -30,7 +30,7 @@ function SignedInActions() {
             variant="border"
             sizing="small"
             aria-label="Projects"
-            onClick={() => router.push("/")}
+            onMouseDown={() => router.push("/")}
           >
             <span className="flex align-center justify-center p-y-small-60 g-medium-10">
               <Icon>
@@ -45,7 +45,7 @@ function SignedInActions() {
             variant="border"
             sizing="small"
             aria-label="Projects"
-            onClick={() => router.push("/projects")}
+            onMouseDown={() => router.push("/projects")}
           >
             <span className="flex align-center justify-center p-y-small-60">
               <Icon>
@@ -65,6 +65,23 @@ function SignedInActions() {
 
             <UpgradeScopeDialog />
           </Dialog.Root>
+        )}
+        {user?.scope === ScopeEnum.PRO && (
+          <Tooltip content="Settings">
+            <Button
+              variant="border"
+              sizing="small"
+              aria-label="Settings"
+              onMouseDown={() => router.push("/settings")}
+            >
+              <span className="flex align-center justify-center p-y-small-60 g-medium-10">
+                <Icon>
+                  <PixelIcon.Sliders />
+                </Icon>
+              </span>
+            </Button>
+            <Pill data-mode="pending" />
+          </Tooltip>
         )}
       </div>
     </SignedIn>
