@@ -1,4 +1,5 @@
 export const MAX_ITERATION = 10;
+export const CONTEXT_MAX_LENGTH = 5;
 export const CODE_AGENT_PARAMETERS = {
   temperature: 0.1, // low randomness → consistent, reliable code
   top_p: 0.9, // allow some diversity but still constrained

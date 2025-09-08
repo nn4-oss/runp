@@ -1,10 +1,10 @@
+import "server-only";
+
 import prisma from "@/lib/prisma";
 
-import { Sandbox } from "@e2b/code-interpreter";
-
 import { inngest } from "./client";
-import { getSandbox } from "./utils";
 
+import { Sandbox } from "@e2b/code-interpreter";
 import { createNetwork, createState } from "@inngest/agent-kit";
 import {
   createCodeAgent,
@@ -12,7 +12,8 @@ import {
   createResponseAgent,
 } from "./agents";
 
-import { getParsedAgentOutput } from "./utils";
+import { getParsedAgentOutput, getSandbox } from "./utils";
+import { autoUpdateProjectTitle } from "@/services/auto-update";
 
 import {
   SANDBOX_NAME,
@@ -21,6 +22,7 @@ import {
 } from "./config/sandbox-variables";
 import {
   MAX_ITERATION,
+  CONTEXT_MAX_LENGTH,
   TITLE_AGENT_FALLBACK,
   RESPONSE_AGENT_FALLBACK,
 } from "./config/parameters";
@@ -64,9 +66,9 @@ export const invokeCodeAgent = inngest.createFunction(
         },
         /**
          * Limit the context length to avoid hallucination on longer history.
-         * 5 is arbitrary, this can be challenged to improve performance and consistency.
+         * `CONTEXT_MAX_LENGTH` is arbitrary, this can be challenged to improve performance and consistency.
          */
-        take: 5,
+        take: CONTEXT_MAX_LENGTH,
       });
 
       // Push each message to formattedMessages
@@ -160,6 +162,12 @@ export const invokeCodeAgent = inngest.createFunction(
           },
         });
       }
+
+      /** Auto-update project's title after an update */
+      await autoUpdateProjectTitle({
+        projectId: event.data.projectId,
+        title: titleContent,
+      });
 
       /** Save user's utterance as is */
       return await prisma.message.create({
