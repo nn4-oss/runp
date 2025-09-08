@@ -6,10 +6,20 @@ import { inngest } from "./client";
 import { getSandbox } from "./utils";
 
 import { createNetwork, createState } from "@inngest/agent-kit";
-import { createCodeAgent } from "./agents";
+import {
+  createCodeAgent,
+  createTitleAgent,
+  createResponseAgent,
+} from "./agents";
+
+import { getParsedAgentOutput } from "./utils";
 
 import { SANDBOX_NAME, SANDBOX_PORT } from "./config/sandbox-variables";
-import { MAX_ITERATION } from "./config/parameters";
+import {
+  MAX_ITERATION,
+  TITLE_AGENT_FALLBACK,
+  RESPONSE_AGENT_FALLBACK,
+} from "./config/parameters";
 
 import type { AgentState } from "./types";
 import type { Message } from "@inngest/agent-kit";
@@ -31,7 +41,7 @@ export const invokeCodeAgent = inngest.createFunction(
     const prevMessages = await step.run("get-previous-messages", async () => {
       const formattedMessages: Message[] = [];
 
-      // Retrieve project existing messages
+      // Retrieve project's existing messages
       const messages = await prisma.message.findMany({
         where: {
           projectId: event.data.prodjectId,
@@ -55,10 +65,7 @@ export const invokeCodeAgent = inngest.createFunction(
 
     /** Create agent state with previous messages context */
     const state = createState<AgentState>(
-      {
-        summary: "",
-        files: {},
-      },
+      { summary: "", files: {} },
       { messages: prevMessages },
     );
 
@@ -87,6 +94,16 @@ export const invokeCodeAgent = inngest.createFunction(
     /* Run the code-agent using user's utterance, load previous messages context state */
     const result = await network.run(event.data.input, { state });
 
+    /* Invole the title and response agents */
+    const titleAgent = createTitleAgent();
+    const responseAgent = createResponseAgent();
+
+    /* Extract title and response agents outputs */
+    const { output: title } = await titleAgent.run(result.state.data.summary);
+    const { output: response } = await responseAgent.run(
+      result.state.data.summary,
+    );
+
     /* Prepare the Sandbox Environment URL that will run the code-agent output */
     const sandboxUrl = await step.run("get-sandbox-url", async () => {
       const sandbox = await getSandbox(sandboxId);
@@ -98,6 +115,16 @@ export const invokeCodeAgent = inngest.createFunction(
     const hasNoSummary = !result.state.data.summary;
     const hasNoFile = Object.keys(result.state.data.files || {}).length === 0;
     const isError = hasNoSummary || hasNoFile;
+
+    /** Agents outputs */
+    const titleContent = await getParsedAgentOutput(
+      title,
+      TITLE_AGENT_FALLBACK,
+    );
+    const summaryContent = await getParsedAgentOutput(
+      response,
+      RESPONSE_AGENT_FALLBACK,
+    );
 
     /** Save Result in DB when the agent job is completed */
     await step.run("save-result", async () => {
@@ -117,13 +144,13 @@ export const invokeCodeAgent = inngest.createFunction(
       return await prisma.message.create({
         data: {
           projectId: event.data.projectId,
-          content: result.state.data.summary,
+          content: summaryContent,
           role: "ASSISTANT",
           type: "RESULT",
           fragment: {
             create: {
               sandboxUrl: sandboxUrl,
-              title: "Fragment",
+              title: titleContent,
               files: result.state.data.files,
             },
           },
@@ -133,7 +160,7 @@ export const invokeCodeAgent = inngest.createFunction(
 
     return {
       url: sandboxUrl,
-      title: "Fragment",
+      title: titleContent,
       files: result.state.data.files,
       summary: result.state.data.summary,
     };
