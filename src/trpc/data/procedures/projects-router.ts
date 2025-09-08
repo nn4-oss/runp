@@ -70,10 +70,12 @@ export const projectsRouter = createTRPCRouter({
           });
         }
 
-        // Rate limit response
+        // Preserve upstream TRPC error
+        if (error instanceof TRPCError) throw error;
         throw new TRPCError({
-          code: "TOO_MANY_REQUESTS",
-          message: "Message Rate Limit",
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Something went wrong.",
+          cause: error,
         });
       }
 
