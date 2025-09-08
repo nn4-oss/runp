@@ -14,4 +14,4 @@ export const RESPONSE_AGENT_PARAMETERS = {
 };
 export const TITLE_AGENT_FALLBACK = "Fragment Code";
 export const RESPONSE_AGENT_FALLBACK =
-  "Here is the code generated based on your demand";
+  "Here is the code generated for your request.";
