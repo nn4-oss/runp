@@ -16,7 +16,7 @@ import {
 } from "@usefui/components";
 import { Icon, PixelIcon, SocialIcon } from "@usefui/icons";
 import { SignOutButton } from "@clerk/nextjs";
-import { ColorModes, Spinner } from "..";
+import { ColorModes } from "..";
 
 import { formatDuration, intervalToDuration } from "date-fns";
 
@@ -64,10 +64,6 @@ const PointsRange = styled.div<RangeProps>`
   will-change: width;
   transition: ease-in-out 0.2s;
 `;
-const ExtendedDropdown = styled(DropdownMenu.Content)`
-  height: var(calc(--measurement-large-90 * 2)) !important;
-  max-height: var(calc(--measurement-large-90 * 2)) !important;
-`;
 
 function UserAvatar() {
   const router = useRouter();
@@ -78,6 +74,28 @@ function UserAvatar() {
   const { data: usageMetadata } = useQuery(
     trpc.usage.getMetadata.queryOptions(),
   );
+
+  const resetDuration = React.useMemo(() => {
+    try {
+      const msBeforeNext = Number(usage?.msBeforeNext);
+      if (!msBeforeNext || msBeforeNext < 0) {
+        return "Unknown";
+      }
+
+      return formatDuration(
+        intervalToDuration({
+          start: new Date(),
+          end: new Date(Date.now() + msBeforeNext),
+        }),
+        {
+          format: ["months", "days", "hours"],
+        },
+      );
+    } catch (error) {
+      console.error("Error calculating reset duration:", error);
+      return "Unknown";
+    }
+  }, [usage?.msBeforeNext]);
 
   return (
     <DropdownMenu.Root>
@@ -111,7 +129,10 @@ function UserAvatar() {
               <RangeContainer className="m-b-medium-30">
                 <PointsRange
                   key={usage?.consumedPoints}
-                  $percentage={Number(usageMetadata?.percentage) * 100}
+                  $percentage={Math.min(
+                    100,
+                    Math.max(0, Number(usageMetadata?.percentage) * 100),
+                  )}
                   data-empty={Boolean(Number(usage?.remainingPoints) === 0)}
                   data-threshold={Boolean(
                     Number(usageMetadata?.percentage) >= 0.3,
@@ -124,15 +145,7 @@ function UserAvatar() {
                   <PixelIcon.Reload />
                 </Icon>
                 Reset&nbsp;in&nbsp;
-                {formatDuration(
-                  intervalToDuration({
-                    start: new Date(),
-                    end: new Date(Date.now() + Number(usage?.msBeforeNext)),
-                  }),
-                  {
-                    format: ["months", "days", "hours"],
-                  },
-                )}
+                {resetDuration}
               </span>
             </PointsWrapper>
           )}
