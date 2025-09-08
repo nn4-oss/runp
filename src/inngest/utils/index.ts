@@ -33,10 +33,13 @@ export async function getParsedAgentOutput(
   contentArray: Message[],
   defaultFallback: string,
 ): Promise<string> {
-  if (contentArray[0]?.type !== "text") return defaultFallback; // Default string fallback
+  if (!contentArray || contentArray.length === 0) return defaultFallback;
+  if (contentArray[0]?.type !== "text") return defaultFallback;
 
-  if (Array.isArray(contentArray[0]?.content))
-    return contentArray[0]?.content.map((content) => content).join(""); // Always return a string
+  const output = contentArray[0]?.content;
 
-  return contentArray[0]?.content;
+  /* Rare exception: Always return a string in this case */
+  if (Array.isArray(output)) return output.map((content) => content).join("");
+
+  return output;
 }
