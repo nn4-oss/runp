@@ -36,18 +36,20 @@ const globalForPrisma = global as unknown as {
  * Injects the correct scopeKey into the mutation payload
  * before writing to the database.
  */
-function injectScopeKey(data: any) {
+function injectScopeKey(data: any, opts: { require?: boolean } = {}) {
   if (!data) return;
+  // Never trust caller-provided scopeKey
+  if ("scopeKey" in data) delete data.scopeKey;
 
   const scope = data.scope as keyof typeof scopesMapping | undefined;
-  if (!scope) return;
-
+  if (!scope) {
+    if (opts.require) throw new Error("scope is required for user creation.");
+    return;
+  }
   const key = scopesMapping[scope];
   if (!key) throw new Error(`Invalid scope: ${scope}`);
-
   data.scopeKey = symetricEncryption(key);
 }
-
 /**
  * Prisma Client with tamper-resistance extension.
  * - Validates scope <-> scopeKey on reads.
@@ -59,44 +61,118 @@ const prisma =
     query: {
       user: {
         async findUnique({ args, query }) {
+          const originalSelect = args?.select ? { ...args.select } : undefined;
+          if (originalSelect) {
+            args.select = { ...originalSelect, scope: true, scopeKey: true };
+          }
+
           const result = await query(args);
+          if (!result) return result;
           assertTamperResistance(result);
+
+          // Strip secrets unless explicitly requested
+          if (!originalSelect?.scopeKey) delete (result as any).scopeKey;
+          if (originalSelect && !originalSelect.scope)
+            delete (result as any).scope;
+
           return result;
         },
+
         async findFirst({ args, query }) {
+          const originalSelect = args?.select ? { ...args.select } : undefined;
+          if (originalSelect) {
+            args.select = { ...originalSelect, scope: true, scopeKey: true };
+          }
+
           const result = await query(args);
+          if (!result) return result;
           assertTamperResistance(result);
+
+          if (!originalSelect?.scopeKey) delete (result as any).scopeKey;
+          if (originalSelect && !originalSelect.scope)
+            delete (result as any).scope;
+
           return result;
         },
+
         async findMany({ args, query }) {
+          const originalSelect = args?.select ? { ...args.select } : undefined;
+          if (originalSelect) {
+            args.select = { ...originalSelect, scope: true, scopeKey: true };
+          }
+
           const results = await query(args);
           results.forEach(assertTamperResistance);
+
+          // Strip secrets unless explicitly requested
+          if (originalSelect) {
+            for (const r of results) {
+              if (!originalSelect.scopeKey) delete (r as any).scopeKey;
+              if (!originalSelect.scope) delete (r as any).scope;
+            }
+          } else {
+            for (const r of results) delete (r as any).scopeKey;
+          }
+
           return results;
         },
+
         async create({ args, query }) {
           injectScopeKey(args.data);
+
+          const originalSelect = args?.select ? { ...args.select } : undefined;
+          if (originalSelect) {
+            args.select = { ...originalSelect, scope: true, scopeKey: true };
+          }
           const result = await query(args);
           assertTamperResistance(result);
+
+          if (!originalSelect?.scopeKey) delete (result as any).scopeKey;
+          if (originalSelect && !originalSelect.scope)
+            delete (result as any).scope;
+
           return result;
         },
+
         async update({ args, query }) {
           injectScopeKey(args.data);
+
+          const originalSelect = args?.select ? { ...args.select } : undefined;
+          if (originalSelect) {
+            args.select = { ...originalSelect, scope: true, scopeKey: true };
+          }
           const result = await query(args);
           assertTamperResistance(result);
+
+          if (!originalSelect?.scopeKey) delete (result as any).scopeKey;
+          if (originalSelect && !originalSelect.scope)
+            delete (result as any).scope;
+
           return result;
         },
+
         async upsert({ args, query }) {
-          injectScopeKey(args.create);
+          injectScopeKey(args.create, { require: true });
           injectScopeKey(args.update);
+
+          const originalSelect = args?.select ? { ...args.select } : undefined;
+          if (originalSelect) {
+            args.select = { ...originalSelect, scope: true, scopeKey: true };
+          }
           const result = await query(args);
           assertTamperResistance(result);
+
+          if (!originalSelect?.scopeKey) delete (result as any).scopeKey;
+          if (originalSelect && !originalSelect.scope)
+            delete (result as any).scope;
+
           return result;
         },
       },
     },
   });
 
-// Reuse Prisma client in dev to avoid exhausting DB connections
+// Reuse Prisma client during dev (singleton pattern)
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
 
 export default prisma;
