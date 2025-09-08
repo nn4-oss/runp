@@ -15,11 +15,17 @@ export type TamperUser = {
 
 export const DEFAULT_SCOPE = "FREE" as const;
 
-export const scopesMapping: Record<string, string> = {
-  FREE: process.env.SCOPE_FREE_KEY!,
-  PRO: process.env.SCOPE_PRO_KEY!,
-  ENTERPRISE: process.env.SCOPE_ENTERPRISE_KEY!,
-};
+function mustGetEnv(name: string): string {
+  const v = process.env[name];
+  if (!v) throw new Error(`Missing required env var: ${name}`);
+  return v;
+}
+
+export const scopesMapping = {
+  FREE: mustGetEnv("SCOPE_FREE_KEY"),
+  PRO: mustGetEnv("SCOPE_PRO_KEY"),
+  ENTERPRISE: mustGetEnv("SCOPE_ENTERPRISE_KEY"),
+} as const satisfies Record<ScopeEnum, string>;
 
 /**
  * Returns true if the user’s scopeKey matches the expected secret.
@@ -29,9 +35,14 @@ export function tamperResistance(user: TamperUser | null | undefined): boolean {
   if (!user.scope || !user.scopeKey) return false;
 
   const expectedKey = scopesMapping[user.scope];
-  const decryptedKey = symetricDecryption(user.scopeKey);
+  if (!expectedKey) return false;
 
-  return decryptedKey === expectedKey;
+  try {
+    const decryptedKey = symetricDecryption(user.scopeKey);
+    return decryptedKey === expectedKey;
+  } catch {
+    return false;
+  }
 }
 
 /**
