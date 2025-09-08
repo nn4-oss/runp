@@ -103,19 +103,17 @@ function UserAvatar() {
         <DropdownMenu.Trigger>
           <StyledAvatar src={user?.imageUrl ?? "/gradient.svg"} />
         </DropdownMenu.Trigger>
-        <ScrollArea as={DropdownMenu.Content} sizing="medium" scrollbar>
-          <div className="grid p-l-medium-30 p-t-medium-30">
-            {user?.name && (
-              <React.Fragment>
-                <p className="fs-medium-20">{user?.name}</p>
-                <span className="fs-medium-10 opacity-default-60">
-                  {user?.email}
-                </span>
+        <ScrollArea as={DropdownMenu.Content}>
+          {user?.name && (
+            <div className="grid p-l-medium-30 p-t-medium-30">
+              <p className="fs-medium-20">{user?.name}</p>
+              <span className="fs-medium-10 opacity-default-60">
+                {user?.email}
+              </span>
 
-                <Divider className="m-y-medium-50" />
-              </React.Fragment>
-            )}
-          </div>
+              <Divider className="m-y-medium-50" />
+            </div>
+          )}
 
           {usage && usageMetadata && (
             <PointsWrapper className="p-medium-30 m-b-medium-60">
