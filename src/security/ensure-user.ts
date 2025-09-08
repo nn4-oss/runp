@@ -6,7 +6,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import { TRPCError } from "@trpc/server";
 
 import { scopesMapping, DEFAULT_SCOPE } from "./tamper-resistance";
-import { symetricEncryption } from ".//encryption";
+import { symetricEncryption } from "./encryption";
 
 import type { ScopeEnum } from "generated/prisma";
 
@@ -42,16 +42,22 @@ export async function ensureUserInDatabase(userId: string) {
 
   // Case: Clerk only -> create DB user
   if (clerkUser && !dbUser) {
-    return prisma.user.create({
-      data: {
+    // Make creation idempotent (race-safe) and prefer primary email.
+    return prisma.user.upsert({
+      where: { id: clerkUser.id },
+      update: {},
+      create: {
         id: clerkUser.id,
-        email: clerkUser.emailAddresses[0]?.emailAddress,
+        email:
+          clerkUser.primaryEmailAddress?.emailAddress ??
+          clerkUser.emailAddresses[0]?.emailAddress ??
+          null,
         name:
           [clerkUser.firstName, clerkUser.lastName].filter(Boolean).join(" ") ||
           null,
         imageUrl: clerkUser.imageUrl,
         scope: DEFAULT_SCOPE,
-        scopeKey: symetricEncryption(scopesMapping[DEFAULT_SCOPE] as ScopeEnum),
+        scopeKey: symetricEncryption(scopesMapping[DEFAULT_SCOPE]),
       },
     });
   }
