@@ -33,12 +33,12 @@ const PlansWrapper = styled.div`
   padding: var(--measurement-medium-60);
 `;
 
-function PlanHeader({ scope }: { scope: string }) {
+function PlanHeader({ scope, price = 0 }: { scope: string; price?: number }) {
   return (
     <hgroup className="grid g-medium-30 m-b-medium-60">
       <h6 className="fs-medium-20">Runp&nbsp;{scope}</h6>
       <span className="fs-medium-40 flex align-center">
-        $0&nbsp;
+        ${price}&nbsp;
         <span className="opacity-default-30 fs-medium-10">/month</span>
       </span>
     </hgroup>
