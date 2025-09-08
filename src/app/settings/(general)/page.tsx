@@ -1,5 +1,3 @@
-import React from "react";
-
 import { HydrateClient } from "@/trpc/server";
 import SettingsList from "./_components/SettingsList";
 
