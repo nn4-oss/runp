@@ -1,5 +1,5 @@
 import { Sandbox } from "@e2b/code-interpreter";
-import type { AgentResult, TextMessage } from "@inngest/agent-kit";
+import type { AgentResult, Message, TextMessage } from "@inngest/agent-kit";
 
 export async function getSandbox(sandboxId: string) {
   const sandbox = await Sandbox.connect(sandboxId);
@@ -27,4 +27,16 @@ export async function getLastMessageContent(result: AgentResult) {
 
   /** Last message was found and is of type string */
   return message.content;
+}
+
+export async function getParsedAgentOutput(
+  contentArray: Message[],
+  defaultFallback: string,
+): Promise<string> {
+  if (contentArray[0]?.type !== "text") return defaultFallback; // Default string fallback
+
+  if (Array.isArray(contentArray[0]?.content))
+    return contentArray[0]?.content.map((content) => content).join(""); // Always return a string
+
+  return contentArray[0]?.content;
 }
