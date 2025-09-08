@@ -32,7 +32,7 @@ const PromptContainer = styled.div`
   max-width: var(--breakpoint-tablet);
   margin: 0 auto;
 `;
-const PromptWrapper = styled.div`
+const PromptWrapper = styled.form`
   border: var(--measurement-small-30) solid var(--font-color-alpha-10);
   border-radius: var(--measurement-medium-60);
 

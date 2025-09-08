@@ -21,8 +21,6 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { utteranceValueSchema } from "@/schemas/utterances-schema";
 
-import { toast } from "sonner";
-
 const PromptWrapper = styled.form`
   border: var(--measurement-small-30) solid var(--font-color-alpha-10);
   border-radius: var(--measurement-medium-30);
