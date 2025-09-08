@@ -60,8 +60,13 @@ export const invokeCodeAgent = inngest.createFunction(
           projectId: event.data.projectId,
         },
         orderBy: {
-          createdAt: "asc",
+          createdAt: "desc",
         },
+        /**
+         * Limit the context length to avoid hallucination on longer history.
+         * 5 is arbitrary, this can be challenged to improve performance and consistency.
+         */
+        take: 5,
       });
 
       // Push each message to formattedMessages
