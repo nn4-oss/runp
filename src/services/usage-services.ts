@@ -22,8 +22,6 @@ async function getScopePoints(scope: ScopeEnum) {
  */
 export async function getUsageTracker() {
   const user = await getCurrentUserViaTRPC();
-  if (!user) throw new Error("User not found");
-
   const scopePoints = await getScopePoints(user.scope);
 
   return new RateLimiterPrisma({
@@ -40,7 +38,6 @@ export async function getUsageTracker() {
  */
 export async function consumePoints() {
   const { id: userId } = await getCurrentUserViaTRPC();
-  if (!userId) throw new Error("Unauthenticated");
 
   const usageTracker = await getUsageTracker();
   const result = await usageTracker.consume(userId, UTTERANCE_COST);
@@ -53,7 +50,6 @@ export async function consumePoints() {
  */
 export async function getUsageStatus() {
   const { id: userId } = await getCurrentUserViaTRPC();
-  if (!userId) throw new Error("Unauthenticated");
 
   const usageTracker = await getUsageTracker();
   const result = await usageTracker.get(userId);
