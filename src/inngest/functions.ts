@@ -5,13 +5,14 @@ import { Sandbox } from "@e2b/code-interpreter";
 import { inngest } from "./client";
 import { getSandbox } from "./utils";
 
-import { createNetwork } from "@inngest/agent-kit";
+import { createNetwork, createState } from "@inngest/agent-kit";
 import { createCodeAgent } from "./agents";
 
 import { SANDBOX_NAME, SANDBOX_PORT } from "./config/sandbox-variables";
 import { MAX_ITERATION } from "./config/parameters";
 
 import type { AgentState } from "./types";
+import type { Message } from "@inngest/agent-kit";
 
 export const invokeCodeAgent = inngest.createFunction(
   { id: "runp-code-agent-invoke-function" },
@@ -23,6 +24,43 @@ export const invokeCodeAgent = inngest.createFunction(
       const sandbox = await Sandbox.create(SANDBOX_NAME);
       return sandbox.sandboxId;
     });
+
+    /** Handle Agent's Context Memory */
+
+    /** Retrieve and store previous messages */
+    const prevMessages = await step.run("get-previous-messages", async () => {
+      const formattedMessages: Message[] = [];
+
+      // Retrieve project existing messages
+      const messages = await prisma.message.findMany({
+        where: {
+          projectId: event.data.prodjectId,
+        },
+        orderBy: {
+          createdAt: "asc",
+        },
+      });
+
+      // Push each message to formattedMessages
+      for (const message of messages) {
+        formattedMessages.push({
+          type: "text",
+          role: message.role === "ASSISTANT" ? "assistant" : "user",
+          content: message.content,
+        });
+      }
+
+      return formattedMessages;
+    });
+
+    /** Create agent state with previous messages context */
+    const state = createState<AgentState>(
+      {
+        summary: "",
+        files: {},
+      },
+      { messages: prevMessages },
+    );
 
     /* [TODO]: Decrypt and pass the user's oai key */
     // const userId = (event.data as { userId: string } | undefined)?.userId;
@@ -36,6 +74,7 @@ export const invokeCodeAgent = inngest.createFunction(
       name: "runp-code-agent",
       agents: [codeAgent],
       maxIter: MAX_ITERATION, // Limit how many loops the agent can perform
+      defaultState: state, // Load previous messages context as default state
       router: async ({ network }) => {
         const summary = network.state.data.summary;
 
@@ -45,8 +84,8 @@ export const invokeCodeAgent = inngest.createFunction(
       },
     });
 
-    /* Run the code-agent using user's utterance */
-    const result = await network.run(event.data.input);
+    /* Run the code-agent using user's utterance, load previous messages context state */
+    const result = await network.run(event.data.input, { state });
 
     /* Prepare the Sandbox Environment URL that will run the code-agent output */
     const sandboxUrl = await step.run("get-sandbox-url", async () => {
