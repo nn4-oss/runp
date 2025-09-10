@@ -67,45 +67,49 @@ function ProjectsHeader({
           </span>
         </Button>
       </Tooltip>
+
       <Field
         variant="secondary"
         sizing="small"
         readOnly
+        className="fs-medium-10 w-100"
         value={fragment?.sandboxUrl ?? "/"}
-        style={{ width: "100%" }}
+        style={{ textAlign: "center" }}
       />
 
-      <Tooltip content="Open in new tab">
-        <Button
-          disabled={disableIframeInteractions}
-          variant="border"
-          sizing="small"
-          aria-label="Open in new tab"
-          onClick={handleNewTab}
-        >
-          <span className="flex align-center justify-center p-y-small-60">
-            <Icon>
-              <PixelIcon.Open />
-            </Icon>
-          </span>
-        </Button>
-      </Tooltip>
+      <div className="flex align-center g-medium-10">
+        <Tooltip content="Open in new tab">
+          <Button
+            disabled={disableIframeInteractions}
+            variant="border"
+            sizing="small"
+            aria-label="Open in new tab"
+            onClick={handleNewTab}
+          >
+            <span className="flex align-center justify-center p-y-small-60">
+              <Icon>
+                <PixelIcon.Open />
+              </Icon>
+            </span>
+          </Button>
+        </Tooltip>
 
-      <Tooltip content="Refresh page">
-        <Button
-          disabled={disableIframeInteractions}
-          variant="border"
-          sizing="small"
-          aria-label="Refresh page"
-          onClick={handleRefresh}
-        >
-          <span className="flex align-center justify-center p-y-small-60">
-            <Icon>
-              <PixelIcon.Reload />
-            </Icon>
-          </span>
-        </Button>
-      </Tooltip>
+        <Tooltip content="Refresh page">
+          <Button
+            disabled={disableIframeInteractions}
+            variant="border"
+            sizing="small"
+            aria-label="Refresh page"
+            onClick={handleRefresh}
+          >
+            <span className="flex align-center justify-center p-y-small-60">
+              <Icon>
+                <PixelIcon.Reload />
+              </Icon>
+            </span>
+          </Button>
+        </Tooltip>
+      </div>
     </StyledMenu>
   );
 }

@@ -22,7 +22,6 @@ type TreeProps = {
 };
 
 const TreeWrapper = styled(ScrollArea)`
-  background-color: var(--contrast-color);
   border-right: var(--measurement-small-30) solid var(--font-color-alpha-10);
   height: 100%;
 `;
@@ -40,7 +39,7 @@ function Tree({ file, parentPath, selectedValue, onSelect }: TreeProps) {
         aria-current={isFileSelected ? "true" : undefined}
         onClick={() => onSelect?.(currentPath)}
         variant="ghost"
-        sizing="small"
+        sizing="medium"
       >
         <Icon>
           <PixelIcon.File />
@@ -58,15 +57,12 @@ function Tree({ file, parentPath, selectedValue, onSelect }: TreeProps) {
   // Folder case
   return (
     <Accordion.Root>
-      <Accordion className="m-b-medium-30">
-        <Accordion.Trigger value={name} variant="ghost" sizing="small">
+      <Accordion>
+        <Accordion.Trigger value={name} variant="ghost" sizing="medium">
           <Icon>
             <PixelIcon.Folder />
           </Icon>
           {name}
-          <Icon>
-            <PixelIcon.ChevronsVertical />
-          </Icon>
         </Accordion.Trigger>
         <Accordion.Content
           value={name}
@@ -96,11 +92,7 @@ function Tree({ file, parentPath, selectedValue, onSelect }: TreeProps) {
 
 function FilesTree({ files, value, onSelect }: FilesTreeProps) {
   return (
-    <TreeWrapper scrollbar className="p-medium-30">
-      <header className="m-b-medium-30">
-        <p className="fs-medium-10 opacity-default-30">Explorer</p>
-      </header>
-
+    <TreeWrapper scrollbar className="p-x-medium-30 p-y-medium-60">
       {files?.map((file) => {
         const name = Array.isArray(file) ? file[0] : file;
         return (

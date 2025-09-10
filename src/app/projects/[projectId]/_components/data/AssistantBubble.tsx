@@ -12,10 +12,10 @@ import type { BubbleProps } from "../../_types";
 
 const BubbleText = styled.p`
   font-weight: 500;
-  line-height: 1.1;
+  line-height: 1.2;
   word-break: keep-all;
 
-  font-size: var(--fontsize-medium-10) !important;
+  font-size: var(--fontsize-medium-20) !important;
 
   max-width: calc(var(--measurement-large-90) * 1.5);
   width: 100%;

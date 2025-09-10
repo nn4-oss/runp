@@ -7,22 +7,12 @@ import { useRouter } from "next/navigation";
 import { useTRPC } from "@/trpc/client";
 import { useQuery } from "@tanstack/react-query";
 
-import {
-  Avatar,
-  Dialog,
-  Divider,
-  DropdownMenu,
-  ScrollArea,
-} from "@usefui/components";
+import { Avatar, Divider, DropdownMenu, ScrollArea } from "@usefui/components";
 import { Icon, PixelIcon, SocialIcon } from "@usefui/icons";
 import { SignOutButton } from "@clerk/nextjs";
-import { ColorModes, Spinner } from "..";
+import { ColorModes, UsageRange } from "..";
 
 import { formatDuration, intervalToDuration } from "date-fns";
-
-type RangeProps = {
-  $percentage: number;
-};
 
 const StyledAvatar = styled(Avatar)`
   width: var(--measurement-medium-80) !important;
@@ -38,31 +28,6 @@ const PointsWrapper = styled.div`
   background-color: var(--contrast-color);
   border-radius: var(--measurement-medium-30);
   border: var(--measurement-small-30) solid var(--font-color-alpha-10);
-`;
-const RangeContainer = styled.div`
-  background-color: var(--font-color-alpha-10);
-  width: 100%;
-  border-radius: var(--measurement-large-90);
-  height: fit-content;
-`;
-const PointsRange = styled.div<RangeProps>`
-  border-radius: var(--measurement-large-90);
-
-  height: var(--measurement-medium-30);
-  width: ${({ $percentage }) => `${$percentage}%`};
-
-  background-color: var(--color-green);
-
-  &[data-threshold="true"] {
-    background-color: var(--color-orange) !important;
-  }
-
-  &[data-empty="true"] {
-    background-color: var(--color-red) !important;
-  }
-
-  will-change: width;
-  transition: ease-in-out 0.2s;
 `;
 
 function UserAvatar() {
@@ -123,20 +88,11 @@ function UserAvatar() {
                   {usage?.remainingPoints}&nbsp;left
                 </p>
               </hgroup>
-
-              <RangeContainer className="m-b-medium-30">
-                <PointsRange
-                  key={usage?.consumedPoints}
-                  $percentage={Math.min(
-                    100,
-                    Math.max(0, Number(usageMetadata?.percentage) * 100),
-                  )}
-                  data-empty={Boolean(Number(usage?.remainingPoints) === 0)}
-                  data-threshold={Boolean(
-                    Number(usageMetadata?.percentage) >= 0.3,
-                  )}
-                />
-              </RangeContainer>
+              <UsageRange
+                consumedPoints={Number(usage?.consumedPoints)}
+                remainingPoints={Number(usage?.remainingPoints)}
+                percentage={Number(usageMetadata?.percentage)}
+              />
 
               <span className="fs-small-60 opacity-default-30 flex align-center g-medium-10">
                 <Icon>

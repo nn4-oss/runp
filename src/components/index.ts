@@ -18,6 +18,7 @@ export { default as SplitScreen } from "./split-screen";
 export { default as SkeletonLoader } from "./skeleton";
 export { default as Textarea } from "./text-area";
 export { default as UserAvatar } from "./user-avatar";
+export { default as UsageRange } from "./usage-range";
 export { default as UsageBanner } from "./usage-banner";
 
 export { Spinner } from "./spinner";

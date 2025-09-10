@@ -41,15 +41,19 @@ function MessagesHeader({ projectId }: { projectId: string }) {
 
   return (
     <StyledMenu className="w-100 flex g-medium-30 p-x-medium-30 align-center justify-between">
-      <div className="w-100 flex g-medium-10 align-center justify-start">
+      <Truncate className="fs-medium-10">{project.name}</Truncate>
+
+      <div className="flex g-medium-10 align-center justify-start">
         <Dialog.Root>
           <DropdownMenu.Root>
             <DropdownMenu>
               <Tooltip content="Options">
                 <DropdownMenu.Trigger variant="border" sizing="small">
-                  <Icon>
-                    <PixelIcon.EditBox />
-                  </Icon>
+                  <span className="flex align-center justify-center p-y-small-60">
+                    <Icon>
+                      <PixelIcon.EditBox />
+                    </Icon>
+                  </span>
                 </DropdownMenu.Trigger>
               </Tooltip>
 
@@ -93,21 +97,20 @@ function MessagesHeader({ projectId }: { projectId: string }) {
 
           <UpdateNameDialog currentName={project.name} projectId={projectId} />
         </Dialog.Root>
-        <Truncate className="fs-medium-10">{project.name}</Truncate>
-      </div>
-      <Dialog.Root>
-        <Tooltip content="Delete">
-          <Dialog.Trigger variant="border" sizing="small" rawicon>
-            <span className="flex align-center justify-center p-y-small-60">
-              <Icon fill="var(--color-red)">
-                <PixelIcon.Delete />
-              </Icon>
-            </span>
-          </Dialog.Trigger>
-        </Tooltip>
+        <Dialog.Root>
+          <Tooltip content="Delete">
+            <Dialog.Trigger variant="border" sizing="small" rawicon>
+              <span className="flex align-center justify-center p-y-small-60">
+                <Icon>
+                  <PixelIcon.Close />
+                </Icon>
+              </span>
+            </Dialog.Trigger>
+          </Tooltip>
 
-        <DeleteProjectDialog projectId={projectId} />
-      </Dialog.Root>
+          <DeleteProjectDialog projectId={projectId} />
+        </Dialog.Root>
+      </div>
     </StyledMenu>
   );
 }

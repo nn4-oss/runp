@@ -207,8 +207,8 @@ function ProjectsTable({
                   <Dialog.Root>
                     <Dialog.Trigger variant="border" sizing="small" rawicon>
                       <span className="flex align-center justify-center p-y-small-60">
-                        <Icon fill="var(--color-red)">
-                          <PixelIcon.Delete />
+                        <Icon>
+                          <PixelIcon.Close />
                         </Icon>
                       </span>
                     </Dialog.Trigger>
