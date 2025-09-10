@@ -191,7 +191,7 @@ function UpgradeScopeDialog() {
           </span>
         </footer>
       </Dialog>
-      <Dialog.Overlay closeOnInteract />
+      <Dialog.Overlay closeOnInteract={!updateUser.isPending} />
     </Portal>
   );
 }
