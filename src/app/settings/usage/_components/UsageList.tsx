@@ -3,18 +3,16 @@
 import React from "react";
 
 import { FixedHeader } from "@/components";
-import { Button } from "@usefui/components";
+import SubscribeActions from "../../(general)/_components/SubscribeActions";
 
-function PreferencesList() {
+function UsageList() {
   return (
     <section className="w-100 h-100">
       <FixedHeader className="grid">
         <div className="flex justify-between align-center p-y-medium-60 p-x-medium-60">
-          <p className="fs-medium-20">Preferences</p>
+          <p className="fs-medium-20">Usage</p>
 
-          <Button variant="border" sizing="medium">
-            Placeholder
-          </Button>
+          <SubscribeActions />
         </div>
       </FixedHeader>
 
@@ -25,4 +23,4 @@ function PreferencesList() {
   );
 }
 
-export default PreferencesList;
+export default UsageList;

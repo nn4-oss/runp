@@ -1,12 +1,12 @@
 import React from "react";
 
 import { HydrateClient } from "@/trpc/server";
-import PreferencesList from "./_components/PreferencesList";
+import SandboxesList from "./_components/SandboxesList";
 
 async function Page() {
   return (
     <HydrateClient>
-      <PreferencesList />
+      <SandboxesList />
     </HydrateClient>
   );
 }
