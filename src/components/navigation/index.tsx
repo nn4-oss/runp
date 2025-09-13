@@ -4,13 +4,26 @@ import React from "react";
 import styled from "styled-components";
 
 import { useRouter } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import { useTRPC } from "@/trpc/client";
 
 import SignedOutLinks from "./SignedOutLinks";
 import SignedOutActions from "./SignedOutActions";
 import SignedInActions from "./SignedInActions";
 
-import { Page, Button, Badge, Avatar } from "@usefui/components";
-import { Icon, SocialIcon } from "@usefui/icons";
+import {
+  Page,
+  Button,
+  Badge,
+  Dialog,
+  Avatar,
+  Tooltip,
+} from "@usefui/components";
+import { Icon, PixelIcon, SocialIcon } from "@usefui/icons";
+
+import { ScopeEnum } from "generated/prisma";
+import { UpgradeScopeDialog } from "..";
+import { SignedIn } from "@clerk/nextjs";
 
 const StyledMenu = styled(Page.Navigation)`
   border: none !important;
@@ -26,6 +39,9 @@ const BrandAvatar = styled(Avatar)`
 
 function Navigation() {
   const router = useRouter();
+  const trpc = useTRPC();
+
+  const { data: user } = useQuery(trpc.user.get.queryOptions());
 
   return (
     <StyledMenu className="w-100 flex p-x-medium-30 align-center justify-between">
@@ -42,13 +58,38 @@ function Navigation() {
         <SignedOutLinks />
       </div>
 
-      <div className="flex g-medium-30 align-center justify-end w-100">
-        <Button variant="ghost" sizing="small">
-          <Icon viewBox="0 0 15 15">
-            <SocialIcon.Github />
-          </Icon>
-        </Button>
-        <Badge variant="border">&beta;&nbsp;1.0.0</Badge>
+      <div className="flex g-medium-10 align-center justify-end w-100">
+        <SignedIn>
+          {user?.scope === ScopeEnum.FREE && (
+            <Dialog.Root>
+              <Dialog.Trigger variant="primary" sizing="medium">
+                Upgrade
+              </Dialog.Trigger>
+
+              <UpgradeScopeDialog />
+            </Dialog.Root>
+          )}
+        </SignedIn>
+
+        <Tooltip content="Documentation">
+          <Button variant="border" sizing="small">
+            <span className="flex align-center justify-center p-y-small-60">
+              <Icon>
+                <PixelIcon.BookOpen />
+              </Icon>
+            </span>
+          </Button>
+        </Tooltip>
+
+        <Tooltip content="Github">
+          <Button variant="border" sizing="small">
+            <span className="flex align-center justify-center p-y-small-60">
+              <Icon viewBox="0 0 15 15">
+                <SocialIcon.Github />
+              </Icon>
+            </span>
+          </Button>
+        </Tooltip>
 
         <SignedOutActions />
       </div>
