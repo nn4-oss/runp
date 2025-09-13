@@ -3,29 +3,19 @@
 import React from "react";
 import styled from "styled-components";
 
+import { useTRPC } from "@/trpc/client";
+import { useQuery } from "@tanstack/react-query";
 import { usePathname, useRouter } from "next/navigation";
 
 import AppLayout from "./AppLayout";
 
 import { Button, ScrollArea, Toolbar, Tooltip } from "@usefui/components";
 import { AppContainer } from "@/components";
-import { Icon, PixelIcon } from "@usefui/icons";
+import { Icon, PixelIcon, WebIcon } from "@usefui/icons";
 
 const StyledToolbar = styled(Toolbar)`
   background-color: var(--contrast-color) !important;
   min-width: fit-content !important;
-`;
-const LinkItem = styled(Toolbar.Item)`
-  cursor: pointer;
-  padding: var(--measurement-medium-30);
-  border-radius: var(--measurement-medium-30);
-  font-size: var(--fontsize-medium-10);
-
-  will-change: background-color;
-  transition: ease-in-out 0.2s;
-  &:hover {
-    background-color: var(--font-color-alpha-10);
-  }
 `;
 
 const SettingsLinks = [
@@ -33,33 +23,50 @@ const SettingsLinks = [
     icon: <PixelIcon.SlidersVertical />,
     label: "General",
     path: "/settings",
+    disabled: false,
+    availableScopes: ["FREE", "PRO"],
+  },
+  {
+    icon: <WebIcon.Key />,
+    label: "API Keys",
+    path: "/settings/api-keys",
+    disabled: false,
+    availableScopes: ["PRO"],
   },
   {
     icon: <PixelIcon.Trending />,
     label: "Usage",
     path: "/settings/usage",
+    disabled: true,
+    availableScopes: [],
   },
   {
-    icon: <PixelIcon.Lock />,
-    label: "API Keys",
-    path: "/settings/api-keys",
+    icon: <WebIcon.Globe />,
+    label: "Environments",
+    path: "/settings/usage",
+    disabled: true,
+    availableScopes: [],
   },
   {
-    icon: <PixelIcon.LayoutHeader />,
-    label: "Sandboxes",
-    path: "/settings/sandboxes",
+    icon: <PixelIcon.User />,
+    label: "Profile",
+    path: "/settings/profile",
+    disabled: false,
+    availableScopes: ["FREE", "PRO"],
   },
-] as const;
+];
 
 function SettingsLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const trpc = useTRPC();
   const router = useRouter();
   const pathname = usePathname();
 
-  console.log();
+  const { data: user, isPending } = useQuery(trpc.user.get.queryOptions());
+
   return (
     <AppLayout>
       <AppContainer
@@ -67,34 +74,43 @@ function SettingsLayout({
         style={{ position: "relative" }}
       >
         <Toolbar.Root>
-          <StyledToolbar side="left" sizing="small" height="auto">
-            <Toolbar.Section showoncollapse className="grid g-medium-10">
-              {SettingsLinks.map((link) => {
-                const currentPath = pathname
-                  .split("/")
-                  .filter(Boolean)
-                  .join("/");
-                const isCurrentPath = `/${currentPath}` === link.path;
+          {!isPending && user?.scope && (
+            <StyledToolbar side="left" sizing="small" height="auto">
+              <Toolbar.Section showoncollapse className="grid g-medium-10">
+                {SettingsLinks.map((link) => {
+                  const currentPath = pathname
+                    .split("/")
+                    .filter(Boolean)
+                    .join("/");
+                  const isCurrentPath = `/${currentPath}` === link.path;
+                  const userScope = user.scope ?? "FREE";
 
-                console.log({ currentPath, isCurrentPath });
+                  const isDisabled =
+                    link.disabled || !link.availableScopes.includes(userScope);
 
-                return (
-                  <Tooltip key={link.label} content={link.label}>
-                    <Button
-                      variant={isCurrentPath ? "mono" : "border"}
-                      sizing="small"
-                      className="flex align-center g-medium-30"
-                      onMouseDown={() => router.push(link.path)}
-                    >
-                      <span className="flex align-center justify-center p-y-small-60 g-medium-10">
-                        <Icon>{link.icon}</Icon>
-                      </span>
-                    </Button>
-                  </Tooltip>
-                );
-              })}
-            </Toolbar.Section>
-          </StyledToolbar>
+                  const onClick = () => {
+                    if (!isDisabled) router.push(link.path);
+                  };
+
+                  return (
+                    <Tooltip key={link.label} content={link.label}>
+                      <Button
+                        variant={isCurrentPath ? "mono" : "border"}
+                        sizing="small"
+                        className="flex align-center g-medium-30"
+                        disabled={isDisabled}
+                        onMouseDown={onClick}
+                      >
+                        <span className="flex align-center justify-center p-y-small-60 g-medium-10">
+                          <Icon>{link.icon}</Icon>
+                        </span>
+                      </Button>
+                    </Tooltip>
+                  );
+                })}
+              </Toolbar.Section>
+            </StyledToolbar>
+          )}
         </Toolbar.Root>
         <ScrollArea scrollbar>{children}</ScrollArea>
       </AppContainer>
