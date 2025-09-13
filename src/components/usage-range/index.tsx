@@ -1,11 +1,17 @@
 "use client";
 
 import React from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 type RangeProps = {
   $percentage: number;
 };
+
+const RangeAnimation = keyframes`
+  from {
+    width: 0px;
+  }
+`;
 
 const RangeContainer = styled.div`
   background-color: var(--font-color-alpha-10);
@@ -31,6 +37,7 @@ const PointsRange = styled.div<RangeProps>`
 
   will-change: width;
   transition: ease-in-out 0.2s;
+  animation: ${RangeAnimation} 0.75s cubic-bezier(0.075, 0.82, 0.165, 1);
 `;
 
 function UsageRange({
