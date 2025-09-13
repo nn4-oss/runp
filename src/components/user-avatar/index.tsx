@@ -7,7 +7,13 @@ import { useRouter } from "next/navigation";
 import { useTRPC } from "@/trpc/client";
 import { useQuery } from "@tanstack/react-query";
 
-import { Avatar, Divider, DropdownMenu, ScrollArea } from "@usefui/components";
+import {
+  Avatar,
+  Badge,
+  Divider,
+  DropdownMenu,
+  ScrollArea,
+} from "@usefui/components";
 import { Icon, PixelIcon, SocialIcon } from "@usefui/icons";
 import { SignOutButton } from "@clerk/nextjs";
 import { ColorModes, UsageRange } from "..";
@@ -29,6 +35,11 @@ const PointsWrapper = styled.div`
   border-radius: var(--measurement-medium-30);
   border: var(--measurement-small-30) solid var(--font-color-alpha-10);
 `;
+
+const stripLongString = (content?: string) => {
+  if (Number(content?.length) >= 18) return `${content?.substring(0, 18)}..`;
+  else return content;
+};
 
 function UserAvatar() {
   const router = useRouter();
@@ -68,16 +79,27 @@ function UserAvatar() {
         <DropdownMenu.Trigger>
           <StyledAvatar src={user?.imageUrl ?? "/gradient.svg"} />
         </DropdownMenu.Trigger>
+
         <ScrollArea as={DropdownMenu.Content}>
           {user?.name && (
-            <div className="grid p-l-medium-30 p-t-medium-30">
-              <p className="fs-medium-20">{user?.name}</p>
-              <span className="fs-medium-10 opacity-default-60">
-                {user?.email}
-              </span>
+            <header className="grid p-x-medium-30 p-t-medium-30">
+              <div className="flex justify-between align-start g-medium-30">
+                <hgroup className="grid">
+                  <p className="fs-medium-10">
+                    {stripLongString(String(user?.name))}
+                  </p>
+                  <span className="fs-small-60 opacity-default-60">
+                    {stripLongString(String(user.email))}
+                  </span>
+                </hgroup>
+
+                <Badge variant="secondary">
+                  <span className="fs-small-50">{user.scope}</span>
+                </Badge>
+              </div>
 
               <Divider className="m-y-medium-50" />
-            </div>
+            </header>
           )}
 
           {usage && usageMetadata && (
@@ -105,14 +127,21 @@ function UserAvatar() {
           )}
 
           <DropdownMenu.Item
-            className="w-100 flex align-center g-medium-30"
-            onMouseDown={() => router.push("/profile")}
+            className="w-100 flex align-center justify-between g-medium-30"
+            onMouseDown={() => router.push("/settings/profile")}
           >
-            <Icon>
-              <PixelIcon.User />
+            <div className="flex align-center g-medium-30">
+              <Icon>
+                <PixelIcon.User />
+              </Icon>
+              Profile
+            </div>
+
+            <Icon viewBox="0 0 18 18">
+              <SocialIcon.Clerk />
             </Icon>
-            Profile
           </DropdownMenu.Item>
+
           <DropdownMenu.Item
             className="w-100 flex align-center g-medium-30"
             onMouseDown={() => router.push("/settings")}
@@ -121,41 +150,6 @@ function UserAvatar() {
               <PixelIcon.Sliders />
             </Icon>
             Settings
-          </DropdownMenu.Item>
-
-          <DropdownMenu.Item
-            className="flex align-center g-medium-30"
-            onMouseDown={() => router.push("/docs/introduction")}
-          >
-            <span className="flex align-center justify-center">
-              <Icon>
-                <PixelIcon.BookOpen />
-              </Icon>
-            </span>
-            Documentation
-            <div className="flex w-100 justify-end">
-              <Icon>
-                <PixelIcon.Open />
-              </Icon>
-            </div>
-          </DropdownMenu.Item>
-          <Divider className="m-y-medium-10" />
-
-          <DropdownMenu.Item
-            className="flex align-center g-medium-30"
-            onMouseDown={() => router.push("/settings/api-keys")}
-          >
-            <span className="flex align-center justify-center">
-              <Icon>
-                <SocialIcon.OpenAi />
-              </Icon>
-            </span>
-            API&nbsp;Keys
-            <div className="flex w-100 justify-end">
-              <Icon>
-                <PixelIcon.Open />
-              </Icon>
-            </div>
           </DropdownMenu.Item>
 
           <Divider className="m-y-medium-10" />
