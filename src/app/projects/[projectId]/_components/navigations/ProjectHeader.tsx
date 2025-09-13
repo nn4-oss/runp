@@ -59,7 +59,7 @@ function ProjectsHeader({
           aria-label={`Show ${switchViewLabel}`}
           onClick={handleViewChange}
         >
-          <span className="flex align-center justify-center p-y-small-60">
+          <span className="flex align-center justify-center p-y-small-30">
             <Icon>
               {currentView === "code" && <PixelIcon.Eye />}
               {currentView === "preview" && <WebIcon.DataObject />}
@@ -72,9 +72,9 @@ function ProjectsHeader({
         variant="secondary"
         sizing="small"
         readOnly
-        className="fs-medium-10 w-100"
+        className="fs-medium-10"
         value={fragment?.sandboxUrl ?? "/"}
-        style={{ textAlign: "center" }}
+        style={{ textAlign: "center", width: "100%" }}
       />
 
       <div className="flex align-center g-medium-10">

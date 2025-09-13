@@ -49,9 +49,9 @@ function MessagesHeader({ projectId }: { projectId: string }) {
             <DropdownMenu>
               <Tooltip content="Options">
                 <DropdownMenu.Trigger variant="border" sizing="small">
-                  <span className="flex align-center justify-center p-y-small-60">
+                  <span className="flex align-center justify-center p-y-small-30">
                     <Icon>
-                      <PixelIcon.EditBox />
+                      <PixelIcon.SlidersVertical />
                     </Icon>
                   </span>
                 </DropdownMenu.Trigger>
