@@ -8,7 +8,7 @@ import { TRPCError } from "@trpc/server";
 import { scopesMapping, DEFAULT_SCOPE } from "./tamper-resistance";
 import { symetricEncryption } from "./encryption";
 
-import type { ScopeEnum } from "generated/prisma";
+import { generateSlug } from "random-word-slugs";
 
 /**
  * Ensures the user exists in both Clerk and DB.
@@ -54,7 +54,11 @@ export async function ensureUserInDatabase(userId: string) {
           null,
         name:
           [clerkUser.firstName, clerkUser.lastName].filter(Boolean).join(" ") ||
-          null,
+          `Anonymous ${generateSlug(1, {
+            categories: {
+              noun: ["animals"],
+            },
+          })}`, // Ensure user name
         imageUrl: clerkUser.imageUrl,
         scope: DEFAULT_SCOPE,
         scopeKey: symetricEncryption(scopesMapping[DEFAULT_SCOPE]),
