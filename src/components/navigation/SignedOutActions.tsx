@@ -12,12 +12,12 @@ function SignedOutActions() {
       <span className="opacity-default-10">/</span>
 
       <SignInButton>
-        <ReflectiveButton variant="border" sizing="small">
+        <ReflectiveButton variant="border" sizing="medium">
           Sign&nbsp;In
         </ReflectiveButton>
       </SignInButton>
       <SignUpButton>
-        <Button variant="primary" sizing="small">
+        <Button variant="primary" sizing="medium">
           Sign&nbsp;Up
         </Button>
       </SignUpButton>

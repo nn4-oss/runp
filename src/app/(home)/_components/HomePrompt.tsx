@@ -22,8 +22,6 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { utteranceValueSchema } from "@/schemas/utterances-schema";
 
-import { toast } from "sonner";
-
 const PromptContainer = styled.div`
   display: flex;
   flex-direction: column;

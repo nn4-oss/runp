@@ -2,31 +2,30 @@
 
 import React from "react";
 
-import { Tooltip } from "@usefui/components";
-import { Icon, PixelIcon, SocialIcon } from "@usefui/icons";
-import { ReflectiveButton } from "@/components";
+import { Badge, Tooltip } from "@usefui/components";
+import { Icon, SocialIcon } from "@usefui/icons";
 
 function PromptOptions() {
   return (
     <div className="flex align-center g-medium-10">
       <Tooltip content="gpt-4.1">
-        <ReflectiveButton variant="border" sizing="small">
+        <Badge variant="border">
           <span className="p-y-small-60 flex align-center justify-center">
             <Icon>
               <SocialIcon.OpenAi />
             </Icon>
           </span>
-        </ReflectiveButton>
+        </Badge>
       </Tooltip>
-      <Tooltip content="Prompt templates">
-        <ReflectiveButton variant="border" sizing="small">
+      {/* <Tooltip content="Prompt templates">
+        <Badge variant="border">
           <span className="p-y-small-60 flex align-center justify-center">
             <Icon>
               <PixelIcon.Script />
             </Icon>
           </span>
-        </ReflectiveButton>
-      </Tooltip>
+        </Badge>
+      </Tooltip> */}
     </div>
   );
 }
