@@ -60,11 +60,7 @@ function ProjectsList() {
   const hasData = tableData.length !== 0;
 
   return (
-    <AppContainer
-      className="h-100 w-100 "
-      scrollbar
-      style={{ position: "relative" }}
-    >
+    <AppContainer className="w-100 h-100" scrollbar>
       <FixedHeader className="grid">
         <div className="flex justify-between align-center p-y-medium-60 p-x-medium-60">
           <p className="fs-medium-20">
