@@ -24,7 +24,7 @@ function GeneralSettings() {
   const isFreeScope = user?.scope === "FREE";
 
   return (
-    <section className="grid w-100 g-medium-30 p-b-large-10">
+    <section className="grid w-100 g-medium-30 ">
       <UsageSettings />
       <LLMSettings isFreeScope={isFreeScope} />
       <PreferencesSettings />

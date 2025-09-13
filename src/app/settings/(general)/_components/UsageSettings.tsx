@@ -8,17 +8,20 @@ import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import SubscribeActions from "./SubscribeActions";
 
-import { UsageRange, SkeletonLoader } from "@/components";
+import { UsageRange, SkeletonLoader, Spinner } from "@/components";
 import { BorderWrapper } from "./GeneralSettings";
 import { Icon, PixelIcon } from "@usefui/icons";
 
 import { formatDuration, intervalToDuration } from "date-fns";
 import { POINTS_PER_SCOPE } from "@/utils/scope-features";
+import { Divider } from "@usefui/components";
 
 function UsageSettings() {
   const trpc = useTRPC();
 
-  const { data: user } = useQuery(trpc.user.get.queryOptions());
+  const { data: user, isPending: isUserPending } = useQuery(
+    trpc.user.get.queryOptions(),
+  );
   const { data: metadata } = useQuery(trpc.usage.getMetadata.queryOptions());
   const { data: usage, isPending: isUsagePending } = useQuery(
     trpc.usage.status.queryOptions(),
@@ -51,33 +54,41 @@ function UsageSettings() {
   return (
     <BorderWrapper className="p-medium-60">
       <div className="grid g-medium-60">
-        <hgroup className="flex g-medium-10 align-start justify-between">
-          <div className=" grid g-medium-10">
-            <h6 className="fs-medium-20">Usage</h6>
-            <div>
-              <p className="fs-medium-10 opacity-default-60">
-                You are currently using the&nbsp;
-                <b>{user?.scope.toLowerCase() ?? "FREE"}</b>
-                &nbsp;plan.
-              </p>
-              <p className="flex  g-medium-10 fs-medium-10 opacity-default-60">
-                Compare plans and options on our
-                <Link
-                  href="/pricing"
-                  target="_blank"
-                  className="flex align-center g-medium-10"
-                >
-                  pricing page
-                  <Icon>
-                    <PixelIcon.Open />
-                  </Icon>
-                </Link>
-              </p>
-            </div>
+        {isUserPending && (
+          <div className="flex justify-between align-start g-large-10">
+            <SkeletonLoader />
+            <Spinner />
           </div>
+        )}
+        {!isUserPending && (
+          <hgroup className="flex g-medium-10 align-start justify-between">
+            <div className=" grid g-medium-10">
+              <h6 className="fs-medium-20">Usage</h6>
+              <div>
+                <p className="fs-medium-10 opacity-default-60">
+                  You are currently using the&nbsp;
+                  <b>{user?.scope.toLowerCase()}</b>
+                  &nbsp;plan.
+                </p>
+                <p className="flex  g-medium-10 fs-medium-10 opacity-default-60">
+                  Compare plans and options on our
+                  <Link
+                    href="/pricing"
+                    target="_blank"
+                    className="flex align-center g-medium-10"
+                  >
+                    pricing page
+                    <Icon>
+                      <PixelIcon.Open />
+                    </Icon>
+                  </Link>
+                </p>
+              </div>
+            </div>
 
-          <SubscribeActions />
-        </hgroup>
+            <SubscribeActions />
+          </hgroup>
+        )}
 
         <div>
           {displayUsage && (
@@ -108,6 +119,21 @@ function UsageSettings() {
               </React.Fragment>
             )}
           </div>
+
+          <Divider className="m-y-medium-50" />
+          <p className="flex  g-medium-10 fs-medium-10 opacity-default-60">
+            See the detailed view on the
+            <Link
+              href="/settings/usage"
+              target="_blank"
+              className="flex align-center g-medium-10"
+            >
+              details page
+              <Icon>
+                <PixelIcon.Open />
+              </Icon>
+            </Link>
+          </p>
         </div>
       </div>
     </BorderWrapper>

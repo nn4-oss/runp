@@ -1,8 +1,9 @@
 "use client";
 
 import React from "react";
-import { Badge, Dialog, Table, Tooltip } from "@usefui/components";
+import styled from "styled-components";
 
+import { Badge, Dialog, Table, Tooltip } from "@usefui/components";
 import { Icon, PixelIcon } from "@usefui/icons";
 import {
   CopyCode,
@@ -14,6 +15,10 @@ import { format, formatDistanceToNow } from "date-fns";
 import { maskKey } from "@/utils/data-tables";
 
 import type { ThirdPartyServiceType } from "generated/prisma";
+
+const StyledTable = styled(Table)`
+  background-color: var(--contrast-color);
+`;
 
 function CredentialsTable({
   data,
@@ -32,7 +37,7 @@ function CredentialsTable({
   }[];
 }) {
   return (
-    <Table className="w-100">
+    <StyledTable className="w-100">
       <Table.Body>
         {data.map((credential) => {
           const createdAt = format(credential.createdAt, "dd/MM/yyyy");
@@ -138,7 +143,7 @@ function CredentialsTable({
           );
         })}
       </Table.Body>
-    </Table>
+    </StyledTable>
   );
 }
 

@@ -60,7 +60,7 @@ function LLMSettings({ isFreeScope }: { isFreeScope: boolean }) {
         </hgroup>
 
         <Checkbox.Root>
-          <Checkbox disabled sizing="medium">
+          <Checkbox disabled={isFreeScope} sizing="medium">
             <Checkbox.Indicator />
           </Checkbox>
         </Checkbox.Root>
@@ -90,7 +90,11 @@ function LLMSettings({ isFreeScope }: { isFreeScope: boolean }) {
         <div className="w-100 flex justify-end align-end">
           <DropdownMenu.Root>
             <DropdownMenu>
-              <DropdownMenu.Trigger variant="border" sizing="medium" disabled>
+              <DropdownMenu.Trigger
+                variant="border"
+                sizing="medium"
+                disabled={isFreeScope}
+              >
                 <span>
                   <Icon>
                     <SocialIcon.OpenAi />
@@ -131,7 +135,7 @@ function LLMSettings({ isFreeScope }: { isFreeScope: boolean }) {
 
         <form>
           <TextareaLg
-            disabled
+            disabled={isFreeScope}
             className="p-medium-30"
             placeholder="e.g. Use GSAP for animation. Always include Dark Mode support..."
           />
@@ -139,7 +143,7 @@ function LLMSettings({ isFreeScope }: { isFreeScope: boolean }) {
       </div>
 
       <footer className="w-100 flex justify-end align-center">
-        <ReflectiveButton variant="mono" sizing="medium">
+        <ReflectiveButton variant="mono" sizing="medium" disabled={isFreeScope}>
           Save
         </ReflectiveButton>
       </footer>
