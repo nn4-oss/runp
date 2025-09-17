@@ -10,6 +10,7 @@ export const usageRouter = createTRPCRouter({
       const result = await getUsageStatus();
       return result;
     } catch (error) {
+      console.error("UsageRouter", error);
       return null;
     }
   }),
@@ -35,6 +36,7 @@ export const usageRouter = createTRPCRouter({
         percentage: percentage,
       };
     } catch (error) {
+      console.error("UsageRouter", error);
       return null;
     }
   }),
