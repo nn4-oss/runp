@@ -55,9 +55,8 @@ function HomePrompt() {
   const router = useRouter();
   const trpc = useTRPC();
   const queryClient = useQueryClient();
-  const shortcutControls = useKeyPress("Enter", true, "metaKey");
+  const shortcutControls = useKeyPress("Enter", true, "ctrlKey");
 
-  const { data: user } = useQuery(trpc.user.get.queryOptions());
   const { data: usage } = useQuery(trpc.usage.status.queryOptions());
   const showUsageBanner = !!usage && showUsage;
 
@@ -139,7 +138,7 @@ function HomePrompt() {
           <div className="flex align-center g-medium-30">
             <kbd>
               <span className="fs-small-50 opacity-default-30">
-                &#8984;&nbsp;+&nbsp;Enter
+                Ctrl&nbsp;+&nbsp;Enter
               </span>
             </kbd>
 
@@ -166,7 +165,6 @@ function HomePrompt() {
       {showUsageBanner && (
         <div className="m-y-medium-30 w-100">
           <UsageBanner
-            scope={user?.scope ?? "FREE"}
             points={usage.remainingPoints}
             beforeNext={usage.msBeforeNext}
           />

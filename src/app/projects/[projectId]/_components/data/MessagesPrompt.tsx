@@ -44,7 +44,7 @@ const formSchema = z.object({
 
 function MessagesPrompt({ projectId }: { projectId: string }) {
   const [isFocused, setIsFocused] = React.useState<boolean>(false);
-  const shortcutControls = useKeyPress("Enter", true, "metaKey");
+  const shortcutControls = useKeyPress("Enter", true, "ctrlKey");
 
   const trpc = useTRPC();
   const queryClient = useQueryClient();
@@ -63,7 +63,7 @@ function MessagesPrompt({ projectId }: { projectId: string }) {
         );
       },
 
-      onError: (error) => {
+      onError: () => {
         // toast.error(error.message);
         // if (error.data?.code === "TOO_MANY_REQUESTS") {
         //   toast.error("Rate limit exceeded");
@@ -72,9 +72,7 @@ function MessagesPrompt({ projectId }: { projectId: string }) {
     }),
   );
 
-  const { data: user } = useQuery(trpc.user.get.queryOptions());
   const { data: usage } = useQuery(trpc.usage.status.queryOptions());
-
   const showUsageBanner = !!usage;
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -129,7 +127,6 @@ function MessagesPrompt({ projectId }: { projectId: string }) {
       {showUsageBanner && (
         <div className="w-100 m-b-medium-30">
           <UsageBanner
-            scope={user?.scope ?? "FREE"}
             points={usage.remainingPoints}
             beforeNext={usage.msBeforeNext}
           />
@@ -142,7 +139,7 @@ function MessagesPrompt({ projectId }: { projectId: string }) {
         <div className="flex align-center g-medium-30">
           <kbd>
             <span className="fs-small-50 opacity-default-30">
-              &#8984;&nbsp;+&nbsp;Enter
+              Ctrl&nbsp;+&nbsp;Enter
             </span>
           </kbd>
 
