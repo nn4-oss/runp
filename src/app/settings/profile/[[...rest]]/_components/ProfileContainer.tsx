@@ -3,7 +3,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { Badge, Button, Page } from "@usefui/components";
+import { Button, Page } from "@usefui/components";
 import { UserProfile } from "@clerk/nextjs";
 import { Spinner, FixedHeader } from "@/components";
 import { Icon, SocialIcon } from "@usefui/icons";

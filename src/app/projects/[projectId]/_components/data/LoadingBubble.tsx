@@ -3,7 +3,6 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
 
-import { Badge } from "@usefui/components";
 import { AnimatedAgent } from "@/components";
 
 const Blink = keyframes`

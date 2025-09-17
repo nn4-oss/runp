@@ -2,7 +2,7 @@
 
 import React from "react";
 
-import { Badge, Dialog, Sheet, Tooltip } from "@usefui/components";
+import { Sheet, Tooltip } from "@usefui/components";
 import { CreateCredentialDialog } from "@/components";
 import { Icon, PixelIcon } from "@usefui/icons";
 
