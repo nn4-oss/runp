@@ -18,8 +18,7 @@ import {
 
 /**
  * IMPORTANT
- * Create a stable getter for the query client that will
- * return the same client during the same request.
+ * Create a stable getter for the query client that will return the same client during the same request.
  */
 export const getQueryClient = cache(makeQueryClient);
 
@@ -37,23 +36,4 @@ export function HydrateClient(props: { children: React.ReactNode }) {
       {props.children}
     </HydrationBoundary>
   );
-}
-
-export function prefetch<T extends ReturnType<TRPCQueryOptions<ResolverDef>>>(
-  queryOptions: T,
-) {
-  const queryClient = getQueryClient();
-  if (queryOptions.queryKey[1]?.type === "infinite") {
-    void queryClient.prefetchInfiniteQuery(
-      queryOptions as FetchInfiniteQueryOptions<
-        unknown,
-        Error,
-        unknown,
-        readonly unknown[],
-        unknown
-      >,
-    );
-  } else {
-    void queryClient.prefetchQuery(queryOptions);
-  }
 }

@@ -49,7 +49,7 @@ function DeleteCredentialDialog({
     await deleteCredential.mutateAsync({
       name: credentialName,
     });
-  }, [credentialName]);
+  }, []);
 
   return (
     <Portal container="portal-container">

@@ -47,8 +47,7 @@ function MessagesStream({
     m.role === MessageRole.ASSISTANT;
 
   const lastAssistantMessage =
-    (messages as any).findLast?.(predicate) ??
-    [...messages].reverse().find(predicate);
+    messages.findLast?.(predicate) ?? [...messages].reverse().find(predicate);
 
   /** Reset Auto-Fetch is lastMessage is from assistant */
   React.useEffect(() => {

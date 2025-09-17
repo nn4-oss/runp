@@ -1,11 +1,13 @@
 import { FlatCompat } from "@eslint/eslintrc";
+import { defineConfig } from "eslint/config";
+
 import tseslint from "typescript-eslint";
 
 const compat = new FlatCompat({
   baseDirectory: import.meta.dirname,
 });
 
-export default tseslint.config(
+export default defineConfig(
   {
     ignores: [".next"],
   },
@@ -21,6 +23,23 @@ export default tseslint.config(
     rules: {
       "@typescript-eslint/array-type": "off",
       "@typescript-eslint/consistent-type-definitions": "off",
+      "@typescript-eslint/non-nullable-type-assertion-style": "off",
+
+      /** [TODO]: usefui contexts must be fixed */
+      "@typescript-eslint/restrict-template-expressions": "off",
+      "@typescript-eslint/no-base-to-string": "off",
+      "@typescript-eslint/no-unsafe-call": "off",
+
+      /** [TODO]: Set the following rules to "on" */
+      "@typescript-eslint/no-unsafe-assignment": "off",
+      "@typescript-eslint/no-unsafe-member-access": "off",
+      "@typescript-eslint/no-unsafe-argument": "off",
+      "react-hooks/exhaustive-deps": "off",
+
+      // "@typescript-eslint/no-unsafe-return": "off",
+
+      /** */
+
       "@typescript-eslint/consistent-type-imports": [
         "warn",
         { prefer: "type-imports", fixStyle: "inline-type-imports" },

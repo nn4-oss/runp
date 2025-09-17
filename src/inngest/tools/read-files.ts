@@ -1,4 +1,5 @@
 import { getSandbox } from "../utils";
+import type { GetStepTools, Inngest } from "inngest";
 
 /**
  * Get the updated list of files array;
@@ -13,7 +14,7 @@ export default async function readFilesAgentToolHandler({
   sandboxId,
 }: {
   files: string[];
-  step: any;
+  step?: GetStepTools<Inngest.Any>;
   sandboxId: string;
 }) {
   return await step?.run("readFiles", async () => {
@@ -32,7 +33,7 @@ export default async function readFilesAgentToolHandler({
        */
       return JSON.stringify(contents);
     } catch (error) {
-      return `Error: ${error}`;
+      return `Error: ${error as string}`;
     }
   });
 }

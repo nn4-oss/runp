@@ -38,11 +38,10 @@ const Banner = styled(Badge)`
 
 type UsageBannerProps = {
   points: number;
-  scope: string;
   beforeNext: number;
 };
 
-function UsageBanner({ scope, points, beforeNext }: UsageBannerProps) {
+function UsageBanner({ points, beforeNext }: UsageBannerProps) {
   const [show, setShow] = React.useState(true);
 
   const trpc = useTRPC();

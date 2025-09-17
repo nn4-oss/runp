@@ -68,6 +68,35 @@ function LLMSettings({ isFreeScope }: { isFreeScope: boolean }) {
 
       <Divider className="m-y-medium-50" />
 
+      <div className="flex align-center justify-between g-medium-10">
+        <hgroup className="w-100 grid g-medium-10">
+          <div className="flex g-medium-10 align-center">
+            <h6 className="fs-medium-20">E2E Tests</h6>
+            {isFreeScope && (
+              <Badge
+                variant="warning"
+                shape="round"
+                className="fs-small-60 p-b-small-10"
+              >
+                Runp Pro
+              </Badge>
+            )}
+          </div>
+
+          <p className="fs-medium-10 opacity-default-60">
+            Automatically generate End-to-End test cases for your features.
+          </p>
+        </hgroup>
+
+        <Checkbox.Root>
+          <Checkbox disabled={isFreeScope} sizing="medium">
+            <Checkbox.Indicator />
+          </Checkbox>
+        </Checkbox.Root>
+      </div>
+
+      <Divider className="m-y-medium-50" />
+
       <div className="flex align-center justify-between g-medium-60">
         <hgroup className="w-100 grid g-medium-10">
           <div className="flex g-medium-10 align-center">

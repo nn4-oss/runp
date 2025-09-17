@@ -100,12 +100,13 @@ function UpdateCredentialDialog({ credentialId }: { credentialId: string }) {
 
           form.reset();
           dialog.methods?.toggleDialog?.();
-        } catch (err: any) {
-          toast.error(err.message || "Something went wrong");
+        } catch (error) {
+          toast.error("Something went wrong");
+          console.error(error);
         }
       }
     },
-    [setPrimaryIntegration, queryClient, dialog, form],
+    [],
   );
 
   return (

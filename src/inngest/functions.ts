@@ -155,7 +155,7 @@ export const invokeCodeAgent = inngest.createFunction(
       if (isError) {
         return await prisma.message.create({
           data: {
-            projectId: event.data.projectId,
+            projectId: event.data.projectId as string,
             content: "Something went wrong, please try again.",
             role: "ASSISTANT",
             type: "ERROR",
@@ -165,7 +165,7 @@ export const invokeCodeAgent = inngest.createFunction(
 
       /** Auto-update project's title after an update */
       await autoUpdateProjectTitle({
-        projectId: event.data.projectId,
+        projectId: event.data.projectId as string,
         title: titleContent,
       });
 

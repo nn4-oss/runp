@@ -3,21 +3,29 @@
 import React from "react";
 
 import { useTRPC } from "@/trpc/client";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
 import CredentialsListActions from "./CredentialsListActions";
 import CredentialsTable from "./CredentialsTable";
 
-import { FixedHeader } from "@/components";
+import { FixedHeader, Spinner } from "@/components";
 import { Page } from "@usefui/components";
 
 function CredentialsList() {
   const trpc = useTRPC();
-  const { data: credentials } = useSuspenseQuery(
+  const { data: credentials, isPending } = useQuery(
     trpc.credentials.getMany.queryOptions(),
   );
 
-  const hasData = credentials?.length !== 0;
+  if (isPending) {
+    return (
+      <Page.Content className="w-100 h-100 flex align-center justify-center">
+        <Spinner />
+      </Page.Content>
+    );
+  }
+
+  const hasData = credentials && credentials?.length !== 0;
 
   return (
     <Page.Content className="w-100 h-100" scrollbar>

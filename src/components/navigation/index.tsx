@@ -11,14 +11,7 @@ import SignedOutLinks from "./SignedOutLinks";
 import SignedOutActions from "./SignedOutActions";
 import SignedInActions from "./SignedInActions";
 
-import {
-  Page,
-  Button,
-  Badge,
-  Dialog,
-  Avatar,
-  Tooltip,
-} from "@usefui/components";
+import { Page, Button, Dialog, Avatar, Tooltip } from "@usefui/components";
 import { Icon, PixelIcon, SocialIcon } from "@usefui/icons";
 
 import { ScopeEnum } from "generated/prisma";
@@ -72,7 +65,7 @@ function Navigation() {
         </SignedIn>
 
         <Tooltip content="Documentation">
-          <Button variant="border" sizing="small">
+          <Button variant="border" sizing="small" disabled>
             <span className="flex align-center justify-center p-y-small-60">
               <Icon>
                 <PixelIcon.BookOpen />
@@ -82,7 +75,17 @@ function Navigation() {
         </Tooltip>
 
         <Tooltip content="Github">
-          <Button variant="border" sizing="small">
+          <Button
+            variant="border"
+            sizing="small"
+            onClick={() =>
+              window.open(
+                "https://github.com/nn4-oss/runp",
+                "_blank",
+                "noopener,noreferrer",
+              )
+            }
+          >
             <span className="flex align-center justify-center p-y-small-60">
               <Icon viewBox="0 0 15 15">
                 <SocialIcon.Github />

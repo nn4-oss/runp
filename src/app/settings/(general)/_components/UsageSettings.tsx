@@ -11,10 +11,10 @@ import SubscribeActions from "./SubscribeActions";
 import { UsageRange, SkeletonLoader, Spinner } from "@/components";
 import { BorderWrapper } from "./GeneralSettings";
 import { Icon, PixelIcon } from "@usefui/icons";
+import { Divider } from "@usefui/components";
 
 import { formatDuration, intervalToDuration } from "date-fns";
 import { POINTS_PER_SCOPE } from "@/utils/scope-features";
-import { Divider } from "@usefui/components";
 
 function UsageSettings() {
   const trpc = useTRPC();

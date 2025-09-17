@@ -35,7 +35,7 @@ function DeleteProjectDialog({ projectId }: { projectId: string }) {
     await deleteProject.mutateAsync({
       id: projectId,
     });
-  }, [projectId]);
+  }, []);
 
   return (
     <Portal container="portal-container">

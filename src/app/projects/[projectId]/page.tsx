@@ -1,7 +1,7 @@
 import React from "react";
 
 import ProjectEditor from "./_components/containers/ProjectEditor";
-import { HydrateClient, prefetch, trpc } from "@/trpc/server";
+import { HydrateClient } from "@/trpc/server";
 
 interface Props {
   params: Promise<{
@@ -11,9 +11,6 @@ interface Props {
 
 async function Page({ params }: Props) {
   const { projectId } = await params;
-
-  prefetch(trpc.projects.getUnique.queryOptions({ id: projectId }));
-  prefetch(trpc.messages.getMany.queryOptions({ projectId }));
 
   return (
     <HydrateClient>

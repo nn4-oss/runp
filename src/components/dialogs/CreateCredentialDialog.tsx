@@ -116,11 +116,11 @@ function CreateCredentialDialog() {
         await queryClient.invalidateQueries(
           trpc.integrations.getMany.queryOptions(),
         );
-
         form.reset();
         sheet.methods?.toggle?.();
-      } catch (err: any) {
-        toast.error(err.message || "Something went wrong");
+      } catch (error) {
+        console.error(error);
+        toast.error("Something went wrong");
       }
     },
     [

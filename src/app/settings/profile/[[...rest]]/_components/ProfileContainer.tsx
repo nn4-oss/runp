@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { Button, Page } from "@usefui/components";
 import { UserProfile } from "@clerk/nextjs";
 import { Spinner, FixedHeader } from "@/components";
-import { Icon, SocialIcon } from "@usefui/icons";
+import { Icon, PixelIcon, SocialIcon } from "@usefui/icons";
 
 const ClerkProfileWrapper = styled.div`
   .cl-rootBox,
@@ -33,6 +33,9 @@ function ProfileContainer() {
               <SocialIcon.Clerk />
             </Icon>
             Powered by Clerk
+            <Icon>
+              <PixelIcon.Open />
+            </Icon>
           </Button>
         </div>
       </FixedHeader>

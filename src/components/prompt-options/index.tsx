@@ -8,7 +8,7 @@ import { Icon, SocialIcon } from "@usefui/icons";
 function PromptOptions() {
   return (
     <div className="flex align-center g-medium-10">
-      <Tooltip content="gpt-4.1">
+      <Tooltip content="OpenAI-gpt-4.1">
         <Badge variant="border">
           <span className="p-y-small-60 flex align-center justify-center">
             <Icon>
