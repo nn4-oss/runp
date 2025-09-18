@@ -10,7 +10,7 @@ function CredentialsListActions() {
   return (
     <div className="flex align-center g-medium-10">
       <Sheet.Root>
-        <Tooltip content="&#8963;&nbsp;+&nbsp;A">
+        <Tooltip content="Shortcut: ctrl&nbsp;+&nbsp;a">
           <Sheet.Trigger variant="border" sizing="medium">
             <Icon>
               <PixelIcon.Plus />
