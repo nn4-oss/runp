@@ -110,9 +110,6 @@ function UpgradeScopeDialog() {
                 <Tooltip content="Available Soon">
                   <Tabs.Trigger sizing="small" value={ScopeEnum.PRO}>
                     Pro
-                    <Badge variant="meta" className="fs-small-50" shape="round">
-                      WIP
-                    </Badge>
                   </Tabs.Trigger>
                 </Tooltip>
               </div>
