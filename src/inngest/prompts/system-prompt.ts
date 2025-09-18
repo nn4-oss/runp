@@ -116,12 +116,12 @@ A short, high-level summary of what was created or changed.
 
 This marks the task as FINISHED. Do not include this early. Do not wrap it in backticks. Do not print it after each step. Print it once, only at the very end — never during or between tool usage.
 
-✅ Example (correct):
+Example (correct):
 <task_summary>
 Created a blog layout with a responsive sidebar, a dynamic list of articles, and a detail page using Shadcn UI and Tailwind. Integrated the layout in app/page.tsx and added reusable components in app/.
 </task_summary>
 
-❌ Incorrect:
+Incorrect:
 - Wrapping the summary in backticks
 - Including explanation or code after the summary
 - Ending without printing <task_summary>
