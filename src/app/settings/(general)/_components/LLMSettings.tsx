@@ -97,52 +97,6 @@ function LLMSettings({ isFreeScope }: { isFreeScope: boolean }) {
 
       <Divider className="m-y-medium-50" />
 
-      <div className="flex align-center justify-between g-medium-60">
-        <hgroup className="w-100 grid g-medium-10">
-          <div className="flex g-medium-10 align-center">
-            <h6 className="fs-medium-20">LLM Model</h6>
-            {isFreeScope && (
-              <Badge
-                variant="warning"
-                shape="round"
-                className="fs-small-60 p-b-small-10"
-              >
-                Runp Pro
-              </Badge>
-            )}
-          </div>
-          <p className="fs-medium-10 opacity-default-60">
-            Define which LLM model is used by Runp.
-          </p>
-        </hgroup>
-
-        <div className="w-100 flex justify-end align-end">
-          <DropdownMenu.Root>
-            <DropdownMenu>
-              <DropdownMenu.Trigger
-                variant="border"
-                sizing="medium"
-                disabled={isFreeScope}
-              >
-                <span>
-                  <Icon>
-                    <SocialIcon.OpenAi />
-                  </Icon>
-                </span>
-                gpt-4.1
-              </DropdownMenu.Trigger>
-              <DropdownMenu.Content sizing="small">
-                {MODELS.map((model) => (
-                  <DropdownMenu.Item key={model}>{model}</DropdownMenu.Item>
-                ))}
-              </DropdownMenu.Content>
-            </DropdownMenu>
-          </DropdownMenu.Root>
-        </div>
-      </div>
-
-      <Divider className="m-y-medium-50" />
-
       <div className="grid g-medium-60 m-b-medium-60">
         <hgroup className="w-100 grid g-medium-10">
           <div className="flex g-medium-10 align-center">

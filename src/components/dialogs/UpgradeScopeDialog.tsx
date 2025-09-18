@@ -171,9 +171,8 @@ function UpgradeScopeDialog() {
                   sizing="medium"
                   style={{ width: "100%" }}
                   variant={isFreeScope ? "primary" : "mono"}
-                  disabled
-                  // disabled={!isFreeScope || updateUser.isPending}
-                  // onClick={() => onSubmit(ScopeEnum.PRO)}
+                  disabled={!isFreeScope || updateUser.isPending}
+                  onClick={() => onSubmit(ScopeEnum.PRO)}
                 >
                   {isFreeScope ? "Upgrade to Runp Pro" : "Current plan"}
                 </Button>
