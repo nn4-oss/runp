@@ -26,7 +26,7 @@ import { toast } from "sonner";
 const Banner = styled(Badge)`
   /* width: 100% !important; */
   justify-content: start !important;
-  padding: var(--measurement-medium-60) !important;
+  padding: var(--measurement-medium-30) !important;
   gap: var(--measurement-medium-60) !important;
   font-size: var(--fontsize-medium-10) !important;
 `;
@@ -165,13 +165,17 @@ function CreateCredentialDialog() {
 
           <div className="grid g-medium-10 m-b-medium-60">
             <Banner variant="secondary">
-              API Keys are stored encrypted and only used to securely connect
-              with third-party services
-            </Banner>
+              <div className="p-medium-30">
+                <p className="fs-medium-10 m-b-medium-30">
+                  API Keys are stored encrypted and only used to securely
+                  connect with third-party services
+                </p>
 
-            <Banner variant="warning">
-              API Keys are tested before being stored. Make sure to provide a
-              valid key to securely connect Runp to Third-Party services.
+                <Banner variant="warning" className="p-medium-30">
+                  Each key is tested before being stored. Make sure to provide a
+                  valid key to securely connect Runp to Third-Party services.
+                </Banner>
+              </div>
             </Banner>
           </div>
 
