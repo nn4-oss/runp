@@ -10,13 +10,14 @@ import { useQuery } from "@tanstack/react-query";
 import {
   Avatar,
   Badge,
+  Dialog,
   Divider,
   DropdownMenu,
   ScrollArea,
 } from "@usefui/components";
 import { Icon, PixelIcon, SocialIcon } from "@usefui/icons";
-import { SignOutButton } from "@clerk/nextjs";
-import { ColorModes, UsageRange } from "..";
+import { SignOutButton, useUser } from "@clerk/nextjs";
+import { UsageRange } from "..";
 
 import { formatDuration, intervalToDuration } from "date-fns";
 
@@ -42,6 +43,7 @@ const stripLongString = (content?: string) => {
 };
 
 function UserAvatar() {
+  const clerkUser = useUser();
   const router = useRouter();
   const trpc = useTRPC();
 
@@ -73,17 +75,28 @@ function UserAvatar() {
     }
   }, [usage?.msBeforeNext]);
 
+  const avatarImageSrc =
+    clerkUser?.user?.imageUrl ?? user?.imageUrl ?? "/gradient.svg";
+
   return (
     <DropdownMenu.Root>
       <DropdownMenu>
         <DropdownMenu.Trigger>
-          <StyledAvatar src={user?.imageUrl ?? "/gradient.svg"} />
+          <StyledAvatar src={avatarImageSrc} />
+          <div className="flex align-center g-medium-10 ">
+            {user?.scope && (
+              <Badge variant="secondary">
+                <span className="fs-small-50">{user.scope}</span>
+              </Badge>
+            )}
+          </div>
         </DropdownMenu.Trigger>
 
         <ScrollArea as={DropdownMenu.Content}>
           {user?.name && (
             <header className="grid p-x-medium-30 p-t-medium-30">
-              <div className="flex justify-between align-start g-medium-30">
+              <div className="flex align-center g-medium-30">
+                <Avatar src={avatarImageSrc} sizing="small" />
                 <hgroup className="grid">
                   <p className="fs-medium-10">
                     {stripLongString(String(user?.name))}
@@ -92,10 +105,6 @@ function UserAvatar() {
                     {stripLongString(String(user.email))}
                   </span>
                 </hgroup>
-
-                <Badge variant="secondary">
-                  <span className="fs-small-50">{user.scope}</span>
-                </Badge>
               </div>
 
               <Divider className="m-y-medium-50" />
@@ -103,7 +112,7 @@ function UserAvatar() {
           )}
 
           {usage && usageMetadata && (
-            <PointsWrapper className="p-medium-30 m-b-medium-60">
+            <PointsWrapper className="p-medium-30 m-b-medium-30">
               <hgroup className="flex align-center justify-between m-b-medium-30">
                 <p className="fs-medium-10 opacity-default-60">Messages</p>
                 <p className="fs-medium-10">
@@ -126,20 +135,48 @@ function UserAvatar() {
             </PointsWrapper>
           )}
 
+          <Dialog.Trigger
+            rawicon
+            variant="ghost"
+            style={{
+              width: "100%",
+              justifyContent: "start",
+            }}
+          >
+            <DropdownMenu.Item className="w-100 flex align-center g-medium-30">
+              <span>
+                <Icon>
+                  <PixelIcon.Zap />
+                </Icon>
+              </span>
+              Subscription
+              <span className="flex align-center justify-end w-100">
+                {user?.scope && (
+                  <Badge variant="secondary">
+                    <span className="fs-small-50">{user.scope}</span>
+                  </Badge>
+                )}
+              </span>
+            </DropdownMenu.Item>
+          </Dialog.Trigger>
+
+          <Divider className="m-y-medium-10" />
+
           <DropdownMenu.Item
-            className="w-100 flex align-center justify-between g-medium-30"
+            className="w-100 flex align-center g-medium-30"
             onMouseDown={() => router.push("/settings/profile")}
           >
-            <div className="flex align-center g-medium-30">
+            <span>
               <Icon>
                 <PixelIcon.User />
               </Icon>
-              Profile
-            </div>
-
-            <Icon viewBox="0 0 18 18">
-              <SocialIcon.Clerk />
-            </Icon>
+            </span>
+            Profile
+            <span className="flex align-center justify-end w-100">
+              <Icon viewBox="0 0 18 18">
+                <SocialIcon.Clerk />
+              </Icon>
+            </span>
           </DropdownMenu.Item>
 
           <DropdownMenu.Item
@@ -150,20 +187,6 @@ function UserAvatar() {
               <PixelIcon.Sliders />
             </Icon>
             Settings
-          </DropdownMenu.Item>
-
-          <Divider className="m-y-medium-10" />
-
-          <DropdownMenu.Item className="flex align-center g-medium-30" radio>
-            <span className="flex align-center justify-center">
-              <Icon>
-                <PixelIcon.Contrast />
-              </Icon>
-            </span>
-            Theme
-            <div className="flex w-100 justify-end">
-              <ColorModes />
-            </div>
           </DropdownMenu.Item>
 
           <Divider className="m-y-medium-10" />
