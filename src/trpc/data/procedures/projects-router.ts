@@ -104,6 +104,8 @@ export const projectsRouter = createTRPCRouter({
         data: {
           input: input.value,
           projectId: userProject.id,
+          userId: ctx.user.id,
+          userScope: ctx.user.scope,
         },
       });
 

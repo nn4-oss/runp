@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import OpenAI from "openai";
 
 import { symetricEncryption } from "@/security/encryption";
 import { protectedProcedure, createTRPCRouter } from "@/trpc/init";
@@ -6,6 +7,12 @@ import { TRPCError } from "@trpc/server";
 
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
+
+type ValidationErrorType = {
+  code?: number | string;
+  message?: string;
+  status: number;
+};
 
 export const credentialsRouter = createTRPCRouter({
   getMany: protectedProcedure.query(async ({ ctx }) => {
@@ -128,5 +135,48 @@ export const credentialsRouter = createTRPCRouter({
       });
 
       revalidatePath("/settings/api-keys");
+    }),
+
+  checkOpenAIKeyStatus: protectedProcedure
+    .input(
+      z.object({
+        apiKey: z.string().min(1, { message: "apiKey is required" }),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      try {
+        const apiKey = input.apiKey;
+        if (!apiKey)
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "No API key available to check.",
+          });
+
+        const client = new OpenAI({ apiKey });
+
+        /**  Non-billable call; Succeeds only if the key is valid */
+        await client.models.list();
+        return { ok: true, reason: "valid", message: "API key is valid." };
+      } catch (err: unknown) {
+        const error = err as ValidationErrorType & {
+          error?: ValidationErrorType;
+        };
+
+        const code = error?.error?.code ?? error?.code;
+        const status = error?.status;
+        const message =
+          error?.error?.message ?? error?.message ?? "Unknown error";
+
+        if (code === "invalid_api_key" || status === 401)
+          throw new TRPCError({
+            code: "UNAUTHORIZED",
+            message: message ?? "Invalid API key.",
+          });
+
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message,
+        });
+      }
     }),
 });

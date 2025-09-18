@@ -89,6 +89,8 @@ export const messagesRouter = createTRPCRouter({
         data: {
           input: input.value,
           projectId: input.projectId,
+          userId: ctx.user.id,
+          userScope: ctx.user.scope,
         },
       });
 

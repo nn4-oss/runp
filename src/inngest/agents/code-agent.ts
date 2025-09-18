@@ -13,7 +13,7 @@ import { CODE_AGENT_PARAMETERS } from "../config/parameters";
 
 import type { AgentState } from "../types";
 
-export default function createCodeAgent(sandboxId: string, _apiKey?: string) {
+export default function createCodeAgent(sandboxId: string, apiKey: string) {
   return createAgent<AgentState>({
     name: "code-agent",
     description: "An expert coding agent",
@@ -21,6 +21,7 @@ export default function createCodeAgent(sandboxId: string, _apiKey?: string) {
     model: openai({
       model: "gpt-4.1",
       defaultParameters: CODE_AGENT_PARAMETERS,
+      apiKey: apiKey,
     }),
     lifecycle: {
       onResponse: async ({ result, network }) =>

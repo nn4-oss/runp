@@ -5,7 +5,7 @@ import { TITLE_AGENT_PARAMETERS } from "../config/parameters";
 
 import type { AgentState } from "../types";
 
-export default function createTitleAgent(_apiKey?: string) {
+export default function createTitleAgent(apiKey?: string) {
   return createAgent<AgentState>({
     name: "title-agent",
     description: "A title generator agent",
@@ -13,6 +13,7 @@ export default function createTitleAgent(_apiKey?: string) {
     model: openai({
       model: "gpt-4o",
       defaultParameters: TITLE_AGENT_PARAMETERS,
+      apiKey,
     }),
   });
 }

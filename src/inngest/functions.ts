@@ -1,6 +1,7 @@
 import "server-only";
 
 import prisma from "@/lib/prisma";
+import { ScopeEnum } from "generated/prisma";
 
 import { inngest } from "./client";
 
@@ -14,6 +15,8 @@ import {
 
 import { getParsedAgentOutput, getSandbox } from "./utils";
 import { autoUpdateProjectTitle } from "@/services/auto-update";
+import { getOpenAIPrimaryKeys } from "@/services/get-credentials";
+import { symetricDecryption } from "@/security/encryption";
 
 import {
   SANDBOX_NAME,
@@ -35,6 +38,45 @@ export const invokeCodeAgent = inngest.createFunction(
   { event: "code-agent/invoke" },
 
   async ({ event, step }) => {
+    /** Early credential validation for PRO users */
+    const credentialsCheck = await step.run(
+      "validate-credentials",
+      async () => {
+        const isProScope = event.data.userScope === ScopeEnum.PRO;
+        const openAiKeys = await getOpenAIPrimaryKeys(
+          event.data.userScope as ScopeEnum,
+          event.data.userId as string,
+        );
+
+        return {
+          isProScope,
+          openAiKeys,
+          hasValidCredentials: Boolean(openAiKeys && openAiKeys.length > 0),
+        };
+      },
+    );
+
+    /** Handle missing credentials for PRO users */
+    if (credentialsCheck.isProScope && !credentialsCheck.hasValidCredentials) {
+      await step.run("save-credentials-error", async () => {
+        return await prisma.message.create({
+          data: {
+            projectId: event.data.projectId as string,
+            content:
+              "To use Runp PRO, you need to add your OpenAI API key in your account settings.",
+            role: "ASSISTANT",
+            type: "ERROR",
+          },
+        });
+      });
+
+      // Early return to stop the pipeline
+      return {
+        error: "MISSING_CREDENTIALS",
+        message: "OpenAI API key required for PRO users",
+      };
+    }
+
     /* Create a Sandbox Environment using the E2B NextJS Template Docker Image */
     const sandboxId = await step.run("get-sandbox-id", async () => {
       const sandbox = await Sandbox.create(SANDBOX_NAME);
@@ -89,12 +131,16 @@ export const invokeCodeAgent = inngest.createFunction(
       { messages: prevMessages },
     );
 
-    /* [TODO]: Decrypt and pass the user's oai key */
-    // const userId = (event.data as { userId: string } | undefined)?.userId;
-    // const apiKey = await db.userSecrets.getOpenAIKey(userId); // decrypt in-memory
+    /** Setup API key for agents */
+
+    const agentsAPIKey = credentialsCheck.isProScope
+      ? symetricDecryption(
+          credentialsCheck.openAiKeys?.at(0)?.credential?.value ?? "",
+        )
+      : (process.env.OPENAI_API_KEY as string);
 
     /* Invoke the code-agent */
-    const codeAgent = createCodeAgent(sandboxId); // ,apiKey);
+    const codeAgent = createCodeAgent(sandboxId, agentsAPIKey);
 
     /* Setup and add codeAgent to the inngest network */
     const network = createNetwork<AgentState>({
@@ -102,9 +148,9 @@ export const invokeCodeAgent = inngest.createFunction(
       agents: [codeAgent],
       maxIter: MAX_ITERATION, // Limit how many loops the agent can perform
       defaultState: state, // Load previous messages context as default state
+
       router: async ({ network }) => {
         const summary = network.state.data.summary;
-
         /** Kill the loop if a summary had been generated, call the agent otherwise */
         if (summary) return;
         return codeAgent;
@@ -113,10 +159,9 @@ export const invokeCodeAgent = inngest.createFunction(
 
     /* Run the code-agent using user's utterance, load previous messages context state */
     const result = await network.run(event.data.input, { state });
-
-    /* Invole the title and response agents */
-    const titleAgent = createTitleAgent();
-    const responseAgent = createResponseAgent();
+    /* Invoke the title and response agents */
+    const titleAgent = createTitleAgent(agentsAPIKey);
+    const responseAgent = createResponseAgent(agentsAPIKey);
 
     /**
      * Extract title and response agents outputs,
