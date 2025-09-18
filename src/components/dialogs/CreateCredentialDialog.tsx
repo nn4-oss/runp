@@ -70,6 +70,11 @@ function CreateCredentialDialog() {
       onError: (error) => toast.error(error.message),
     }),
   );
+  const checkCredential = useMutation(
+    trpc.credentials.checkOpenAIKeyStatus.mutationOptions({
+      onError: (error) => toast.error(error.message),
+    }),
+  );
 
   const linkIntegration = useMutation(trpc.integrations.link.mutationOptions());
   const setPrimaryIntegration = useMutation(
@@ -90,6 +95,13 @@ function CreateCredentialDialog() {
   const onSubmit = React.useCallback(
     async (values: z.infer<typeof formSchema>) => {
       try {
+        // Check OpenAI API Key Validity before storing it
+        if (values.service === "OPENAI") {
+          await checkCredential.mutateAsync({
+            apiKey: values.value,
+          });
+        }
+
         const credential = await createCredential.mutateAsync({
           name: values.name,
           value: values.value,
@@ -116,11 +128,11 @@ function CreateCredentialDialog() {
         await queryClient.invalidateQueries(
           trpc.integrations.getMany.queryOptions(),
         );
+
         form.reset();
         sheet.methods?.toggle?.();
       } catch (error) {
-        console.error(error);
-        toast.error("Something went wrong");
+        toast.error("Something went wrong", { description: String(error) });
       }
     },
     [
@@ -151,10 +163,17 @@ function CreateCredentialDialog() {
             </p>
           </hgroup>
 
-          <Banner variant="warning" className="m-b-medium-60">
-            API Keys are stored encrypted and only used to securely connect with
-            third-party services
-          </Banner>
+          <div className="grid g-medium-10 m-b-medium-60">
+            <Banner variant="secondary">
+              API Keys are stored encrypted and only used to securely connect
+              with third-party services
+            </Banner>
+
+            <Banner variant="warning">
+              API Keys are tested before being stored. Make sure to provide a
+              valid key to securely connect Runp to Third-Party services.
+            </Banner>
+          </div>
 
           <form
             className="grid w-100 m-b-large-10 g-medium-60"
@@ -245,11 +264,11 @@ function CreateCredentialDialog() {
                   htmlFor="isPrimary"
                   optional
                 >
-                  <span className="fs-medium-20">Set as primary key</span>
+                  <span className="fs-medium-20">Use as primary key</span>
 
                   <span className="fs-medium-10 opacity-default-30">
-                    Primary keys will be used during workflows run instead of
-                    Foudation UIs key.
+                    Primary keys are used during workflows run to give your more
+                    control and visiblity for costs and performance.
                   </span>
                 </Field.Label>
               </CheckboxWrapper>
