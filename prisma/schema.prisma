@@ -31,21 +31,28 @@ enum ThirdPartyServiceType {
 
 // Represents an application user, with identity managed by Clerk.
 // We store references to Clerk’s userId and related metadata, along with
-// application-specific fields such as scope, projects, and integrations.
-// - `idx_user_scope`: Optimizes queries by user scope.
-// - `idx_user_scopeKey`: Optimizes lookups by scopeKey.
+// application-specific fields such as scope.
+// - idx_user_scope:     Optimizes queries by user scope.
+// - idx_user_scopeKey:  Optimizes lookups by scopeKey (encrypted).
 model User {
   id        String    @id // Clerk userId
 
-  scope     ScopeEnum    @default(FREE)
-  scopeKey  String   // Opaque secret reference (env keys)
+  // Opaque secret reference (encrypted at rest), validated against env mapping
+  scopeKey  String
 
-  email    String?
-  name     String?
-  imageUrl String?
+  email     String?
+  name      String?
+  imageUrl  String?
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+
+  scope     ScopeEnum @default(FREE)
+
+  projects      Project[]
+  credentials   Credential[]
+  integrations  Integration[]
+  configuration Configuration?
 
   @@index([scope], name: "idx_user_scope")
   @@index([scopeKey], name: "idx_user_scopeKey")
@@ -56,62 +63,79 @@ model User {
 model Project {
   id        String    @id @default(uuid())
   name      String
-  userId    String    @db.VarChar(255) // Clerk userId
+  userId    String
+
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   messages  Message[]
 
   @@index([userId], name: "idx_project_userId")
 }
 
-
 // Messages belong to a project. Cascade delete ensures that when a project
 // is deleted, its messages are also removed.
 model Message {
   id        String      @id @default(uuid())
+  projectId String
   content   String
-  role      MessageRole
-  type      MessageType
+
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
 
-  fragment  Fragment?
-  projectId String
+  role      MessageRole
+  type      MessageType
+  fragment  Fragment?  // 1:1 Fragment (owned by Message via messageId unique FK)
   project   Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   @@index([projectId], name: "idx_message_projectId")
 }
 
-
 // Each message can have at most one fragment (1:1 relation).
 // Cascade delete ensures fragments are removed with their message.
 model Fragment {
-  id        String   @id @default(uuid())
-  messageId String   @unique
-  message   Message  @relation(fields: [messageId], references: [id], onDelete: Cascade)
-
+  id         String   @id @default(uuid())
+  messageId  String   @unique
   sandboxUrl String
   title      String
   files      Json
 
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+
+  diagram    Diagram?  // 1:1 Diagram (owned by Fragment via fragmentId unique FK)
+  message    Message  @relation(fields: [messageId], references: [id], onDelete: Cascade)
 }
 
+// Each fragment can have at most one diagram (1:1 relation).
+// Cascade delete ensures diagrams are removed with their fragment.
+model Diagram {
+  id         String   @id @default(uuid())
+  fragmentId String   @unique
+  code       String
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  fragment   Fragment @relation(fields: [fragmentId], references: [id], onDelete: Cascade)
+}
 
 // Credentials belong to a user (via Clerk userId).
 // We enforce uniqueness on (userId, name) so a user cannot have two
 // credentials with the same name.
 // Indexed userId for fast lookups.
 model Credential {
-  id        String    @id @default(uuid())
-  userId    String    @db.VarChar(255)
-  name      String
-  value     String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id           String    @id @default(uuid())
+  userId       String
+  name         String
+  value        String
 
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   integrations Integration[]
 
   @@unique([userId, name], name: "userId_name")
@@ -123,15 +147,16 @@ model Credential {
 // Indexed heavily for performance on common queries.
 model Integration {
   id           String     @id @default(uuid())
-  service      ThirdPartyServiceType
   credentialId String
-  userId       String     @db.VarChar(255)
+  userId       String
   isPrimary    Boolean    @default(false)
+  service      ThirdPartyServiceType
 
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
 
   credential   Credential @relation(fields: [credentialId], references: [id], onDelete: Cascade)
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId], name: "idx_integration_userId")
   @@index([service], name: "idx_integration_service")
@@ -140,7 +165,21 @@ model Integration {
 
 // Rate limiting per user's projects/messages.
 model Usage {
-  key String     @id @default(uuid())
-  points Int
-  expire DateTime?
+  key     String    @id @default(uuid())
+  points  Int
+  expire  DateTime?
+}
+
+// Each user can have at most one configuration (1:1 relation).
+// Cascade delete ensures configurations are removed with their user.
+model Configuration {
+  id               String    @id @default(uuid())
+  userId           String    @unique
+  diagrams         Boolean   @default(false)
+  additionalPrompt String
+
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  user  User       @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
