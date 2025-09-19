@@ -62,6 +62,14 @@ export async function ensureUserInDatabase(userId: string) {
         imageUrl: clerkUser.imageUrl,
         scope: DEFAULT_SCOPE,
         scopeKey: symetricEncryption(scopesMapping[DEFAULT_SCOPE]),
+
+        // Ensure basic configuration exists
+        configuration: {
+          create: {
+            diagrams: false,
+            additionalPrompt: "",
+          },
+        },
       },
     });
   }
