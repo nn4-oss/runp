@@ -24,35 +24,24 @@ const SettingsLinks = [
     label: "General",
     path: "/settings",
     disabled: false,
-    availableScopes: ["FREE", "PRO"],
   },
   {
     icon: <WebIcon.Key />,
     label: "API Keys",
     path: "/settings/api-keys",
     disabled: false,
-    availableScopes: ["PRO"],
   },
   {
     icon: <PixelIcon.Trending />,
     label: "Usage",
     path: "/settings/usage",
     disabled: true,
-    availableScopes: [],
-  },
-  {
-    icon: <WebIcon.Globe />,
-    label: "Environments",
-    path: "/settings/usage",
-    disabled: true,
-    availableScopes: [],
   },
   {
     icon: <PixelIcon.User />,
     label: "Profile",
     path: "/settings/profile",
     disabled: false,
-    availableScopes: ["FREE", "PRO"],
   },
 ];
 
@@ -85,8 +74,7 @@ function SettingsLayout({
                   const isCurrentPath = `/${currentPath}` === link.path;
                   const userScope = user.scope ?? "FREE";
 
-                  const isDisabled =
-                    link.disabled || !link.availableScopes.includes(userScope);
+                  const isDisabled = link.disabled;
 
                   const onClick = () => {
                     if (!isDisabled) router.push(link.path);
