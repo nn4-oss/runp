@@ -11,12 +11,7 @@ import {
 } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 
-import {
-  ReflectiveButton,
-  SkeletonLoader,
-  Spinner,
-  Textarea,
-} from "@/components";
+import { ReflectiveButton, Spinner, Textarea } from "@/components";
 import { Badge, Checkbox, Divider } from "@usefui/components";
 import { BorderWrapper } from "./GeneralSettings";
 
@@ -201,10 +196,13 @@ function LLMSettings({ isFreeScope }: { isFreeScope: boolean }) {
         <ReflectiveButton
           variant="mono"
           sizing="medium"
-          disabled={isFreeScope}
+          disabled={
+            isFreeScope || createConfig.isPending || updateConfig.isPending
+          }
           onClick={form.handleSubmit(onSubmit)}
         >
           Save
+          {createConfig.isPending || (updateConfig.isPending && <Spinner />)}
         </ReflectiveButton>
       </footer>
     </BorderWrapper>
