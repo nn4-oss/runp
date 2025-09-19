@@ -48,7 +48,7 @@ function Navigation() {
         </SignedIn>
         <Tooltip content="Version">
           <ReflectiveButton variant="border" sizing="medium">
-            {pkg.version}
+            v{pkg.version}
           </ReflectiveButton>
         </Tooltip>
 
