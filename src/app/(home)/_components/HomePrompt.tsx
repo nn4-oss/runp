@@ -88,9 +88,13 @@ function HomePrompt() {
   const shortcutControls = useKeyPress("Enter", true, "ctrlKey");
 
   const { data: user } = useQuery(trpc.user.get.queryOptions());
+  const { data: config } = useQuery(
+    trpc.configuration.getLatestVersion.queryOptions(),
+  );
   const { data: integrations } = useQuery(
     trpc.integrations.getMany.queryOptions(),
   );
+
   const createProject = useMutation(
     trpc.projects.create.mutationOptions({
       onSuccess: async (data) => {
@@ -133,6 +137,10 @@ function HomePrompt() {
     async (values: z.infer<typeof formSchema>) => {
       await createProject.mutateAsync({
         value: values.content,
+        config: {
+          diagrams: Boolean(config?.at(0)?.diagrams),
+          additionalPrompt: config?.at(0)?.additionalPrompt ?? "",
+        },
       });
     },
     [createProject],

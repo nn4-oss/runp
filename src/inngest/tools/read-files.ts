@@ -28,7 +28,7 @@ export default async function readFilesAgentToolHandler({
       }
 
       /**
-       * This output doesn't need a specificdata structure since it is
+       * This output doesn't need a specific data structure since it is
        * used by models to read files.
        */
       return JSON.stringify(contents);

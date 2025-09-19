@@ -73,6 +73,10 @@ function MessagesPrompt({ projectId }: { projectId: string }) {
   );
 
   const { data: usage } = useQuery(trpc.usage.status.queryOptions());
+  const { data: config } = useQuery(
+    trpc.configuration.getLatestVersion.queryOptions(),
+  );
+
   const showUsageBanner = !!usage;
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -88,6 +92,10 @@ function MessagesPrompt({ projectId }: { projectId: string }) {
       await createMessage.mutateAsync({
         projectId,
         value: values.value,
+        config: {
+          diagrams: Boolean(config?.at(0)?.diagrams),
+          additionalPrompt: config?.at(0)?.additionalPrompt ?? "",
+        },
       });
     },
     [createMessage, projectId],

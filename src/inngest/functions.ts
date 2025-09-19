@@ -38,11 +38,12 @@ export const invokeCodeAgent = inngest.createFunction(
   { event: "code-agent/invoke" },
 
   async ({ event, step }) => {
+    const isProScope = event.data.userScope === ScopeEnum.PRO;
+
     /** Early credential validation for PRO users */
     const credentialsCheck = await step.run(
       "validate-credentials",
       async () => {
-        const isProScope = event.data.userScope === ScopeEnum.PRO;
         const openAiKeys = await getOpenAIPrimaryKeys(
           event.data.userScope as ScopeEnum,
           event.data.userId as string,
@@ -132,16 +133,22 @@ export const invokeCodeAgent = inngest.createFunction(
     );
 
     /** Setup API key for agents */
-
     const agentsAPIKey = credentialsCheck.isProScope
       ? symetricDecryption(
           credentialsCheck.openAiKeys?.at(0)?.credential?.value ?? "",
         )
       : (process.env.OPENAI_API_KEY as string);
 
-    /* Invoke the code-agent */
-    const codeAgent = createCodeAgent(sandboxId, agentsAPIKey);
+    /* Invoke the code-agent with user config */
+    /* Config is only included for PRO users */
+    const userConfig = isProScope
+      ? {
+          diagrams: event.data?.config?.diagrams,
+          additionalPrompt: event.data?.config?.additionalPrompt,
+        }
+      : {};
 
+    const codeAgent = createCodeAgent(sandboxId, agentsAPIKey, userConfig);
     /* Setup and add codeAgent to the inngest network */
     const network = createNetwork<AgentState>({
       name: "runp-code-agent",
@@ -214,6 +221,7 @@ export const invokeCodeAgent = inngest.createFunction(
         title: titleContent,
       });
 
+      console.log(result.state.data.files["diagram.mermaid"]);
       /** Save user's utterance as is */
       return await prisma.message.create({
         data: {
@@ -226,6 +234,11 @@ export const invokeCodeAgent = inngest.createFunction(
               sandboxUrl: sandboxUrl,
               title: titleContent,
               files: result.state.data.files,
+              diagram: {
+                create: {
+                  code: result.state.data.files["diagram.mermaid"] ?? "",
+                },
+              },
             },
           },
         },
