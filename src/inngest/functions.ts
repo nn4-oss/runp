@@ -21,7 +21,7 @@ import { symetricDecryption } from "@/security/encryption";
 import {
   SANDBOX_NAME,
   SANDBOX_PORT,
-  // SANDBOX_TIMEOUT,
+  SANDBOX_TIMEOUT,
 } from "./config/sandbox-variables";
 import {
   MAX_ITERATION,
@@ -86,9 +86,8 @@ export const invokeCodeAgent = inngest.createFunction(
        * Extend the default ttl of the sandbox environment.
        * The longer it get the more credits gets spent on E2B.
        *
-       * [TODO]: Add sandbox_timeout control to user's settings
        */
-      // await sandbox.setTimeout(SANDBOX_TIMEOUT);
+      await sandbox.setTimeout(SANDBOX_TIMEOUT);
 
       return sandbox.sandboxId;
     });

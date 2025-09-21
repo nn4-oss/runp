@@ -22,7 +22,7 @@ export default async function terminalAgentToolHandler({
     const buffers = { stdout: "", stderr: "" };
 
     try {
-      const sandbox = await getSandbox(sandboxId); //
+      const sandbox = await getSandbox(sandboxId);
       const result = await sandbox.commands.run(command, {
         onStdout: (data: string) => {
           buffers.stdout += data;
