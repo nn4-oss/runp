@@ -7,7 +7,7 @@ import { Badge, Dialog, Table, Tooltip } from "@usefui/components";
 import { Icon, PixelIcon } from "@usefui/icons";
 import {
   CopyCode,
-  UpdateCredentialDialog,
+  // UpdateCredentialDialog,
   DeleteCredentialDialog,
 } from "@/components";
 
@@ -116,7 +116,7 @@ function CredentialsTable({
               </Table.Cell>
 
               <Table.Cell className="flex justify-end">
-                <Dialog.Root>
+                {/* <Dialog.Root>
                   <Dialog.Trigger variant="border" sizing="small" rawicon>
                     <span className="flex align-center justify-center p-y-small-60">
                       <Icon>
@@ -126,7 +126,7 @@ function CredentialsTable({
                   </Dialog.Trigger>
 
                   <UpdateCredentialDialog credentialId={credential.id} />
-                </Dialog.Root>
+                </Dialog.Root> */}
                 <Dialog.Root>
                   <Dialog.Trigger variant="border" sizing="small" rawicon>
                     <span className="flex align-center justify-center p-y-small-60">

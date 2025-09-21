@@ -72,8 +72,6 @@ function SettingsLayout({
                     .filter(Boolean)
                     .join("/");
                   const isCurrentPath = `/${currentPath}` === link.path;
-                  const userScope = user.scope ?? "FREE";
-
                   const isDisabled = link.disabled;
 
                   const onClick = () => {

@@ -221,7 +221,6 @@ export const invokeCodeAgent = inngest.createFunction(
         title: titleContent,
       });
 
-      console.log(result.state.data.files["diagram.mermaid"]);
       /** Save user's utterance as is */
       return await prisma.message.create({
         data: {
