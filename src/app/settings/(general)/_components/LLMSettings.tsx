@@ -4,14 +4,15 @@ import React from "react";
 import styled from "styled-components";
 
 import { useTRPC } from "@/trpc/client";
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 
-import { ReflectiveButton, Spinner, Textarea } from "@/components";
+import {
+  ReflectiveButton,
+  SkeletonLoader,
+  Spinner,
+  Textarea,
+} from "@/components";
 import { Badge, Checkbox, Divider } from "@usefui/components";
 import { BorderWrapper } from "./GeneralSettings";
 
@@ -57,12 +58,12 @@ function LLMSettings({ isFreeScope }: { isFreeScope: boolean }) {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 
-  const { data: configuration } = useSuspenseQuery(
-    trpc.configuration.getLatestVersion.queryOptions(),
-  );
+  const {
+    data: configuration,
+    isPending,
+    isSuccess,
+  } = useQuery(trpc.configuration.getLatestVersion.queryOptions());
 
-  const hasConfig = configuration.length !== 0 && configuration.at(0)?.id;
-  const formScopeContraint = isFreeScope || !hasConfig;
   const handleSuccessFallback = React.useCallback(async () => {
     toast.info("Application settings updated");
 
@@ -86,125 +87,130 @@ function LLMSettings({ isFreeScope }: { isFreeScope: boolean }) {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    mode: "onChange",
     defaultValues: {
-      diagrams: formScopeContraint
-        ? false
-        : Boolean(configuration.at(0)?.diagrams),
-      additionalPrompt: formScopeContraint
-        ? ""
-        : (configuration.at(0)?.additionalPrompt ?? ""),
+      diagrams: configuration?.diagrams ?? false,
+      additionalPrompt: configuration?.additionalPrompt ?? "",
     },
   });
 
   const onSubmit = React.useCallback(
     async (values: z.infer<typeof formSchema>) => {
-      // Create a new configuration if user has none yet
-      if (!hasConfig) {
-        return await createConfig.mutateAsync({
-          diagrams: values.diagrams,
-          additionalPrompt: values.additionalPrompt,
-        });
-      } else
-        // Update if user has one
-        await updateConfig.mutateAsync({
-          id: String(configuration.at(0)?.id),
-          diagrams: values.diagrams,
-          additionalPrompt: values.additionalPrompt,
-        });
+      await updateConfig.mutateAsync({
+        id: String(configuration?.id),
+        diagrams: values.diagrams,
+        additionalPrompt: values.additionalPrompt,
+      });
     },
     [configuration, createConfig, updateConfig],
   );
+
+  React.useEffect(() => {
+    if (configuration) {
+      form.reset({
+        diagrams: configuration.diagrams,
+        additionalPrompt: configuration.additionalPrompt,
+      });
+    }
+  }, [configuration, form]);
 
   return (
     <BorderWrapper
       as="form"
       className="p-medium-60"
       onSubmit={form.handleSubmit(onSubmit)}
+      key={configuration?.id}
     >
-      <div className="flex align-center justify-between g-medium-10">
-        <hgroup className="w-100 grid g-medium-10">
-          <div className="flex g-medium-10 align-center">
-            <h6 className="fs-medium-20">Feature Diagram</h6>
-            {isFreeScope && (
-              <Badge
-                variant="warning"
-                shape="round"
-                className="fs-small-60 p-b-small-10"
+      {isPending && (
+        <div className="flex justify-between align-start g-large-10">
+          <SkeletonLoader />
+          <Spinner />
+        </div>
+      )}
+      {isSuccess && (
+        <React.Fragment>
+          <div className="flex align-center justify-between g-medium-10">
+            <hgroup className="w-100 grid g-medium-10">
+              <div className="flex g-medium-10 align-center">
+                <h6 className="fs-medium-20">Feature Diagram</h6>
+                {isFreeScope && (
+                  <Badge
+                    variant="warning"
+                    shape="round"
+                    className="fs-small-60 p-b-small-10"
+                  >
+                    Runp Pro
+                  </Badge>
+                )}
+              </div>
+
+              <p className="fs-medium-10 opacity-default-60">
+                Automatically generate feature maps, or ER specs alongside the
+                generated code.
+              </p>
+            </hgroup>
+            <Checkbox.Root>
+              <Checkbox
+                id="diagrams"
+                sizing="medium"
+                variant="border"
+                disabled={isFreeScope}
+                defaultChecked={configuration?.diagrams}
+                onClick={() => {
+                  form.setValue("diagrams", !Boolean(configuration?.diagrams));
+                }}
               >
-                Runp Pro
-              </Badge>
-            )}
+                <Checkbox.Indicator />
+              </Checkbox>
+            </Checkbox.Root>
           </div>
 
-          <p className="fs-medium-10 opacity-default-60">
-            Automatically generate feature maps, or ER specs alongside the
-            generated code.
-          </p>
-        </hgroup>
-        <Checkbox.Root>
-          <Checkbox
-            id="diagrams"
-            sizing="medium"
-            variant="border"
-            disabled={isFreeScope}
-            defaultChecked={form.watch("diagrams")}
-            onClick={() => {
-              form.setValue(
-                "diagrams",
-                !Boolean(configuration.at(0)?.diagrams),
-              );
-            }}
-          >
-            <Checkbox.Indicator />
-          </Checkbox>
-        </Checkbox.Root>
-      </div>
+          <Divider className="m-y-medium-50" />
 
-      <Divider className="m-y-medium-50" />
+          <div className="grid g-medium-60 m-b-medium-60">
+            <hgroup className="w-100 grid g-medium-10">
+              <div className="flex g-medium-10 align-center">
+                <h6 className="fs-medium-20">LLM Instructions</h6>
+                {isFreeScope && (
+                  <Badge
+                    variant="warning"
+                    shape="round"
+                    className="fs-small-60 p-b-small-10"
+                  >
+                    Runp Pro
+                  </Badge>
+                )}
+              </div>
+              <p className="fs-medium-10 opacity-default-60">
+                Custom instructions used on top of the current system prompt.
+              </p>
+            </hgroup>
 
-      <div className="grid g-medium-60 m-b-medium-60">
-        <hgroup className="w-100 grid g-medium-10">
-          <div className="flex g-medium-10 align-center">
-            <h6 className="fs-medium-20">LLM Instructions</h6>
-            {isFreeScope && (
-              <Badge
-                variant="warning"
-                shape="round"
-                className="fs-small-60 p-b-small-10"
-              >
-                Runp Pro
-              </Badge>
-            )}
+            <TextareaLg
+              id="additionalPrompt"
+              autoComplete="off"
+              className="p-medium-30"
+              placeholder="e.g. Use GSAP for animation. Always include Dark Mode support..."
+              disabled={isFreeScope}
+              {...form.register("additionalPrompt")}
+            />
           </div>
-          <p className="fs-medium-10 opacity-default-60">
-            Custom instructions used on top of the current system prompt.
-          </p>
-        </hgroup>
 
-        <TextareaLg
-          id="additionalPrompt"
-          autoComplete="off"
-          className="p-medium-30"
-          placeholder="e.g. Use GSAP for animation. Always include Dark Mode support..."
-          disabled={isFreeScope}
-          {...form.register("additionalPrompt")}
-        />
-      </div>
-
-      <footer className="w-100 flex justify-end align-center">
-        <ReflectiveButton
-          variant="mono"
-          sizing="medium"
-          disabled={
-            isFreeScope || createConfig.isPending || updateConfig.isPending
-          }
-          onClick={form.handleSubmit(onSubmit)}
-        >
-          Save
-          {createConfig.isPending || (updateConfig.isPending && <Spinner />)}
-        </ReflectiveButton>
-      </footer>
+          <footer className="w-100 flex justify-end align-center">
+            <ReflectiveButton
+              variant="mono"
+              sizing="medium"
+              disabled={
+                isFreeScope || createConfig.isPending || updateConfig.isPending
+              }
+              onClick={form.handleSubmit(onSubmit)}
+            >
+              Save
+              {createConfig.isPending ||
+                (updateConfig.isPending && <Spinner />)}
+            </ReflectiveButton>
+          </footer>
+        </React.Fragment>
+      )}
     </BorderWrapper>
   );
 }
