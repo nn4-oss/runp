@@ -9,28 +9,30 @@ import { useTRPC } from "@/trpc/client";
 import { useKeyPress } from "@usefui/hooks";
 import { useForm } from "react-hook-form";
 
+import Link from "next/link";
+
 import { Icon, PixelIcon } from "@usefui/icons";
+import { Button } from "@usefui/components";
 import {
   PromptOptions,
   ReflectiveButton,
   Spinner,
   Textarea,
-  UsageBanner,
 } from "@/components";
 
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { utteranceValueSchema } from "@/schemas/utterances-schema";
 
-import { toast } from "sonner";
-
 const PromptContainer = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   max-width: var(--breakpoint-tablet);
   margin: 0 auto;
+  z-index: var(--depth-default-10);
 `;
 const PromptWrapper = styled.form`
   border: var(--measurement-small-30) solid var(--font-color-alpha-10);
@@ -45,6 +47,32 @@ const PromptWrapper = styled.form`
     border-color: var(--font-color-alpha-20);
   }
 `;
+const ProBanner = styled.div`
+  --pos-y: calc((var(--measurement-large-30) / 2) * -1);
+
+  @keyframes fadeIn {
+    0% {
+      transform: translateY(calc((var(--measurement-large-30) * 2.5) * -1));
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(var(--pos-y));
+      opacity: 1;
+    }
+  }
+
+  background-color: var(--font-color-alpha-10);
+  border-bottom-left-radius: var(--measurement-medium-40);
+  border-bottom-right-radius: var(--measurement-medium-40);
+  padding: var(--measurement-medium-30) var(--measurement-medium-50);
+  height: var(--measurement-large-30);
+  width: 100%;
+
+  transform: translateY(var(--pos-y));
+  animation: fadeIn 1s cubic-bezier(0.075, 0.82, 0.165, 1);
+
+  z-index: -1;
+`;
 
 const formSchema = z.object({
   content: utteranceValueSchema,
@@ -52,16 +80,20 @@ const formSchema = z.object({
 
 function HomePrompt() {
   const [isFocused, setIsFocused] = React.useState<boolean>(false);
-  const [showUsage, setShowUsage] = React.useState<boolean>(false);
+  const [showUsage, setShowUsage] = React.useState<boolean>(true);
 
   const router = useRouter();
   const trpc = useTRPC();
   const queryClient = useQueryClient();
-  const shortcutControls = useKeyPress("Enter", true, "metaKey");
+  const shortcutControls = useKeyPress("Enter", true, "ctrlKey");
 
   const { data: user } = useQuery(trpc.user.get.queryOptions());
-  const { data: usage } = useQuery(trpc.usage.status.queryOptions());
-  const showUsageBanner = !!usage && showUsage;
+  const { data: config } = useQuery(
+    trpc.configuration.getLatestVersion.queryOptions(),
+  );
+  const { data: integrations } = useQuery(
+    trpc.integrations.getMany.queryOptions(),
+  );
 
   const createProject = useMutation(
     trpc.projects.create.mutationOptions({
@@ -82,7 +114,6 @@ function HomePrompt() {
         }
         if (error.data?.code === "TOO_MANY_REQUESTS") {
           setShowUsage(true);
-          // toast.error("Rate limit exceeded");
         }
       },
     }),
@@ -96,10 +127,20 @@ function HomePrompt() {
     },
   });
 
+  const isProScope = user?.scope === "PRO";
+  const showProBanner = isProScope && showUsage && integrations;
+  const hasOpenAiAPIKeyDefined = integrations?.some((integration) => {
+    return integration.service === "OPENAI";
+  });
+
   const onSubmit = React.useCallback(
     async (values: z.infer<typeof formSchema>) => {
       await createProject.mutateAsync({
         value: values.content,
+        config: {
+          diagrams: Boolean(config?.diagrams),
+          additionalPrompt: config?.additionalPrompt ?? "",
+        },
       });
     },
     [createProject],
@@ -141,7 +182,7 @@ function HomePrompt() {
           <div className="flex align-center g-medium-30">
             <kbd>
               <span className="fs-small-50 opacity-default-30">
-                &#8984;&nbsp;+&nbsp;Enter
+                Ctrl&nbsp;+&nbsp;Enter
               </span>
             </kbd>
 
@@ -157,7 +198,7 @@ function HomePrompt() {
                   <Spinner />
                 ) : (
                   <Icon>
-                    <PixelIcon.ArrowRight />
+                    <PixelIcon.ArrowUp />
                   </Icon>
                 )}
               </span>
@@ -165,14 +206,30 @@ function HomePrompt() {
           </div>
         </div>
       </PromptWrapper>
-      {showUsageBanner && (
-        <div className="m-y-medium-30 w-100">
-          <UsageBanner
-            scope={user?.scope ?? "FREE"}
-            points={usage.remainingPoints}
-            beforeNext={usage.msBeforeNext}
-          />
-        </div>
+      {showProBanner && !hasOpenAiAPIKeyDefined && (
+        <ProBanner className="flex align-end justify-between">
+          <span className="fs-medium-10 opacity-default-60 flex align-center g-medium-10">
+            <Icon>
+              <PixelIcon.Lock />
+            </Icon>
+            <Link href="/settings/api-keys">Define and link</Link>
+            your own
+            <Link href="https://platform.openai.com/api-keys" target="_blank">
+              OpenAI
+            </Link>
+            API key to your project.
+          </span>
+
+          <Button
+            sizing="small"
+            variant="ghost"
+            onClick={() => setShowUsage(false)}
+          >
+            <Icon>
+              <PixelIcon.Close />
+            </Icon>
+          </Button>
+        </ProBanner>
       )}
     </PromptContainer>
   );

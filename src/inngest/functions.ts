@@ -1,10 +1,11 @@
-import prisma from "@/lib/prisma";
+import "server-only";
 
-import { Sandbox } from "@e2b/code-interpreter";
+import prisma from "@/lib/prisma";
+import { ScopeEnum } from "generated/prisma";
 
 import { inngest } from "./client";
-import { getSandbox } from "./utils";
 
+import { Sandbox } from "@e2b/code-interpreter";
 import { createNetwork, createState } from "@inngest/agent-kit";
 import {
   createCodeAgent,
@@ -12,11 +13,19 @@ import {
   createResponseAgent,
 } from "./agents";
 
-import { getParsedAgentOutput } from "./utils";
+import { getParsedAgentOutput, getSandbox } from "./utils";
+import { autoUpdateProjectTitle } from "@/services/auto-update";
+import { getOpenAIPrimaryKeys } from "@/services/get-credentials";
+import { symetricDecryption } from "@/security/encryption";
 
-import { SANDBOX_NAME, SANDBOX_PORT } from "./config/sandbox-variables";
+import {
+  SANDBOX_NAME,
+  SANDBOX_PORT,
+  SANDBOX_TIMEOUT,
+} from "./config/sandbox-variables";
 import {
   MAX_ITERATION,
+  CONTEXT_MAX_LENGTH,
   TITLE_AGENT_FALLBACK,
   RESPONSE_AGENT_FALLBACK,
 } from "./config/parameters";
@@ -29,9 +38,57 @@ export const invokeCodeAgent = inngest.createFunction(
   { event: "code-agent/invoke" },
 
   async ({ event, step }) => {
+    const isProScope = event.data.userScope === ScopeEnum.PRO;
+
+    /** Early credential validation for PRO users */
+    const credentialsCheck = await step.run(
+      "validate-credentials",
+      async () => {
+        const openAiKeys = await getOpenAIPrimaryKeys(
+          event.data.userScope as ScopeEnum,
+          event.data.userId as string,
+        );
+
+        return {
+          isProScope,
+          openAiKeys,
+          hasValidCredentials: Boolean(openAiKeys && openAiKeys.length > 0),
+        };
+      },
+    );
+
+    /** Handle missing credentials for PRO users */
+    if (credentialsCheck.isProScope && !credentialsCheck.hasValidCredentials) {
+      await step.run("save-credentials-error", async () => {
+        return await prisma.message.create({
+          data: {
+            projectId: event.data.projectId as string,
+            content:
+              "To use Runp PRO, you need to add your OpenAI API key in your account settings.",
+            role: "ASSISTANT",
+            type: "ERROR",
+          },
+        });
+      });
+
+      // Early return to stop the pipeline
+      return {
+        error: "MISSING_CREDENTIALS",
+        message: "OpenAI API key required for PRO users",
+      };
+    }
+
     /* Create a Sandbox Environment using the E2B NextJS Template Docker Image */
     const sandboxId = await step.run("get-sandbox-id", async () => {
       const sandbox = await Sandbox.create(SANDBOX_NAME);
+
+      /**
+       * Extend the default ttl of the sandbox environment.
+       * The longer it get the more credits gets spent on E2B.
+       *
+       */
+      await sandbox.setTimeout(SANDBOX_TIMEOUT);
+
       return sandbox.sandboxId;
     });
 
@@ -47,8 +104,13 @@ export const invokeCodeAgent = inngest.createFunction(
           projectId: event.data.projectId,
         },
         orderBy: {
-          createdAt: "asc",
+          createdAt: "desc",
         },
+        /**
+         * Limit the context length to avoid hallucination on longer history.
+         * `CONTEXT_MAX_LENGTH` is arbitrary, this can be challenged to improve performance and consistency.
+         */
+        take: CONTEXT_MAX_LENGTH,
       });
 
       // Push each message to formattedMessages
@@ -69,22 +131,32 @@ export const invokeCodeAgent = inngest.createFunction(
       { messages: prevMessages },
     );
 
-    /* [TODO]: Decrypt and pass the user's oai key */
-    // const userId = (event.data as { userId: string } | undefined)?.userId;
-    // const apiKey = await db.userSecrets.getOpenAIKey(userId); // decrypt in-memory
+    /** Setup API key for agents */
+    const agentsAPIKey = credentialsCheck.isProScope
+      ? symetricDecryption(
+          credentialsCheck.openAiKeys?.at(0)?.credential?.value ?? "",
+        )
+      : (process.env.OPENAI_API_KEY as string);
 
-    /* Invoke the code-agent */
-    const codeAgent = createCodeAgent(sandboxId); // ,apiKey);
+    /* Invoke the code-agent with user config */
+    /* Config is only included for PRO users */
+    const userConfig = isProScope
+      ? {
+          diagrams: event.data?.config?.diagrams,
+          additionalPrompt: event.data?.config?.additionalPrompt,
+        }
+      : {};
 
+    const codeAgent = createCodeAgent(sandboxId, agentsAPIKey, userConfig);
     /* Setup and add codeAgent to the inngest network */
     const network = createNetwork<AgentState>({
       name: "runp-code-agent",
       agents: [codeAgent],
       maxIter: MAX_ITERATION, // Limit how many loops the agent can perform
       defaultState: state, // Load previous messages context as default state
+
       router: async ({ network }) => {
         const summary = network.state.data.summary;
-
         /** Kill the loop if a summary had been generated, call the agent otherwise */
         if (summary) return;
         return codeAgent;
@@ -93,13 +165,9 @@ export const invokeCodeAgent = inngest.createFunction(
 
     /* Run the code-agent using user's utterance, load previous messages context state */
     const result = await network.run(event.data.input, { state });
-
-    /* Invole the title and response agents */
-    const titleAgent = createTitleAgent();
-    const responseAgent = createResponseAgent();
-
-    /* 
-    % */
+    /* Invoke the title and response agents */
+    const titleAgent = createTitleAgent(agentsAPIKey);
+    const responseAgent = createResponseAgent(agentsAPIKey);
 
     /**
      * Extract title and response agents outputs,
@@ -138,13 +206,19 @@ export const invokeCodeAgent = inngest.createFunction(
       if (isError) {
         return await prisma.message.create({
           data: {
-            projectId: event.data.projectId,
+            projectId: event.data.projectId as string,
             content: "Something went wrong, please try again.",
             role: "ASSISTANT",
             type: "ERROR",
           },
         });
       }
+
+      /** Auto-update project's title after an update */
+      await autoUpdateProjectTitle({
+        projectId: event.data.projectId as string,
+        title: titleContent,
+      });
 
       /** Save user's utterance as is */
       return await prisma.message.create({
@@ -158,6 +232,11 @@ export const invokeCodeAgent = inngest.createFunction(
               sandboxUrl: sandboxUrl,
               title: titleContent,
               files: result.state.data.files,
+              diagram: {
+                create: {
+                  code: result.state.data.files["diagram.mermaid"] ?? "",
+                },
+              },
             },
           },
         },

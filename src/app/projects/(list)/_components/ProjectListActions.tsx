@@ -20,7 +20,11 @@ function ProjectListActions() {
 
   return (
     <div className="flex align-center g-medium-10">
-      <Button variant="border" sizing="medium" onClick={() => router.push("/")}>
+      <Button
+        variant="border"
+        sizing="medium"
+        onMouseDown={() => router.push("/")}
+      >
         New chat
       </Button>
       <DropdownMenu.Root>

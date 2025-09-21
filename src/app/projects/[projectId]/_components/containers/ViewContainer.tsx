@@ -44,12 +44,12 @@ function ViewContainer({
   const isPending = !fragment?.sandboxUrl;
   const isPreviewMode = !isPending && fragment && currentView === "preview";
   const isCodeMode = !isPending && fragment && currentView === "code";
+  const showRightPanel = selectedFile && files;
 
   const handleOnSelectFile = React.useCallback(
     (path: string) => {
-      if (files && files[path]) {
-        setSelectedFile(path);
-      }
+      if (!files) return;
+      if (files[path]) setSelectedFile(path);
     },
     [files],
   );
@@ -84,7 +84,7 @@ function ViewContainer({
           }
           right={
             <React.Fragment>
-              {selectedFile && files && files[selectedFile] ? (
+              {showRightPanel && files[selectedFile] ? (
                 <React.Fragment>
                   <CodeEditorHeader
                     path={selectedFile}

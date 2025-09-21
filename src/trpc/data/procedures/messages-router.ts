@@ -39,6 +39,10 @@ export const messagesRouter = createTRPCRouter({
       z.object({
         value: utteranceValueSchema,
         projectId: z.string().min(1, { message: "projectId is required" }),
+        config: z.object({
+          diagrams: z.boolean(),
+          additionalPrompt: z.string(),
+        }),
       }),
     )
     .mutation(async ({ input, ctx }) => {
@@ -89,6 +93,9 @@ export const messagesRouter = createTRPCRouter({
         data: {
           input: input.value,
           projectId: input.projectId,
+          userId: ctx.user.id,
+          userScope: ctx.user.scope,
+          config: input.config,
         },
       });
 

@@ -1,9 +1,10 @@
-import { PrismaClient } from "../../generated/prisma";
 import {
   assertTamperResistance,
   scopesMapping,
 } from "@/security/tamper-resistance";
 import { symetricEncryption } from "@/security/encryption";
+
+import { type Prisma, PrismaClient } from "../../generated/prisma";
 
 const globalForPrisma = global as unknown as {
   prisma: PrismaClient;
@@ -36,7 +37,15 @@ const globalForPrisma = global as unknown as {
  * Injects the correct scopeKey into the mutation payload
  * before writing to the database.
  */
-function injectScopeKey(data: any, opts: { require?: boolean } = {}) {
+
+type PrismaData =
+  | Prisma.UserCreateInput
+  | Prisma.UserUncheckedCreateInput
+  | Prisma.UserUpdateInput
+  | Prisma.UserUncheckedUpdateInput
+  | undefined;
+
+function injectScopeKey(data: PrismaData, opts: { require?: boolean } = {}) {
   if (!data) return;
   // Never trust caller-provided scopeKey
   if ("scopeKey" in data) delete data.scopeKey;
@@ -71,9 +80,8 @@ const prisma =
           assertTamperResistance(result);
 
           // Strip secrets unless explicitly requested
-          if (!originalSelect?.scopeKey) delete (result as any).scopeKey;
-          if (originalSelect && !originalSelect.scope)
-            delete (result as any).scope;
+          if (!originalSelect?.scopeKey) delete result.scopeKey;
+          if (originalSelect && !originalSelect.scope) delete result.scope;
 
           return result;
         },
@@ -88,9 +96,8 @@ const prisma =
           if (!result) return result;
           assertTamperResistance(result);
 
-          if (!originalSelect?.scopeKey) delete (result as any).scopeKey;
-          if (originalSelect && !originalSelect.scope)
-            delete (result as any).scope;
+          if (!originalSelect?.scopeKey) delete result.scopeKey;
+          if (originalSelect && !originalSelect.scope) delete result.scope;
 
           return result;
         },
@@ -107,12 +114,10 @@ const prisma =
           // Strip secrets unless explicitly requested
           if (originalSelect) {
             for (const r of results) {
-              if (!originalSelect.scopeKey) delete (r as any).scopeKey;
-              if (!originalSelect.scope) delete (r as any).scope;
+              if (!originalSelect.scopeKey) delete r.scopeKey;
+              if (!originalSelect.scope) delete r.scope;
             }
-          } else {
-            for (const r of results) delete (r as any).scopeKey;
-          }
+          } else for (const r of results) delete r.scopeKey;
 
           return results;
         },
@@ -127,9 +132,8 @@ const prisma =
           const result = await query(args);
           assertTamperResistance(result);
 
-          if (!originalSelect?.scopeKey) delete (result as any).scopeKey;
-          if (originalSelect && !originalSelect.scope)
-            delete (result as any).scope;
+          if (!originalSelect?.scopeKey) delete result.scopeKey;
+          if (originalSelect && !originalSelect.scope) delete result.scope;
 
           return result;
         },
@@ -144,9 +148,8 @@ const prisma =
           const result = await query(args);
           assertTamperResistance(result);
 
-          if (!originalSelect?.scopeKey) delete (result as any).scopeKey;
-          if (originalSelect && !originalSelect.scope)
-            delete (result as any).scope;
+          if (!originalSelect?.scopeKey) delete result.scopeKey;
+          if (originalSelect && !originalSelect.scope) delete result.scope;
 
           return result;
         },
@@ -162,9 +165,8 @@ const prisma =
           const result = await query(args);
           assertTamperResistance(result);
 
-          if (!originalSelect?.scopeKey) delete (result as any).scopeKey;
-          if (originalSelect && !originalSelect.scope)
-            delete (result as any).scope;
+          if (!originalSelect?.scopeKey) delete result.scopeKey;
+          if (originalSelect && !originalSelect.scope) delete result.scope;
 
           return result;
         },

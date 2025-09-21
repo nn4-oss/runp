@@ -1,12 +1,13 @@
 "use client";
 
 import React from "react";
-import { Badge, Dialog, Table, Tooltip } from "@usefui/components";
+import styled from "styled-components";
 
+import { Badge, Dialog, Table, Tooltip } from "@usefui/components";
 import { Icon, PixelIcon } from "@usefui/icons";
 import {
   CopyCode,
-  UpdateCredentialDialog,
+  // UpdateCredentialDialog,
   DeleteCredentialDialog,
 } from "@/components";
 
@@ -14,6 +15,10 @@ import { format, formatDistanceToNow } from "date-fns";
 import { maskKey } from "@/utils/data-tables";
 
 import type { ThirdPartyServiceType } from "generated/prisma";
+
+const StyledTable = styled(Table)`
+  background-color: var(--contrast-color);
+`;
 
 function CredentialsTable({
   data,
@@ -32,7 +37,7 @@ function CredentialsTable({
   }[];
 }) {
   return (
-    <Table className="w-100">
+    <StyledTable className="w-100">
       <Table.Body>
         {data.map((credential) => {
           const createdAt = format(credential.createdAt, "dd/MM/yyyy");
@@ -111,7 +116,7 @@ function CredentialsTable({
               </Table.Cell>
 
               <Table.Cell className="flex justify-end">
-                <Dialog.Root>
+                {/* <Dialog.Root>
                   <Dialog.Trigger variant="border" sizing="small" rawicon>
                     <span className="flex align-center justify-center p-y-small-60">
                       <Icon>
@@ -121,12 +126,12 @@ function CredentialsTable({
                   </Dialog.Trigger>
 
                   <UpdateCredentialDialog credentialId={credential.id} />
-                </Dialog.Root>
+                </Dialog.Root> */}
                 <Dialog.Root>
                   <Dialog.Trigger variant="border" sizing="small" rawicon>
                     <span className="flex align-center justify-center p-y-small-60">
-                      <Icon fill="var(--color-red)">
-                        <PixelIcon.Delete />
+                      <Icon>
+                        <PixelIcon.Close />
                       </Icon>
                     </span>
                   </Dialog.Trigger>
@@ -138,7 +143,7 @@ function CredentialsTable({
           );
         })}
       </Table.Body>
-    </Table>
+    </StyledTable>
   );
 }
 

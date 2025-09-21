@@ -5,7 +5,7 @@ import { RESPONSE_AGENT_PARAMETERS } from "../config/parameters";
 
 import type { AgentState } from "../types";
 
-export default function createResponseAgent(_apiKey?: string) {
+export default function createResponseAgent(apiKey?: string) {
   return createAgent<AgentState>({
     name: "response-agent",
     description: "A response generator agent",
@@ -13,6 +13,7 @@ export default function createResponseAgent(_apiKey?: string) {
     model: openai({
       model: "gpt-4o",
       defaultParameters: RESPONSE_AGENT_PARAMETERS,
+      apiKey,
     }),
   });
 }

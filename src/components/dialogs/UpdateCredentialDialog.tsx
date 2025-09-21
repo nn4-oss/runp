@@ -100,12 +100,13 @@ function UpdateCredentialDialog({ credentialId }: { credentialId: string }) {
 
           form.reset();
           dialog.methods?.toggleDialog?.();
-        } catch (err: any) {
-          toast.error(err.message || "Something went wrong");
+        } catch (error) {
+          toast.error("Something went wrong");
+          console.error(error);
         }
       }
     },
-    [setPrimaryIntegration, queryClient, dialog, form],
+    [],
   );
 
   return (
@@ -164,8 +165,7 @@ function UpdateCredentialDialog({ credentialId }: { credentialId: string }) {
                 <span className="fs-medium-20">Primary key</span>
 
                 <span className="fs-medium-10 opacity-default-30">
-                  Primary keys will be used during workflows run instead of
-                  Foudation UIs key.
+                  Primary keys will be used during workflow runs.
                 </span>
               </Field.Label>
             </Field.Wrapper>

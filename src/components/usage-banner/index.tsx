@@ -6,8 +6,7 @@ import styled from "styled-components";
 import { useTRPC } from "@/trpc/client";
 import { useQuery } from "@tanstack/react-query";
 
-import { UpgradeScopeDialog } from "../";
-import { Badge, Button, Dialog, Tooltip } from "@usefui/components";
+import { Badge, Button, Tooltip } from "@usefui/components";
 import { Icon, PixelIcon } from "@usefui/icons";
 
 import { formatDuration, intervalToDuration } from "date-fns";
@@ -38,11 +37,10 @@ const Banner = styled(Badge)`
 
 type UsageBannerProps = {
   points: number;
-  scope: string;
   beforeNext: number;
 };
 
-function UsageBanner({ scope, points, beforeNext }: UsageBannerProps) {
+function UsageBanner({ points, beforeNext }: UsageBannerProps) {
   const [show, setShow] = React.useState(true);
 
   const trpc = useTRPC();
@@ -85,23 +83,13 @@ function UsageBanner({ scope, points, beforeNext }: UsageBannerProps) {
         </span>
       </div>
 
-      <div className="flex align-center g-medium-30">
-        <Dialog.Root>
-          <Dialog.Trigger variant="primary" sizing="medium">
-            Upgrade
-          </Dialog.Trigger>
-
-          <UpgradeScopeDialog />
-        </Dialog.Root>
-
-        <Tooltip content="Hide">
-          <Button variant="ghost" onClick={() => setShow(false)}>
-            <Icon>
-              <PixelIcon.Close />
-            </Icon>
-          </Button>
-        </Tooltip>
-      </div>
+      <Tooltip content="Hide">
+        <Button variant="ghost" onClick={() => setShow(false)}>
+          <Icon>
+            <PixelIcon.Close />
+          </Icon>
+        </Button>
+      </Tooltip>
     </Banner>
   );
 }

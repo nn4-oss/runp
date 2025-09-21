@@ -9,20 +9,17 @@ import { useQuery } from "@tanstack/react-query";
 
 import {
   Avatar,
+  Badge,
   Dialog,
   Divider,
   DropdownMenu,
   ScrollArea,
 } from "@usefui/components";
 import { Icon, PixelIcon, SocialIcon } from "@usefui/icons";
-import { SignOutButton } from "@clerk/nextjs";
-import { ColorModes } from "..";
+import { SignOutButton, useUser } from "@clerk/nextjs";
+import { UsageRange } from "..";
 
 import { formatDuration, intervalToDuration } from "date-fns";
-
-type RangeProps = {
-  $percentage: number;
-};
 
 const StyledAvatar = styled(Avatar)`
   width: var(--measurement-medium-80) !important;
@@ -39,33 +36,14 @@ const PointsWrapper = styled.div`
   border-radius: var(--measurement-medium-30);
   border: var(--measurement-small-30) solid var(--font-color-alpha-10);
 `;
-const RangeContainer = styled.div`
-  background-color: var(--font-color-alpha-10);
-  width: 100%;
-  border-radius: var(--measurement-large-90);
-  height: fit-content;
-`;
-const PointsRange = styled.div<RangeProps>`
-  border-radius: var(--measurement-large-90);
 
-  height: var(--measurement-medium-30);
-  width: ${({ $percentage }) => `${$percentage}%`};
-
-  background-color: var(--color-green);
-
-  &[data-threshold="true"] {
-    background-color: var(--color-orange) !important;
-  }
-
-  &[data-empty="true"] {
-    background-color: var(--color-red) !important;
-  }
-
-  will-change: width;
-  transition: ease-in-out 0.2s;
-`;
+const stripLongString = (content?: string) => {
+  if (Number(content?.length) >= 18) return `${content?.substring(0, 18)}..`;
+  else return content;
+};
 
 function UserAvatar() {
+  const clerkUser = useUser();
   const router = useRouter();
   const trpc = useTRPC();
 
@@ -97,48 +75,55 @@ function UserAvatar() {
     }
   }, [usage?.msBeforeNext]);
 
+  const avatarImageSrc =
+    clerkUser?.user?.imageUrl ?? user?.imageUrl ?? "/gradient.svg";
+
   return (
     <DropdownMenu.Root>
       <DropdownMenu>
         <DropdownMenu.Trigger>
-          <StyledAvatar src={user?.imageUrl ?? "/gradient.svg"} />
-        </DropdownMenu.Trigger>
-        <ScrollArea as={DropdownMenu.Content} sizing="medium" scrollbar>
-          <div className="grid p-l-medium-30 p-t-medium-30">
-            {user?.name && (
-              <React.Fragment>
-                <p className="fs-medium-20">{user?.name}</p>
-                <span className="fs-medium-10 opacity-default-60">
-                  {user?.email}
-                </span>
-
-                <Divider className="m-y-medium-50" />
-              </React.Fragment>
+          <StyledAvatar src={avatarImageSrc} />
+          <div className="flex align-center g-medium-10 ">
+            {user?.scope && (
+              <Badge variant="secondary">
+                <span className="fs-small-50">{user.scope}</span>
+              </Badge>
             )}
           </div>
+        </DropdownMenu.Trigger>
+
+        <ScrollArea as={DropdownMenu.Content}>
+          {user?.name && (
+            <header className="grid p-x-medium-30 p-t-medium-30">
+              <div className="flex align-center g-medium-30">
+                <Avatar src={avatarImageSrc} sizing="small" />
+                <hgroup className="grid">
+                  <p className="fs-medium-10">
+                    {stripLongString(String(user?.name))}
+                  </p>
+                  <span className="fs-small-60 opacity-default-60">
+                    {stripLongString(String(user.email))}
+                  </span>
+                </hgroup>
+              </div>
+
+              <Divider className="m-y-medium-50" />
+            </header>
+          )}
 
           {usage && usageMetadata && (
-            <PointsWrapper className="p-medium-30 m-b-medium-60">
+            <PointsWrapper className="p-medium-30 m-b-medium-30">
               <hgroup className="flex align-center justify-between m-b-medium-30">
                 <p className="fs-medium-10 opacity-default-60">Messages</p>
                 <p className="fs-medium-10">
                   {usage?.remainingPoints}&nbsp;left
                 </p>
               </hgroup>
-
-              <RangeContainer className="m-b-medium-30">
-                <PointsRange
-                  key={usage?.consumedPoints}
-                  $percentage={Math.min(
-                    100,
-                    Math.max(0, Number(usageMetadata?.percentage) * 100),
-                  )}
-                  data-empty={Boolean(Number(usage?.remainingPoints) === 0)}
-                  data-threshold={Boolean(
-                    Number(usageMetadata?.percentage) >= 0.3,
-                  )}
-                />
-              </RangeContainer>
+              <UsageRange
+                consumedPoints={Number(usage?.consumedPoints)}
+                remainingPoints={Number(usage?.remainingPoints)}
+                percentage={Number(usageMetadata?.percentage)}
+              />
 
               <span className="fs-small-60 opacity-default-30 flex align-center g-medium-10">
                 <Icon>
@@ -150,72 +135,58 @@ function UserAvatar() {
             </PointsWrapper>
           )}
 
-          <DropdownMenu.Item
-            className="w-100 flex align-center g-medium-30"
-            onClick={() => router.push("/profile")}
+          <Dialog.Trigger
+            rawicon
+            variant="ghost"
+            style={{
+              width: "100%",
+              justifyContent: "start",
+            }}
           >
-            <Icon>
-              <PixelIcon.User />
-            </Icon>
-            Profile
-          </DropdownMenu.Item>
+            <DropdownMenu.Item className="w-100 flex align-center g-medium-30">
+              <span>
+                <Icon>
+                  <PixelIcon.Zap />
+                </Icon>
+              </span>
+              Subscription
+              <span className="flex align-center justify-end w-100">
+                {user?.scope && (
+                  <Badge variant="secondary">
+                    <span className="fs-small-50">{user.scope}</span>
+                  </Badge>
+                )}
+              </span>
+            </DropdownMenu.Item>
+          </Dialog.Trigger>
+
+          <Divider className="m-y-medium-10" />
+
           <DropdownMenu.Item
             className="w-100 flex align-center g-medium-30"
-            onClick={() => router.push("/settings")}
+            onMouseDown={() => router.push("/settings/profile")}
+          >
+            <span>
+              <Icon>
+                <PixelIcon.User />
+              </Icon>
+            </span>
+            Profile
+            <span className="flex align-center justify-end w-100">
+              <Icon viewBox="0 0 18 18">
+                <SocialIcon.Clerk />
+              </Icon>
+            </span>
+          </DropdownMenu.Item>
+
+          <DropdownMenu.Item
+            className="w-100 flex align-center g-medium-30"
+            onMouseDown={() => router.push("/settings")}
           >
             <Icon>
               <PixelIcon.Sliders />
             </Icon>
             Settings
-          </DropdownMenu.Item>
-
-          <DropdownMenu.Item
-            className="flex align-center g-medium-30"
-            onClick={() => router.push("/docs/introduction")}
-          >
-            <span className="flex align-center justify-center">
-              <Icon>
-                <PixelIcon.BookOpen />
-              </Icon>
-            </span>
-            Documentation
-            <div className="flex w-100 justify-end">
-              <Icon>
-                <PixelIcon.Open />
-              </Icon>
-            </div>
-          </DropdownMenu.Item>
-          <Divider className="m-y-medium-10" />
-
-          <DropdownMenu.Item
-            className="flex align-center g-medium-30"
-            onClick={() => router.push("/settings/api-keys")}
-          >
-            <span className="flex align-center justify-center">
-              <Icon>
-                <SocialIcon.OpenAi />
-              </Icon>
-            </span>
-            API&nbsp;Keys
-            <div className="flex w-100 justify-end">
-              <Icon>
-                <PixelIcon.Open />
-              </Icon>
-            </div>
-          </DropdownMenu.Item>
-
-          <Divider className="m-y-medium-10" />
-
-          <DropdownMenu.Item className="flex align-center g-medium-30" radio>
-            <span className="flex align-center justify-center">
-              <Icon>
-                <PixelIcon.Contrast />
-              </Icon>
-            </span>
-            Theme
-            <div className="flex w-100 justify-end">
-              <ColorModes />
-            </div>
           </DropdownMenu.Item>
 
           <Divider className="m-y-medium-10" />

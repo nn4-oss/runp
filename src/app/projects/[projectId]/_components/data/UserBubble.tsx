@@ -28,7 +28,7 @@ const Bubble = styled(Badge)`
   line-height: 1.1;
   word-break: keep-all;
 
-  font-size: var(--fontsize-medium-10) !important;
+  font-size: var(--fontsize-medium-20) !important;
 
   syntax: "*";
   inherits: false;

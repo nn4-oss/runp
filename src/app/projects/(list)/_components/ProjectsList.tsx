@@ -5,12 +5,12 @@ import styled from "styled-components";
 
 import { useTRPC } from "@/trpc/client";
 import { useSearchParams } from "next/navigation";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
 import ProjectListActions from "./ProjectListActions";
 import ProjectsTable from "./ProjectsTable";
 
-import { AppContainer, FixedHeader } from "@/components";
+import { AppContainer, FixedHeader, Spinner } from "@/components";
 import { Field } from "@usefui/components";
 import { Icon, PixelIcon } from "@usefui/icons";
 
@@ -26,7 +26,7 @@ const SearchContainer = styled.div`
 
 function ProjectsList() {
   const trpc = useTRPC();
-  const { data: projects } = useSuspenseQuery(
+  const { data: projects, isPending } = useQuery(
     trpc.projects.getMany.queryOptions(),
   );
 
@@ -37,9 +37,11 @@ function ProjectsList() {
   const deferredSearchQuery = React.useDeferredValue<string>(searchQuery);
 
   const sortedData = React.useMemo(() => {
+    if (!projects) return;
+
     return [...projects].sort((a, b) => {
-      const aTime = new Date(a.createdAt).getTime();
-      const bTime = new Date(b.createdAt).getTime();
+      const aTime = new Date(a.updatedAt).getTime();
+      const bTime = new Date(b.updatedAt).getTime();
 
       const asc = aTime - bTime;
       const desc = bTime - aTime;
@@ -50,6 +52,7 @@ function ProjectsList() {
   }, [projects, sortOption]);
 
   const tableData = React.useMemo(() => {
+    if (!sortedData) return;
     return sortedData.filter(
       (item) =>
         item.id.includes(deferredSearchQuery) ||
@@ -57,20 +60,24 @@ function ProjectsList() {
     );
   }, [sortedData, deferredSearchQuery]);
 
-  const hasData = tableData.length !== 0;
+  if (isPending) {
+    return (
+      <AppContainer className="w-100 h-100 flex align-center justify-center">
+        <Spinner />
+      </AppContainer>
+    );
+  }
+
+  const hasData = projects && tableData && Number(tableData?.length) !== 0;
 
   return (
-    <AppContainer
-      className="h-100 w-100 "
-      scrollbar
-      style={{ position: "relative" }}
-    >
+    <AppContainer className="w-100 h-100" scrollbar>
       <FixedHeader className="grid">
         <div className="flex justify-between align-center p-y-medium-60 p-x-medium-60">
           <p className="fs-medium-20">
             All projects&nbsp;
             <span className="opacity-default-30">
-              ({tableData.length}/{projects.length})
+              ({Number(tableData?.length)}/{Number(projects?.length)})
             </span>
           </p>
 

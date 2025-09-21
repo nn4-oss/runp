@@ -4,10 +4,10 @@ import React from "react";
 import styled from "styled-components";
 
 import { useTRPC } from "@/trpc/client";
-import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { Button, Dialog, Portal } from "@usefui/components";
+import { Button, Dialog, useDialog, Portal } from "@usefui/components";
 
 import { toast } from "sonner";
 import { Spinner } from "@/components";
@@ -23,10 +23,18 @@ const DangerButton = styled(Button)`
 function DeleteProjectDialog({ projectId }: { projectId: string }) {
   const trpc = useTRPC();
   const router = useRouter();
+  const queryClient = useQueryClient();
+  const dialog = useDialog();
 
   const deleteProject = useMutation(
     trpc.projects.delete.mutationOptions({
-      onSuccess: () => router.push("/projects"),
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.projects.getMany.queryOptions(),
+        );
+        router.push("/projects");
+      },
+      onSettled: () => dialog.methods?.toggleDialog?.(),
       onError: (error) => toast.error(error.message),
     }),
   );
@@ -35,7 +43,7 @@ function DeleteProjectDialog({ projectId }: { projectId: string }) {
     await deleteProject.mutateAsync({
       id: projectId,
     });
-  }, [projectId]);
+  }, []);
 
   return (
     <Portal container="portal-container">

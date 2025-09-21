@@ -1,18 +1,18 @@
 export const POINTS_PER_SCOPE = {
-  FREE: 10,
-  PRO: 200,
+  FREE: 5,
+  PRO: 100,
 } as const;
 
 export const SCOPES_FEATURES = {
   FREE: [
     `${POINTS_PER_SCOPE.FREE} messages /month`,
-    "Customizable System Prompts",
-    "End-to-end Encryption",
+    "Unlimited projects",
+    "T3 App Docker Image",
   ],
   PRO: [
     `${POINTS_PER_SCOPE.PRO} messages /month`,
-    "Access to API Configurations",
-    "Custom Docker Image and Sandbox",
+    "LLM and Sandbox configurations",
+    "Unlock Runp at full capacity",
   ],
   // ENTERPRISE: [],
 };

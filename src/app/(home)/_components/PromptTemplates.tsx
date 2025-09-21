@@ -4,7 +4,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { useRouter } from "next/navigation";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
 import { useClerk } from "@clerk/nextjs";
 
@@ -22,6 +22,10 @@ function PromptTemplates() {
   const trpc = useTRPC();
   const clerk = useClerk();
 
+  const { data: config } = useQuery(
+    trpc.configuration.getLatestVersion.queryOptions(),
+  );
+
   const createProject = useMutation(
     trpc.projects.create.mutationOptions({
       onSuccess: (data) => {
@@ -36,7 +40,13 @@ function PromptTemplates() {
 
   const onPredefinedPromptSelection = React.useCallback(
     async (content: string) => {
-      createProject.mutate({ value: content });
+      createProject.mutate({
+        value: content,
+        config: {
+          diagrams: Boolean(config?.diagrams),
+          additionalPrompt: config?.additionalPrompt ?? "",
+        },
+      });
     },
     [createProject],
   );

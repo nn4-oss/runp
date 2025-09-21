@@ -1,8 +1,13 @@
 import { Sandbox } from "@e2b/code-interpreter";
+import { SANDBOX_TIMEOUT } from "../config/sandbox-variables";
+
 import type { AgentResult, Message, TextMessage } from "@inngest/agent-kit";
 
 export async function getSandbox(sandboxId: string) {
   const sandbox = await Sandbox.connect(sandboxId);
+
+  /** Add sandbox_timeout extends sandboxes TTL duration */
+  await sandbox.setTimeout(SANDBOX_TIMEOUT);
   return sandbox;
 }
 
@@ -38,8 +43,25 @@ export async function getParsedAgentOutput(
 
   const output = contentArray[0]?.content;
 
+  /** Ensure we only accept string or string[] */
+  if (typeof output === "string") return output;
+
   /* Rare exception: Always return a string in this case */
-  if (Array.isArray(output)) return output.map((content) => content).join("");
+  if (Array.isArray(output)) {
+    // Reject non-primitive silently
+    const parts = output
+      .map((part) =>
+        typeof part === "string"
+          ? part
+          : part == null
+            ? ""
+            : typeof part === "number" || typeof part === "boolean"
+              ? String(part)
+              : "",
+      )
+      .join("");
+    return parts.length > 0 ? parts : defaultFallback;
+  }
 
   return output;
 }

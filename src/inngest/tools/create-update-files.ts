@@ -2,6 +2,7 @@ import { getSandbox } from "../utils";
 
 import type { AgentState } from "../types";
 import type { NetworkRun } from "@inngest/agent-kit";
+import type { GetStepTools, Inngest } from "inngest";
 
 /**
  * Get the updated list of files array;
@@ -22,7 +23,7 @@ export default async function createUpdateAgentToolHandler({
   sandboxId,
 }: {
   files: Files;
-  step: any;
+  step?: GetStepTools<Inngest.Any>;
   network: NetworkRun<AgentState>;
   sandboxId: string;
 }) {
@@ -41,7 +42,7 @@ export default async function createUpdateAgentToolHandler({
 
       return updatedFiles;
     } catch (error) {
-      return `Error: ${error}`;
+      return `Error: ${error as string}`;
     }
   });
 

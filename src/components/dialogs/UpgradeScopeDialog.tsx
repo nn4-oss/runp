@@ -16,6 +16,7 @@ import {
   Button,
   useDialog,
   Badge,
+  Tooltip,
 } from "@usefui/components";
 import { Icon, PixelIcon } from "@usefui/icons";
 
@@ -33,12 +34,12 @@ const PlansWrapper = styled.div`
   padding: var(--measurement-medium-60);
 `;
 
-function PlanHeader({ scope, price = 0 }: { scope: string; price?: number }) {
+function PlanHeader({ scope, price }: { scope: string; price?: number }) {
   return (
     <hgroup className="grid g-medium-30 m-b-medium-60">
       <h6 className="fs-medium-20">Runp&nbsp;{scope}</h6>
-      <span className="fs-medium-40 flex align-center">
-        ${price}&nbsp;
+      <span className="fs-medium-20 flex align-center">
+        {price ? <React.Fragment>`$${price}`</React.Fragment> : "Free"}&nbsp;
         <span className="opacity-default-30 fs-medium-10">/month</span>
       </span>
     </hgroup>
@@ -106,9 +107,11 @@ function UpgradeScopeDialog() {
                   Free
                 </Tabs.Trigger>
                 <span className="opacity-default-10">/</span>
-                <Tabs.Trigger sizing="small" value={ScopeEnum.PRO}>
-                  Pro
-                </Tabs.Trigger>
+                <Tooltip content="Available Soon">
+                  <Tabs.Trigger sizing="small" value={ScopeEnum.PRO}>
+                    Pro
+                  </Tabs.Trigger>
+                </Tooltip>
               </div>
 
               <Divider className="m-b-medium-60" />
@@ -162,10 +165,10 @@ function UpgradeScopeDialog() {
                 </div>
 
                 <Button
-                  disabled={!isFreeScope || updateUser.isPending}
                   sizing="medium"
-                  variant={isFreeScope ? "primary" : "mono"}
                   style={{ width: "100%" }}
+                  variant={isFreeScope ? "primary" : "mono"}
+                  disabled={!isFreeScope || updateUser.isPending}
                   onClick={() => onSubmit(ScopeEnum.PRO)}
                 >
                   {isFreeScope ? "Upgrade to Runp Pro" : "Current plan"}
@@ -191,7 +194,7 @@ function UpgradeScopeDialog() {
           </span>
         </footer>
       </Dialog>
-      <Dialog.Overlay closeOnInteract />
+      <Dialog.Overlay closeOnInteract={!updateUser.isPending} />
     </Portal>
   );
 }
