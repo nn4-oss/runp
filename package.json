@@ -8,6 +8,7 @@
     "build": "next build",
     "check": "next lint && tsc --noEmit",
     "dev": "next dev --turbo",
+    "postinstall": "pnpx prisma generate",
     "db:init": "pnpx prisma init",
     "db:generate": "pnpx prisma generate",
     "db:migrate-dev": "pnpx prisma migrate dev",
