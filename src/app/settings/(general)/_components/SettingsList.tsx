@@ -22,13 +22,14 @@ function SettingsList() {
 
   const isFreeScope = user?.scope === "FREE";
   const hasDefaultConfig =
-    config?.at(0)?.diagrams === false && config?.at(0)?.additionalPrompt === "";
+    config?.diagrams === false && config?.additionalPrompt === "";
   const disableReset = isPending || isFreeScope || hasDefaultConfig;
 
   const updateConfig = useMutation(
     trpc.configuration.update.mutationOptions({
       onSuccess: () => {
-        window && window.location.reload();
+        if (!window) return;
+        window.location.reload();
       },
       onError: (error) => toast.error(error.message),
     }),
@@ -36,7 +37,7 @@ function SettingsList() {
 
   const handleReset = useCallback(async () => {
     return await updateConfig.mutateAsync({
-      id: String(config?.at(0)?.id),
+      id: String(config?.id),
       diagrams: false,
       additionalPrompt: "",
     });

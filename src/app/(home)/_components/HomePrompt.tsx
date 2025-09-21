@@ -138,8 +138,8 @@ function HomePrompt() {
       await createProject.mutateAsync({
         value: values.content,
         config: {
-          diagrams: Boolean(config?.at(0)?.diagrams),
-          additionalPrompt: config?.at(0)?.additionalPrompt ?? "",
+          diagrams: Boolean(config?.diagrams),
+          additionalPrompt: config?.additionalPrompt ?? "",
         },
       });
     },

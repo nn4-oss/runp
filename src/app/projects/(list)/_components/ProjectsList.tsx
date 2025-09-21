@@ -40,8 +40,8 @@ function ProjectsList() {
     if (!projects) return;
 
     return [...projects].sort((a, b) => {
-      const aTime = new Date(a.createdAt).getTime();
-      const bTime = new Date(b.createdAt).getTime();
+      const aTime = new Date(a.updatedAt).getTime();
+      const bTime = new Date(b.updatedAt).getTime();
 
       const asc = aTime - bTime;
       const desc = bTime - aTime;

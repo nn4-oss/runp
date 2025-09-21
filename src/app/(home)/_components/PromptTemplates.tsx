@@ -43,8 +43,8 @@ function PromptTemplates() {
       createProject.mutate({
         value: content,
         config: {
-          diagrams: Boolean(config?.at(0)?.diagrams),
-          additionalPrompt: config?.at(0)?.additionalPrompt ?? "",
+          diagrams: Boolean(config?.diagrams),
+          additionalPrompt: config?.additionalPrompt ?? "",
         },
       });
     },

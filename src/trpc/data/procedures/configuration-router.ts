@@ -7,10 +7,9 @@ import { z } from "zod";
 
 export const configurationRouter = createTRPCRouter({
   getLatestVersion: protectedProcedure.query(async ({ ctx }) => {
-    const configHistory = await prisma.configuration.findMany({
+    const configHistory = await prisma.configuration.findFirst({
       where: { userId: ctx.user.id },
       orderBy: { updatedAt: "desc" },
-      take: 1,
     });
 
     return configHistory;
