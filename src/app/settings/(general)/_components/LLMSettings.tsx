@@ -95,7 +95,14 @@ function LLMSettings({ isFreeScope }: { isFreeScope: boolean }) {
 
   const onSubmit = React.useCallback(
     async (values: z.infer<typeof formSchema>) => {
-      await updateConfig.mutateAsync({
+      if (!configuration) {
+        return await createConfig.mutateAsync({
+          diagrams: values.diagrams,
+          additionalPrompt: values.additionalPrompt,
+        });
+      }
+
+      return await updateConfig.mutateAsync({
         id: String(configuration?.id),
         diagrams: values.diagrams,
         additionalPrompt: values.additionalPrompt,

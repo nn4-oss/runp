@@ -41,32 +41,12 @@ export const configurationRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ input, ctx }) => {
-      const user = await prisma.user.findUnique({
-        where: { id: ctx.user.id },
-      });
-
-      if (!user) {
-        throw new TRPCError({ code: "NOT_FOUND", message: "User not found" });
-      }
-
       return prisma.configuration.update({
         where: { id: input.id, userId: ctx.user.id },
         data: {
           diagrams: input.diagrams,
           additionalPrompt: input.additionalPrompt ?? "",
         },
-      });
-    }),
-
-  delete: protectedProcedure
-    .input(
-      z.object({
-        id: z.string(),
-      }),
-    )
-    .mutation(async ({ input }) => {
-      return prisma.user.delete({
-        where: { id: input.id },
       });
     }),
 });

@@ -25,7 +25,7 @@ function SettingsList() {
     config?.diagrams === false && config?.additionalPrompt === "";
   const disableReset = isPending || isFreeScope || hasDefaultConfig;
 
-  const updateConfig = useMutation(
+  const deleteConfig = useMutation(
     trpc.configuration.update.mutationOptions({
       onSuccess: () => {
         if (!window) return;
@@ -36,12 +36,14 @@ function SettingsList() {
   );
 
   const handleReset = useCallback(async () => {
-    return await updateConfig.mutateAsync({
+    if (!config) return;
+
+    return await deleteConfig.mutateAsync({
       id: String(config?.id),
       diagrams: false,
       additionalPrompt: "",
     });
-  }, []);
+  }, [config]);
 
   return (
     <Page.Content className="w-100 h-100" scrollbar>
@@ -52,11 +54,11 @@ function SettingsList() {
           <Button
             variant="border"
             sizing="medium"
-            disabled={disableReset || updateConfig.isPending}
+            disabled={disableReset || deleteConfig.isPending}
             onClick={handleReset}
           >
             Reset default
-            {updateConfig.isPending && <Spinner />}
+            {deleteConfig.isPending && <Spinner />}
           </Button>
         </div>
       </FixedHeader>
