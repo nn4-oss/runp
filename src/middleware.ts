@@ -8,9 +8,14 @@ const isPublicRoute = createRouteMatcher([
   "/api/inngest(.*)",
 ]);
 
-export default clerkMiddleware(async (auth, req) => {
-  if (!isPublicRoute(req)) await auth.protect();
-});
+export default clerkMiddleware(
+  async (auth, req) => {
+    if (!isPublicRoute(req)) await auth.protect();
+  },
+  {
+    authorizedParties: ["https://runp.dev"],
+  },
+);
 
 export const config = {
   matcher: [
