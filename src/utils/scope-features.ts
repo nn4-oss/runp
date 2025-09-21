@@ -1,6 +1,6 @@
 export const POINTS_PER_SCOPE = {
-  FREE: 10,
-  PRO: 200,
+  FREE: 5,
+  PRO: 100,
 } as const;
 
 export const SCOPES_FEATURES = {
