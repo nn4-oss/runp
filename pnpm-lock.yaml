@@ -147,6 +147,9 @@ importers:
       eslint-config-next:
         specifier: ^15.5.3
         version: 15.5.3(eslint@9.35.0(jiti@2.5.1))(typescript@5.9.2)
+      netlify-plugin-inngest:
+        specifier: ^1.0.1
+        version: 1.0.1
       prettier:
         specifier: ^3.6.2
         version: 3.6.2
@@ -2794,6 +2797,10 @@ packages:
   negotiator@1.0.0:
     resolution: {integrity: sha512-8Ofs/AUQh8MaEcrlq5xOX0CQ9ypTF5dl78mjlMNfOK08fzpgTHQRQPBxcPlEtIw0yRpws+Zo/3r+5WRby7u3Gg==}
     engines: {node: '>= 0.6'}
+
+  netlify-plugin-inngest@1.0.1:
+    resolution: {integrity: sha512-1BHTAAQTpxlllOqlmUmQpCDuMZlauPoNJOqJfFl7POoUZAUiR9m9+bKo1eM4D/wC4RMsm0HF4vK2ps6VSVwyoA==}
+    engines: {node: ^12.20.0 || ^14.14.0 || >=16.0.0}
 
   next@15.5.3:
     resolution: {integrity: sha512-r/liNAx16SQj4D+XH/oI1dlpv9tdKJ6cONYPwwcCC46f2NjpaRWY+EKCzULfgQYV6YKXjHBchff2IZBSlZmJNw==}
@@ -6587,6 +6594,8 @@ snapshots:
   negotiator@0.6.3: {}
 
   negotiator@1.0.0: {}
+
+  netlify-plugin-inngest@1.0.1: {}
 
   next@15.5.3(@opentelemetry/api@1.9.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1):
     dependencies:
