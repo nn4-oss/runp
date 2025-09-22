@@ -1,6 +1,7 @@
 export { default as AnimatedAgent } from "./animated-agent";
 export { default as AnimatedHero } from "./animated-hero";
 export { default as Breadcrumbs } from "./breadcrumbs";
+export { default as Card } from "./cards";
 export { default as CodeEditor } from "./code-editor";
 export { default as ColorModes } from "./color-mode";
 export { default as CopyCode } from "./copy-code";

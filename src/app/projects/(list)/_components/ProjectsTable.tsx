@@ -1,21 +1,32 @@
 "use client";
 
 import React from "react";
+import styled from "styled-components";
+
 import { useRouter } from "next/navigation";
 
-import {
-  Badge,
-  Dialog,
-  DropdownMenu,
-  Table,
-  Tooltip,
-} from "@usefui/components";
+import { Badge, Dialog, DropdownMenu } from "@usefui/components";
 import { Icon, PixelIcon, WebIcon } from "@usefui/icons";
-import { CopyCode, DeleteProjectDialog, UpdateNameDialog } from "@/components";
+import { Card, DeleteProjectDialog, UpdateNameDialog } from "@/components";
 
 import { maskKey } from "@/utils/data-tables";
 import { format, formatDistanceToNow } from "date-fns";
+
 import type { MessageRole, MessageType } from "generated/prisma";
+
+export const GridLayout = styled.div`
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(var(--measurement-large-90), 1fr)
+  );
+  grid-gap: var(--measurement-medium-30) var(--measurement-medium-30);
+  box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
+  }
+`;
 
 function ProjectsTable({
   data,
@@ -39,62 +50,38 @@ function ProjectsTable({
   const router = useRouter();
 
   return (
-    <Table className="w-100">
-      <Table.Body>
-        {data.map((project) => {
-          const createdAt = format(project.createdAt, "dd/MM/yyyy");
-          const lastUpdate = formatDistanceToNow(project.updatedAt, {
-            addSuffix: true,
-          });
+    <GridLayout>
+      {data.map((project) => {
+        const createdAt = format(project.createdAt, "dd/MM/yyyy");
+        const lastUpdate = formatDistanceToNow(project.updatedAt, {
+          addSuffix: true,
+        });
 
-          return (
-            <Table.Row key={project.id}>
-              <Table.Cell>
-                <p className="fs-medium-10">{project.name}</p>
-              </Table.Cell>
-              <Table.Cell>
-                <Badge variant="border">
-                  <kbd className="fs-small-60">
-                    {project.messages.length}&nbsp;Messages
-                  </kbd>
-                </Badge>
-              </Table.Cell>
-              <Table.Cell>
-                <span className="flex align-center g-medium-10">
-                  <Badge variant="border">
-                    <kbd className="fs-small-60">{maskKey(project.id)}</kbd>
-                  </Badge>
-                  <CopyCode value={project.id} />
-                </span>
-              </Table.Cell>
+        return (
+          <Card key={project.id} updatedAt={lastUpdate} itemId={project.id}>
+            <header className="flex align-center justify-between m-b-large-30">
+              <kbd className="fs-small-60 opacity-default-30">
+                {maskKey(project.id)}
+              </kbd>
 
-              <Table.Cell>
-                <Tooltip content="Created At">
-                  <Badge variant="border">
-                    <Icon>
-                      <PixelIcon.Calendar />
-                    </Icon>
-                    {createdAt}
-                  </Badge>
-                </Tooltip>
-                <Tooltip content="Updated At">
-                  <Badge variant="border">
-                    <Icon>
-                      <PixelIcon.Clock />
-                    </Icon>
-                    {lastUpdate}
-                  </Badge>
-                </Tooltip>
-              </Table.Cell>
-
-              <Table.Cell className="flex justify-end">
+              <div className="flex align-center g-medium-10">
+                <Dialog.Root>
+                  <Dialog.Trigger variant="ghost" sizing="small" rawicon>
+                    <span className="flex align-center justify-center p-y-small-60">
+                      <Icon>
+                        <PixelIcon.Close />
+                      </Icon>
+                    </span>
+                  </Dialog.Trigger>
+                  <DeleteProjectDialog projectId={project.id} />
+                </Dialog.Root>
                 <Dialog.Root>
                   <DropdownMenu.Root>
                     <DropdownMenu>
-                      <DropdownMenu.Trigger variant="border" sizing="small">
+                      <DropdownMenu.Trigger variant="ghost" sizing="small">
                         <span className="flex align-center justify-center p-y-small-60">
                           <Icon>
-                            <WebIcon.Option />
+                            <WebIcon.More />
                           </Icon>
                         </span>
                       </DropdownMenu.Trigger>
@@ -145,23 +132,24 @@ function ProjectsTable({
                     projectId={project.id}
                   />
                 </Dialog.Root>
+              </div>
+            </header>
+            <div className="flex justify-between align-end w-100">
+              <div>
+                <p className="fs-medium-20">{project.name}</p>
+                <p className="fs-medium-10 opacity-default-30">
+                  Created&nbsp;{createdAt}
+                </p>
+              </div>
 
-                <Dialog.Root>
-                  <Dialog.Trigger variant="border" sizing="small" rawicon>
-                    <span className="flex align-center justify-center p-y-small-60">
-                      <Icon>
-                        <PixelIcon.Close />
-                      </Icon>
-                    </span>
-                  </Dialog.Trigger>
-                  <DeleteProjectDialog projectId={project.id} />
-                </Dialog.Root>
-              </Table.Cell>
-            </Table.Row>
-          );
-        })}
-      </Table.Body>
-    </Table>
+              <Badge variant="border">
+                {project.messages.length}&nbsp;Messages
+              </Badge>
+            </div>
+          </Card>
+        );
+      })}
+    </GridLayout>
   );
 }
 

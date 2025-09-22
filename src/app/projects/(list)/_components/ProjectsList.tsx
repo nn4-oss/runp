@@ -56,7 +56,7 @@ function ProjectsList() {
     return sortedData.filter(
       (item) =>
         item.id.includes(deferredSearchQuery) ||
-        item.name.includes(deferredSearchQuery),
+        item.name.toLowerCase().includes(deferredSearchQuery.toLowerCase()),
     );
   }, [sortedData, deferredSearchQuery]);
 
