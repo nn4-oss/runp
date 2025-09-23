@@ -8,7 +8,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import GeneralSettings from "./GeneralSettings";
 
 import { FixedHeader, Spinner } from "@/components";
-import { Button, Page } from "@usefui/components";
+import { Button } from "@usefui/components";
 
 import { toast } from "sonner";
 
@@ -46,7 +46,7 @@ function SettingsList() {
   }, [config]);
 
   return (
-    <Page.Content className="w-100 h-100" scrollbar>
+    <React.Fragment>
       <FixedHeader className="grid">
         <div className="flex justify-between align-center p-y-medium-60 p-x-medium-60">
           <p className="fs-medium-20">Application Settings</p>
@@ -66,7 +66,7 @@ function SettingsList() {
       <div className="p-medium-30 w-100">
         <GeneralSettings />
       </div>
-    </Page.Content>
+    </React.Fragment>
   );
 }
 

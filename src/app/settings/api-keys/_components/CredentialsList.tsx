@@ -19,16 +19,15 @@ function CredentialsList() {
 
   if (isPending) {
     return (
-      <Page.Content className="w-100 h-100 flex align-center justify-center">
+      <div className="w-100 h-100 flex align-center justify-center">
         <Spinner />
-      </Page.Content>
+      </div>
     );
   }
 
   const hasData = credentials && credentials?.length !== 0;
-
   return (
-    <Page.Content className="w-100 h-100" scrollbar>
+    <React.Fragment>
       <FixedHeader className="grid">
         <div className="flex justify-between align-center p-y-medium-60 p-x-medium-60">
           <p className="fs-medium-20">API Keys</p>
@@ -46,7 +45,7 @@ function CredentialsList() {
 
         {hasData && <CredentialsTable data={credentials} />}
       </div>
-    </Page.Content>
+    </React.Fragment>
   );
 }
 

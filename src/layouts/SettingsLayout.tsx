@@ -9,13 +9,16 @@ import { usePathname, useRouter } from "next/navigation";
 
 import AppLayout from "./AppLayout";
 
-import { Button, ScrollArea, Toolbar, Tooltip } from "@usefui/components";
+import { Button, Page, ScrollArea, Toolbar, Tooltip } from "@usefui/components";
 import { AppContainer } from "@/components";
 import { Icon, PixelIcon, WebIcon } from "@usefui/icons";
 
 const StyledToolbar = styled(Toolbar)`
   background-color: var(--contrast-color) !important;
   min-width: fit-content !important;
+`;
+const PageContent = styled(Page.Content)`
+  background-color: var(--contrast-color) !important;
 `;
 
 const SettingsLinks = [
@@ -31,12 +34,12 @@ const SettingsLinks = [
     path: "/settings/api-keys",
     disabled: false,
   },
-  {
-    icon: <PixelIcon.Trending />,
-    label: "Usage",
-    path: "/settings/usage",
-    disabled: true,
-  },
+  // {
+  //   icon: <PixelIcon.Trending />,
+  //   label: "Usage",
+  //   path: "/settings/usage",
+  //   disabled: true,
+  // },
   {
     icon: <PixelIcon.User />,
     label: "Profile",
@@ -58,10 +61,7 @@ function SettingsLayout({
 
   return (
     <AppLayout>
-      <AppContainer
-        className="h-100 w-100 flex"
-        style={{ position: "relative" }}
-      >
+      <AppContainer className="h-100 w-100 flex">
         <Toolbar.Root>
           {!isPending && user?.scope && (
             <StyledToolbar side="left" sizing="small" height="auto">
@@ -98,7 +98,10 @@ function SettingsLayout({
             </StyledToolbar>
           )}
         </Toolbar.Root>
-        <ScrollArea scrollbar>{children}</ScrollArea>
+
+        <ScrollArea scrollbar>
+          <PageContent scrollbar>{children}</PageContent>
+        </ScrollArea>
       </AppContainer>
     </AppLayout>
   );

@@ -3,7 +3,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { Button, Page } from "@usefui/components";
+import { Button } from "@usefui/components";
 import { UserProfile } from "@clerk/nextjs";
 import { Spinner, FixedHeader } from "@/components";
 import { Icon, PixelIcon, SocialIcon } from "@usefui/icons";
@@ -17,7 +17,7 @@ const ClerkProfileWrapper = styled.div`
 
 function ProfileContainer() {
   return (
-    <Page.Content className="w-100 h-100" scrollbar>
+    <React.Fragment>
       <FixedHeader className="grid">
         <div className="flex justify-between align-center p-y-medium-60 p-x-medium-60">
           <p className="fs-medium-20">Profile</p>
@@ -43,7 +43,7 @@ function ProfileContainer() {
       <ClerkProfileWrapper className="p-medium-30 flex align-start justify-center h-100 w-100 ">
         <UserProfile fallback={<Spinner />} />
       </ClerkProfileWrapper>
-    </Page.Content>
+    </React.Fragment>
   );
 }
 
