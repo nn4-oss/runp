@@ -1,5 +1,5 @@
 import { Sandbox } from "@e2b/code-interpreter";
-import { SANDBOX_TIMEOUT } from "../config/sandbox-variables";
+// import { SANDBOX_TIMEOUT } from "../config/sandbox-variables";
 
 import type { AgentResult, Message, TextMessage } from "@inngest/agent-kit";
 
@@ -7,7 +7,7 @@ export async function getSandbox(sandboxId: string) {
   const sandbox = await Sandbox.connect(sandboxId);
 
   /** Add sandbox_timeout extends sandboxes TTL duration */
-  await sandbox.setTimeout(SANDBOX_TIMEOUT);
+  // await sandbox.setTimeout(SANDBOX_TIMEOUT);
   return sandbox;
 }
 

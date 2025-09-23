@@ -21,7 +21,7 @@ import { symetricDecryption } from "@/security/encryption";
 import {
   SANDBOX_NAME,
   SANDBOX_PORT,
-  SANDBOX_TIMEOUT,
+  // SANDBOX_TIMEOUT,
 } from "./config/sandbox-variables";
 import {
   MAX_ITERATION,
@@ -87,7 +87,7 @@ export const invokeCodeAgent = inngest.createFunction(
        * The longer it get the more credits gets spent on E2B.
        *
        */
-      await sandbox.setTimeout(SANDBOX_TIMEOUT);
+      // await sandbox.setTimeout(SANDBOX_TIMEOUT);
 
       return sandbox.sandboxId;
     });
