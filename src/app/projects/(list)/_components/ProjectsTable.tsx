@@ -1,32 +1,21 @@
 "use client";
 
 import React from "react";
-import styled from "styled-components";
-
 import { useRouter } from "next/navigation";
 
-import { Badge, Dialog, DropdownMenu } from "@usefui/components";
+import { Badge, Button, Dialog, DropdownMenu } from "@usefui/components";
 import { Icon, PixelIcon, WebIcon } from "@usefui/icons";
-import { Card, DeleteProjectDialog, UpdateNameDialog } from "@/components";
+import {
+  Card,
+  CardsGrid,
+  DeleteProjectDialog,
+  UpdateNameDialog,
+} from "@/components";
 
 import { maskKey } from "@/utils/data-tables";
 import { format, formatDistanceToNow } from "date-fns";
 
 import type { MessageRole, MessageType } from "generated/prisma";
-
-export const GridLayout = styled.div`
-  display: grid;
-  grid-template-columns: repeat(
-    auto-fill,
-    minmax(var(--measurement-large-90), 1fr)
-  );
-  grid-gap: var(--measurement-medium-30) var(--measurement-medium-30);
-  box-sizing: border-box;
-
-  @media (max-width: 768px) {
-    grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
-  }
-`;
 
 function ProjectsTable({
   data,
@@ -50,7 +39,7 @@ function ProjectsTable({
   const router = useRouter();
 
   return (
-    <GridLayout>
+    <CardsGrid>
       {data.map((project) => {
         const createdAt = format(project.createdAt, "dd/MM/yyyy");
         const lastUpdate = formatDistanceToNow(project.updatedAt, {
@@ -58,7 +47,32 @@ function ProjectsTable({
         });
 
         return (
-          <Card key={project.id} updatedAt={lastUpdate} itemId={project.id}>
+          <Card
+            key={project.id}
+            footer={
+              <footer className="p-medium-30 flex align-center justify-between w-100">
+                <Button
+                  variant="ghost"
+                  sizing="small"
+                  className="w-100 justify-between"
+                  onMouseDown={() => router.push(`/projects/${project.id}`)}
+                >
+                  <span className="flex align-center g-medium-10">
+                    <span>
+                      <Icon fillOpacity={0.3}>
+                        <PixelIcon.Clock />
+                      </Icon>
+                    </span>
+                    Updated&nbsp;{lastUpdate}
+                  </span>
+
+                  <Icon>
+                    <PixelIcon.ArrowRight />
+                  </Icon>
+                </Button>
+              </footer>
+            }
+          >
             <header className="flex align-center justify-between m-b-large-30">
               <kbd className="fs-small-60 opacity-default-30">
                 {maskKey(project.id)}
@@ -75,6 +89,7 @@ function ProjectsTable({
                   </Dialog.Trigger>
                   <DeleteProjectDialog projectId={project.id} />
                 </Dialog.Root>
+                <span className="fs-medium-10 opacity-default-10">/</span>
                 <Dialog.Root>
                   <DropdownMenu.Root>
                     <DropdownMenu>
@@ -134,7 +149,7 @@ function ProjectsTable({
                 </Dialog.Root>
               </div>
             </header>
-            <div className="flex justify-between align-end w-100">
+            <div className="flex justify-between g-medium-30 align-end w-100">
               <div>
                 <p className="fs-medium-20">{project.name}</p>
                 <p className="fs-medium-10 opacity-default-30">
@@ -149,7 +164,7 @@ function ProjectsTable({
           </Card>
         );
       })}
-    </GridLayout>
+    </CardsGrid>
   );
 }
 

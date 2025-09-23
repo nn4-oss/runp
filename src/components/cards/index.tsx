@@ -1,9 +1,5 @@
 "use client";
 
-import { Button } from "@usefui/components";
-import { Icon, PixelIcon } from "@usefui/icons";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
 import React from "react";
 import styled from "styled-components";
 
@@ -18,39 +14,31 @@ const CardWrapper = styled.div`
   border-radius: var(--measurement-medium-30);
 `;
 
+export const CardsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(var(--measurement-large-90), 1fr)
+  );
+  grid-gap: var(--measurement-medium-30) var(--measurement-medium-30);
+  box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
+  }
+`;
+
 function Card({
-  itemId,
-  updatedAt,
+  footer,
   children,
 }: {
-  itemId: string;
-  updatedAt: string;
+  footer: React.ReactNode;
   children: React.ReactNode;
 }) {
-  const router = useRouter();
-
   return (
     <CardContainer>
       <CardWrapper className="p-medium-60 w-100">{children}</CardWrapper>
-      <footer className="p-medium-30 flex align-center justify-between w-100">
-        <Button
-          variant="ghost"
-          sizing="small"
-          className="w-100 justify-between"
-          onMouseDown={() => router.push(`/projects/${itemId}`)}
-        >
-          <span className="flex align-center g-medium-10">
-            <Icon fillOpacity={0.3}>
-              <PixelIcon.Clock />
-            </Icon>
-            Updated&nbsp;{updatedAt}
-          </span>
-
-          <Icon>
-            <PixelIcon.ArrowRight />
-          </Icon>
-        </Button>
-      </footer>
+      {footer}
     </CardContainer>
   );
 }

@@ -1,48 +1,16 @@
 "use client";
 
 import React from "react";
-import styled from "styled-components";
 
-import {
-  Badge,
-  Dialog,
-  DropdownMenu,
-  Table,
-  Tooltip,
-} from "@usefui/components";
-import { Icon, PixelIcon, WebIcon } from "@usefui/icons";
-import {
-  Card,
-  CopyCode,
-  // UpdateCredentialDialog,
-  DeleteCredentialDialog,
-  DeleteProjectDialog,
-  UpdateNameDialog,
-} from "@/components";
+import { Badge, Button, Dialog, Tooltip } from "@usefui/components";
+import { Icon, PixelIcon } from "@usefui/icons";
+import { Card, CardsGrid, DeleteCredentialDialog } from "@/components";
 
 import { format, formatDistanceToNow } from "date-fns";
 import { maskKey } from "@/utils/data-tables";
 
 import type { ThirdPartyServiceType } from "generated/prisma";
-import router from "next/router";
-
-const StyledTable = styled(Table)`
-  background-color: var(--contrast-color);
-`;
-
-export const GridLayout = styled.div`
-  display: grid;
-  grid-template-columns: repeat(
-    auto-fill,
-    minmax(var(--measurement-large-90), 1fr)
-  );
-  grid-gap: var(--measurement-medium-30) var(--measurement-medium-30);
-  box-sizing: border-box;
-
-  @media (max-width: 768px) {
-    grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
-  }
-`;
+import { useRouter } from "next/navigation";
 
 function CredentialsTable({
   data,
@@ -61,7 +29,7 @@ function CredentialsTable({
   }[];
 }) {
   return (
-    <GridLayout>
+    <CardsGrid>
       {data.map((credential) => {
         const createdAt = format(credential.createdAt, "dd/MM/yyyy");
         const lastUpdate = formatDistanceToNow(credential.updatedAt, {
@@ -71,8 +39,16 @@ function CredentialsTable({
         return (
           <Card
             key={credential.id}
-            updatedAt={lastUpdate}
-            itemId={credential.id}
+            footer={
+              <footer className="p-medium-30 g-medium-10 flex align-center w-100">
+                <Icon fillOpacity={0.1}>
+                  <PixelIcon.Clock />
+                </Icon>
+                <span className="fs-medium-10 opacity-default-60">
+                  Updated&nbsp;{lastUpdate}
+                </span>
+              </footer>
+            }
           >
             <header className="flex align-center justify-between m-b-large-30">
               <kbd className="fs-small-60 opacity-default-30">
@@ -92,7 +68,7 @@ function CredentialsTable({
                 </Dialog.Root>
               </div>
             </header>
-            <div className="flex justify-between align-end w-100">
+            <div className="flex justify-between align-end g-medium-30 w-100">
               <div className="w-100">
                 <p className="fs-medium-20">{credential.name}</p>
                 <p className="fs-medium-10 opacity-default-30">
@@ -135,7 +111,7 @@ function CredentialsTable({
           </Card>
         );
       })}
-    </GridLayout>
+    </CardsGrid>
   );
 }
 
