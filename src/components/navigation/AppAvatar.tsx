@@ -58,22 +58,25 @@ function AppAvatar() {
 
           <DropdownMenu.Item
             className="w-100 flex align-center g-medium-30"
-            onMouseDown={() => router.push("/docs")}
+            onClick={() =>
+              window.open(
+                "https://github.com/nn4-oss/runp",
+                "_blank",
+                "noopener,noreferrer",
+              )
+            }
           >
-            <Icon viewBox="0 0 15 15">
-              <SocialIcon.Github />
-            </Icon>
+            <span className="flex align-center g-medium-30">
+              <Icon viewBox="0 0 15 15">
+                <SocialIcon.Github />
+              </Icon>
+            </span>
             Github
-          </DropdownMenu.Item>
-
-          <DropdownMenu.Item
-            className="w-100 flex align-center g-medium-30"
-            onMouseDown={() => router.push("/docs")}
-          >
-            <Icon>
-              <PixelIcon.HumanHandsup />
-            </Icon>
-            Community
+            <span className="w-100 flex justify-end">
+              <Icon>
+                <PixelIcon.Open />
+              </Icon>
+            </span>
           </DropdownMenu.Item>
 
           <Divider className="m-y-medium-10" />
