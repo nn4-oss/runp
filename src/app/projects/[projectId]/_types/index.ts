@@ -16,5 +16,5 @@ export interface MessageBubbleProps extends BubbleProps {
   role: MessageRole;
 }
 
-export type ViewProps = "preview" | "code";
+export type ViewProps = "preview" | "code" | "diagram";
 export type FilesProps = Record<string, string>;
