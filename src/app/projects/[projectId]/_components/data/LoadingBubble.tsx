@@ -3,7 +3,6 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
 
-import { motion } from "framer-motion";
 import { LiquidMetal } from "@paper-design/shaders-react";
 import { Avatar } from "@usefui/components";
 

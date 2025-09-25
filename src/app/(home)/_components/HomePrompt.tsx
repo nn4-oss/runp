@@ -20,6 +20,9 @@ import {
   Textarea,
 } from "@/components";
 
+import { motion } from "framer-motion";
+import { PulsingBorder } from "@paper-design/shaders-react";
+
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { utteranceValueSchema } from "@/schemas/utterances-schema";
@@ -33,8 +36,11 @@ const PromptContainer = styled.div`
   max-width: var(--breakpoint-tablet);
   margin: 0 auto;
   z-index: var(--depth-default-10);
+  z-index: 10;
 `;
 const PromptWrapper = styled.form`
+  z-index: 10;
+  position: relative;
   border: var(--measurement-small-30) solid var(--font-color-alpha-10);
   border-radius: var(--measurement-medium-60);
 
@@ -71,7 +77,16 @@ const ProBanner = styled.div`
   transform: translateY(var(--pos-y));
   animation: fadeIn 1s cubic-bezier(0.075, 0.82, 0.165, 1);
 
+  z-index: 1;
+`;
+const ShaderBackground = styled(motion.div)`
+  position: absolute;
+  width: 100%;
+  height: 100%;
   z-index: -1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const formSchema = z.object({
@@ -162,50 +177,86 @@ function HomePrompt() {
   return (
     <PromptContainer>
       <PromptWrapper
-        className="p-medium-60 w-100"
+        className="w-100"
         onSubmit={form.handleSubmit(onSubmit)}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
       >
-        <Textarea
-          autoComplete="off"
-          id="prompt-content"
-          placeholder="Ask runp to build.."
-          className="p-b-large-10"
-          disabled={createProject.isPending}
-          {...form.register("content")}
-        />
+        <ShaderBackground
+          initial={{ opacity: 0 }}
+          animate={{ opacity: isFocused ? 0 : 1 }}
+          transition={{
+            duration: 2,
+          }}
+        >
+          <PulsingBorder
+            style={{ height: "146.5%", minWidth: "143%" }}
+            colorBack="rgba(0, 0, 0, 0)"
+            roundness={0.18}
+            thickness={0}
+            softness={0}
+            intensity={0.3}
+            bloom={2}
+            spots={2}
+            spotSize={0.25}
+            pulse={0}
+            smoke={0.35}
+            smokeSize={0.4}
+            scale={0.7}
+            rotation={0}
+            offsetX={0}
+            offsetY={0}
+            speed={0.2}
+            colors={[
+              "rgb(103, 121, 255)",
+              "rgb(188, 220, 255)",
+              "rgba(148, 75, 187, 1)",
+              "rgba(241, 241, 241, 0.1)",
+            ]}
+          />
+        </ShaderBackground>
+        <div className="p-medium-60">
+          <Textarea
+            autoComplete="off"
+            id="prompt-content"
+            placeholder="Ask runp to build.."
+            className="p-b-large-10"
+            disabled={createProject.isPending}
+            {...form.register("content")}
+          />
 
-        <div className="flex align-center justify-between">
-          <PromptOptions />
+          <div className="flex align-center justify-between">
+            <PromptOptions />
 
-          <div className="flex align-center g-medium-30">
-            <kbd>
-              <span className="fs-small-50 opacity-default-30">
-                Ctrl&nbsp;+&nbsp;Enter
-              </span>
-            </kbd>
+            <div className="flex align-center g-medium-30">
+              <kbd>
+                <span className="fs-small-50 opacity-default-30">
+                  Ctrl&nbsp;+&nbsp;Enter
+                </span>
+              </kbd>
 
-            <ReflectiveButton
-              type="submit"
-              sizing="small"
-              variant="mono"
-              onClick={form.handleSubmit(onSubmit)}
-              disabled={createProject.isPending || !form.formState.isValid}
-            >
-              <span className="p-y-small-30">
-                {createProject.isPending ? (
-                  <Spinner />
-                ) : (
-                  <Icon>
-                    <PixelIcon.ArrowUp />
-                  </Icon>
-                )}
-              </span>
-            </ReflectiveButton>
+              <ReflectiveButton
+                type="submit"
+                sizing="small"
+                variant="mono"
+                onClick={form.handleSubmit(onSubmit)}
+                disabled={createProject.isPending || !form.formState.isValid}
+              >
+                <span className="p-y-small-30">
+                  {createProject.isPending ? (
+                    <Spinner />
+                  ) : (
+                    <Icon>
+                      <PixelIcon.ArrowUp />
+                    </Icon>
+                  )}
+                </span>
+              </ReflectiveButton>
+            </div>
           </div>
         </div>
       </PromptWrapper>
+
       {showProBanner && !hasOpenAiAPIKeyDefined && (
         <ProBanner className="flex align-end justify-between">
           <span className="fs-medium-10 opacity-default-60 flex align-center g-medium-10">

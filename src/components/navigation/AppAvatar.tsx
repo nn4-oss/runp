@@ -50,9 +50,11 @@ function AppAvatar() {
             className="w-100 flex align-center g-medium-30"
             onMouseDown={() => router.push("/docs")}
           >
-            <Icon>
-              <PixelIcon.BookOpen />
-            </Icon>
+            <span className="flex align-center justify-center">
+              <Icon>
+                <PixelIcon.BookOpen />
+              </Icon>
+            </span>
             Documentation
           </DropdownMenu.Item>
 
