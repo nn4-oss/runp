@@ -3,7 +3,9 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
 
-import { AnimatedAgent } from "@/components";
+import { motion } from "framer-motion";
+import { LiquidMetal } from "@paper-design/shaders-react";
+import { Avatar } from "@usefui/components";
 
 const Blink = keyframes`
     from {
@@ -40,7 +42,25 @@ function LoadingBubble() {
   return (
     <div className="grid p-medium-30">
       <div className="flex align-center g-medium-30">
-        <AnimatedAgent />
+        <Avatar sizing="small">
+          <LiquidMetal
+            style={{ height: 100, width: 100 }}
+            colorBack="hsl(0, 0%, 0%, 0)"
+            colorTint="rgb(188, 220, 255)"
+            repetition={4}
+            softness={0.5}
+            shiftRed={0.3}
+            shiftBlue={0.3}
+            distortion={0.1}
+            contour={1}
+            shape="circle"
+            offsetX={0}
+            offsetY={0}
+            scale={1}
+            rotation={50}
+            speed={5}
+          />
+        </Avatar>
         <div
           className="grid"
           role="status"
