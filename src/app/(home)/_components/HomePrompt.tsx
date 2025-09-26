@@ -2,6 +2,7 @@
 
 import React from "react";
 import styled from "styled-components";
+import { motion } from "framer-motion";
 
 import { useRouter } from "next/navigation";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -20,7 +21,6 @@ import {
   Textarea,
 } from "@/components";
 
-import { motion } from "framer-motion";
 import { PulsingBorder } from "@paper-design/shaders-react";
 
 import { z } from "zod";
@@ -33,13 +33,12 @@ const PromptContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  max-width: var(--breakpoint-tablet);
+  max-width: var(--breakpoint-tablet-small);
   margin: 0 auto;
   z-index: var(--depth-default-10);
-  z-index: 10;
 `;
 const PromptWrapper = styled.form`
-  z-index: 10;
+  z-index: 90;
   position: relative;
   border: var(--measurement-small-30) solid var(--font-color-alpha-10);
   border-radius: var(--measurement-medium-60);
@@ -77,16 +76,18 @@ const ProBanner = styled.div`
   transform: translateY(var(--pos-y));
   animation: fadeIn 1s cubic-bezier(0.075, 0.82, 0.165, 1);
 
-  z-index: 1;
+  z-index: 10;
 `;
 const ShaderBackground = styled(motion.div)`
   position: absolute;
   width: 100%;
   height: 100%;
-  z-index: -1;
+
   display: flex;
   align-items: center;
   justify-content: center;
+  user-select: none;
+  pointer-events: none;
 `;
 
 const formSchema = z.object({
@@ -194,24 +195,28 @@ function HomePrompt() {
             colorBack="rgba(0, 0, 0, 0)"
             roundness={0.18}
             thickness={0}
-            softness={0}
+            softness={1}
             intensity={0.3}
             bloom={2}
-            spots={2}
+            spots={1}
             spotSize={0.25}
             pulse={0}
             smoke={0.35}
             smokeSize={0.4}
             scale={0.7}
-            rotation={0}
+            rotation={Math.PI / 10}
             offsetX={0}
             offsetY={0}
-            speed={0.2}
+            speed={Math.PI / 10}
             colors={[
-              "rgb(103, 121, 255)",
-              "rgb(188, 220, 255)",
-              "rgba(148, 75, 187, 1)",
-              "rgba(241, 241, 241, 0.1)",
+              "rgba(255, 255, 255, 1)",
+              "rgba(255, 255, 255, 0.1)",
+              "rgba(255, 255, 255, 0.2)",
+              "rgba(255, 255, 255, 0.3)",
+              "rgba(255, 255, 255, 0.4)",
+              // "rgba(26, 118, 0, 0.1)",
+              // "rgba(170, 255, 246, 0.1)",
+              // "rgba(244, 126, 7, 0.1)",
             ]}
           />
         </ShaderBackground>
