@@ -5,7 +5,7 @@ import styled from "styled-components";
 
 import { Button } from "@usefui/components";
 import { UserProfile } from "@clerk/nextjs";
-import { Spinner, FixedHeader } from "@/components";
+import { Spinner, FixedHeader, SplitText } from "@/components";
 import { Icon, PixelIcon, SocialIcon } from "@usefui/icons";
 
 const ClerkProfileWrapper = styled.div`
@@ -20,7 +20,14 @@ function ProfileContainer() {
     <React.Fragment>
       <FixedHeader className="grid">
         <div className="flex justify-between align-center p-y-medium-60 p-x-medium-60">
-          <p className="fs-medium-20">Profile</p>
+          <p className="fs-medium-20">
+            <SplitText
+              stagger={0.02}
+              duration={0.1}
+              variant="fade"
+              text="Profile"
+            />
+          </p>
 
           <Button
             variant="border"

@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { useTRPC } from "@/trpc/client";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
-import { DeleteProjectDialog, UpdateNameDialog } from "@/components";
+import { DeleteProjectDialog, SplitText, UpdateNameDialog } from "@/components";
 import {
   Button,
   Dialog,
@@ -41,7 +41,14 @@ function MessagesHeader({ projectId }: { projectId: string }) {
 
   return (
     <StyledMenu className="w-100 flex g-medium-30 p-x-medium-30 align-center justify-between">
-      <Truncate className="fs-medium-10">{project.name}</Truncate>
+      <Truncate className="fs-medium-20 opacity-default-60">
+        <SplitText
+          stagger={0.02}
+          duration={0.1}
+          variant="fade"
+          text={project.name}
+        />
+      </Truncate>
 
       <div className="flex g-medium-10 align-center justify-start">
         <Dialog.Root>

@@ -10,7 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 import ProjectListActions from "./ProjectListActions";
 import ProjectsTable from "./ProjectsTable";
 
-import { AppContainer, FixedHeader, Spinner } from "@/components";
+import { AppContainer, FixedHeader, Spinner, SplitText } from "@/components";
 import { Field } from "@usefui/components";
 import { Icon, PixelIcon } from "@usefui/icons";
 
@@ -75,9 +75,20 @@ function ProjectsList() {
       <FixedHeader className="grid">
         <div className="flex justify-between align-center p-y-medium-60 p-x-medium-60">
           <p className="fs-medium-20">
-            All projects&nbsp;
+            <SplitText
+              stagger={0.02}
+              duration={0.1}
+              variant="fade"
+              text="All projects&nbsp;"
+            />
+
             <span className="opacity-default-30">
-              ({Number(tableData?.length)}/{Number(projects?.length)})
+              <SplitText
+                stagger={0.1}
+                duration={0.1}
+                variant="fade"
+                text={`(${Number(tableData?.length)}/${Number(projects?.length)})`}
+              />
             </span>
           </p>
 
