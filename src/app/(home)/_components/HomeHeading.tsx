@@ -26,7 +26,7 @@ const AnimatedSubtitle = styled(motion.p)<{
   font-size: clamp(var(--fontsize-medium-10), 5vw, var(--fontsize-medium-30));
 `;
 
-const containerVariants = {
+const stagger: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -36,7 +36,7 @@ const containerVariants = {
     },
   },
 };
-const titleVariants = {
+const fade: Variants = {
   hidden: {
     opacity: 0,
   },
@@ -44,8 +44,7 @@ const titleVariants = {
     opacity: 1,
   },
 };
-
-const subtitleVariants = {
+const slide: Variants = {
   hidden: {
     opacity: 0,
     y: -3,
@@ -60,11 +59,11 @@ function HomeHeading() {
   return (
     <HeadingGroup
       className="grid align-center justify-center m-b-medium-60"
-      variants={containerVariants}
+      variants={stagger}
       initial="hidden"
       animate="visible"
     >
-      <AnimatedTitle variants={titleVariants}>
+      <AnimatedTitle variants={fade}>
         <SplitText
           stagger={0.02}
           duration={0.1}
@@ -72,7 +71,7 @@ function HomeHeading() {
           text="Ideas to features in seconds"
         />
       </AnimatedTitle>
-      <AnimatedSubtitle variants={subtitleVariants}>
+      <AnimatedSubtitle variants={slide}>
         <SplitText
           stagger={0.02}
           duration={0.1}
