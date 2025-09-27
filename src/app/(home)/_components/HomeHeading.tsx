@@ -68,7 +68,7 @@ function HomeHeading() {
           stagger={0.02}
           duration={0.1}
           variant="fade"
-          text="Ideas to features in seconds"
+          text="Prompt. Preview. Ship."
         />
       </AnimatedTitle>
       <AnimatedSubtitle variants={slide}>
@@ -76,7 +76,7 @@ function HomeHeading() {
           stagger={0.02}
           duration={0.1}
           variant="fade"
-          text="Start building with with prompts."
+          text="Build features at the speed of thought"
         />
       </AnimatedSubtitle>
     </HeadingGroup>
