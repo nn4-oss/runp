@@ -9,8 +9,10 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
 import { useKeyPress } from "@usefui/hooks";
 import { useForm } from "react-hook-form";
+import { useColorMode } from "@usefui/tokens";
 
 import Link from "next/link";
+import PromptTemplates from "./PromptTemplates";
 
 import { Icon, PixelIcon } from "@usefui/icons";
 import { Button } from "@usefui/components";
@@ -102,6 +104,7 @@ function HomePrompt() {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const shortcutControls = useKeyPress("Enter", true, "ctrlKey");
+  const { colorMode } = useColorMode();
 
   const { data: user } = useQuery(trpc.user.get.queryOptions());
   const { data: config } = useQuery(
@@ -148,6 +151,24 @@ function HomePrompt() {
   const hasOpenAiAPIKeyDefined = integrations?.some((integration) => {
     return integration.service === "OPENAI";
   });
+
+  const shaderColors = React.useMemo(() => {
+    return (["dark", "system"] as (typeof colorMode)[]).includes(colorMode)
+      ? [
+          "rgba(255, 255, 255, 1)",
+          "rgba(255, 255, 255, 0.1)",
+          "rgba(255, 255, 255, 0.2)",
+          "rgba(255, 255, 255, 0.3)",
+          "rgba(255, 255, 255, 0.4)",
+        ]
+      : [
+          "rgba(255, 255, 255, 1)",
+          "rgba(255, 127, 17, 0.1)",
+          "rgba(255, 127, 17, 0.2)",
+          "rgba(255, 127, 17, 0.3)",
+          "rgba(255, 127, 17, 0.4)",
+        ];
+  }, [colorMode]);
 
   const onSubmit = React.useCallback(
     async (values: z.infer<typeof formSchema>) => {
@@ -208,16 +229,7 @@ function HomePrompt() {
             offsetX={0}
             offsetY={0}
             speed={Math.PI / 10}
-            colors={[
-              "rgba(255, 255, 255, 1)",
-              "rgba(255, 255, 255, 0.1)",
-              "rgba(255, 255, 255, 0.2)",
-              "rgba(255, 255, 255, 0.3)",
-              "rgba(255, 255, 255, 0.4)",
-              // "rgba(26, 118, 0, 0.1)",
-              // "rgba(170, 255, 246, 0.1)",
-              // "rgba(244, 126, 7, 0.1)",
-            ]}
+            colors={shaderColors}
           />
         </ShaderBackground>
         <div className="p-medium-60">
@@ -287,6 +299,14 @@ function HomePrompt() {
           </Button>
         </ProBanner>
       )}
+
+      <span
+        className={
+          showProBanner && !hasOpenAiAPIKeyDefined ? "" : "m-t-medium-60"
+        }
+      >
+        <PromptTemplates />
+      </span>
     </PromptContainer>
   );
 }
