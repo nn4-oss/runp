@@ -5,11 +5,8 @@ import DiagramHeader from "../navigations/DiagramHeader";
 
 import { MermaidViewer } from "@/components";
 import { Page, ScrollArea } from "@usefui/components";
-import { useTRPC } from "@/trpc/client";
 
 function DiagramPreview({ code }: { code: string }) {
-  const trpc = useTRPC();
-
   const [diagramScale, setDiagramScale] = React.useState<number>(1);
 
   return (

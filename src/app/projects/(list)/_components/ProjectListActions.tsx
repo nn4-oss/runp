@@ -6,7 +6,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 import { Button, DropdownMenu } from "@usefui/components";
 import { Icon, PixelIcon } from "@usefui/icons";
-import { SplitText } from "@/components";
 
 function ProjectListActions() {
   const searchParams = useSearchParams();

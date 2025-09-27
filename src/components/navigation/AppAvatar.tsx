@@ -1,23 +1,12 @@
 "use client";
 
 import React from "react";
-import styled from "styled-components";
 
 import { useRouter } from "next/navigation";
 
-import { ScrollArea, Avatar, DropdownMenu, Divider } from "@usefui/components";
-import { Icon, PixelIcon, SocialIcon } from "@usefui/icons";
 import ColorModes from "../color-mode";
-
-const BrandAvatar = styled(Avatar)`
-  background-color: var(--font-color) !important;
-  width: var(--measurement-medium-80) !important;
-  min-width: var(--measurement-medium-80) !important;
-  height: var(--measurement-medium-80) !important;
-  min-height: var(--measurement-medium-80) !important;
-
-  border-radius: var(--measurement-medium-30) !important;
-`;
+import { ScrollArea, DropdownMenu, Divider } from "@usefui/components";
+import { Icon, PixelIcon, SocialIcon } from "@usefui/icons";
 
 export const BrandSVG = () => {
   return (

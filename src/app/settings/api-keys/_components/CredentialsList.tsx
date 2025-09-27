@@ -9,7 +9,6 @@ import CredentialsListActions from "./CredentialsListActions";
 import CredentialsTable from "./CredentialsTable";
 
 import { FixedHeader, Spinner, SplitText } from "@/components";
-import { Page } from "@usefui/components";
 
 function CredentialsList() {
   const trpc = useTRPC();

@@ -7,7 +7,7 @@ import { motion, type Variants } from "framer-motion";
 
 import { useRouter } from "next/navigation";
 
-import { Badge, Dialog, DropdownMenu } from "@usefui/components";
+import { Dialog, DropdownMenu } from "@usefui/components";
 import { Icon, PixelIcon, WebIcon } from "@usefui/icons";
 import {
   Card,

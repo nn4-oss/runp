@@ -35,7 +35,7 @@ function MermaidViewer({ code, scale }: { scale: number; code: string }) {
      * Reset the internal cache to avoid conflicts after hot reload/remounts.
      * no-op parse helps ensure init took effect
      */
-    mermaid.parse("");
+    void mermaid.parse("");
   }, [colorMode]);
 
   React.useEffect(() => {
@@ -53,19 +53,20 @@ function MermaidViewer({ code, scale }: { scale: number; code: string }) {
 
         if (!cancelled) setSvg(svg);
       } catch (error) {
-        if (!cancelled) console.error("Failed to render diagram");
+        if (!cancelled) console.error(error, "Failed to render diagram");
       }
     };
 
     /** Validate early to surface syntax errors */
     try {
-      mermaid.parse(code);
+      void mermaid.parse(code);
     } catch (error) {
-      console.error("Invalid Mermaid syntax");
+      console.error(error, "Invalid Mermaid syntax");
       return;
     }
 
-    renderDiagram();
+    void renderDiagram();
+
     return () => {
       cancelled = true;
     };

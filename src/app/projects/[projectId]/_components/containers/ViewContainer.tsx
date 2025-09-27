@@ -112,8 +112,8 @@ function ViewContainer({
         />
       )}
 
-      {isDiagramMode && (
-        <DiagramPreview code={(files && files["diagram.mermaid"]) ?? ""} />
+      {isDiagramMode && files && (
+        <DiagramPreview code={files["diagram.mermaid"] ?? ""} />
       )}
     </div>
   );

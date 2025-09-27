@@ -4,7 +4,6 @@ import React from "react";
 
 import { Sheet, Tooltip } from "@usefui/components";
 import { CreateCredentialDialog } from "@/components";
-import { Icon, PixelIcon } from "@usefui/icons";
 
 function CredentialsListActions() {
   return (

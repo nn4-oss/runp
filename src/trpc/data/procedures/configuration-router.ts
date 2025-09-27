@@ -1,7 +1,5 @@
 import prisma from "@/lib/prisma";
-
 import { protectedProcedure, createTRPCRouter } from "@/trpc/init";
-import { TRPCError } from "@trpc/server";
 
 import { z } from "zod";
 
