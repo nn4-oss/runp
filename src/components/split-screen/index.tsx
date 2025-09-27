@@ -94,7 +94,7 @@ function SplitScreen({
         ((e.clientX - containerRect.left) / containerRect.width) * 100;
 
       // Constrain between 20% and 80%
-      const threshold = { min: 25, max: 75 };
+      const threshold = { min: 30, max: 70 };
 
       const constrainedWidth = Math.min(
         Math.max(newLeftWidth, threshold.min),

@@ -75,7 +75,7 @@ function ViewContainer({
 
       {isCodeMode && (
         <SplitScreen
-          defaultWidth={25}
+          defaultWidth={30}
           left={
             <FilesTree
               files={filesTree}
