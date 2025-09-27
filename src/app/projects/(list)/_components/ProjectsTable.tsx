@@ -7,7 +7,7 @@ import { motion, type Variants } from "framer-motion";
 
 import { useRouter } from "next/navigation";
 
-import { Badge, Button, Dialog, DropdownMenu } from "@usefui/components";
+import { Badge, Dialog, DropdownMenu } from "@usefui/components";
 import { Icon, PixelIcon, WebIcon } from "@usefui/icons";
 import {
   Card,
@@ -109,15 +109,6 @@ function ProjectsTable({
                 </kbd>
 
                 <div className="flex align-center g-medium-10">
-                  {/* <Button
-                    variant="ghost"
-                    onMouseDown={() => router.push(`/projects/${project.id}`)}
-                  >
-                    <Icon>
-                      <PixelIcon.ArrowRight />
-                    </Icon>
-                  </Button>
-                  <span className="fs-medium-10 opacity-default-10">/</span> */}
                   <Dialog.Root>
                     <DropdownMenu.Root>
                       <DropdownMenu>
@@ -202,10 +193,6 @@ function ProjectsTable({
                     Created&nbsp;{createdAt}
                   </p>
                 </div>
-
-                <Badge variant="border">
-                  {project.messages.length}&nbsp;Messages
-                </Badge>
               </div>
             </Card>
           </motion.div>
