@@ -14,7 +14,7 @@ import {
   Page,
   Tooltip,
 } from "@usefui/components";
-import { Icon, PixelIcon } from "@usefui/icons";
+import { Icon, PixelIcon, WebIcon } from "@usefui/icons";
 
 const StyledMenu = styled(Page.Navigation)`
   border: none !important;
@@ -55,10 +55,10 @@ function MessagesHeader({ projectId }: { projectId: string }) {
           <DropdownMenu.Root>
             <DropdownMenu>
               <Tooltip content="Options">
-                <DropdownMenu.Trigger variant="border" sizing="small">
+                <DropdownMenu.Trigger variant="ghost" sizing="small">
                   <span className="flex align-center justify-center p-y-small-30">
                     <Icon>
-                      <PixelIcon.SlidersVertical />
+                      <WebIcon.More />
                     </Icon>
                   </span>
                 </DropdownMenu.Trigger>
@@ -104,9 +104,10 @@ function MessagesHeader({ projectId }: { projectId: string }) {
 
           <UpdateNameDialog currentName={project.name} projectId={projectId} />
         </Dialog.Root>
+        <span className="fs-medium-10 opacity-default-10">/</span>
         <Dialog.Root>
           <Tooltip content="Delete">
-            <Dialog.Trigger variant="border" sizing="small" rawicon>
+            <Dialog.Trigger variant="ghost" sizing="small" rawicon>
               <span className="flex align-center justify-center p-y-small-60">
                 <Icon>
                   <PixelIcon.Close />

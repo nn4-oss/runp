@@ -6,14 +6,7 @@ import styled from "styled-components";
 import { useTRPC } from "@/trpc/client";
 import { useQuery } from "@tanstack/react-query";
 
-import {
-  Field,
-  Page,
-  Tooltip,
-  Button,
-  DropdownMenu,
-  Badge,
-} from "@usefui/components";
+import { Page, Tooltip, Button, DropdownMenu, Badge } from "@usefui/components";
 import { Icon, PixelIcon, WebIcon } from "@usefui/icons";
 import { Spinner } from "@/components";
 
@@ -32,6 +25,20 @@ const StyledMenu = styled(Page.Navigation)`
   background-color: transparent;
   padding-left: 0;
   padding-right: var(--measurement-small-10) !important;
+`;
+const URLBadge = styled(Badge)`
+  width: 100% !important;
+  min-width: 0 !important;
+
+  padding-left: var(--measurement-medium-40) !important;
+  padding-right: var(--measurement-medium-40) !important;
+
+  span {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+  }
 `;
 
 function ProjectsHeader({
@@ -65,7 +72,7 @@ function ProjectsHeader({
     !fragment?.sandboxUrl || ["code", "diagram"].includes(currentView);
 
   return (
-    <StyledMenu className="w-100 flex g-medium-10 align-center justify-between">
+    <StyledMenu className="flex align-center justify-between g-medium-10 w-100">
       <DropdownMenu.Root>
         <DropdownMenu>
           <Tooltip content="Views">
@@ -74,18 +81,14 @@ function ProjectsHeader({
               sizing="small"
               disabled={isPending || isUserPending}
             >
-              {isPending || isUserPending ? (
-                <Spinner />
-              ) : (
-                <span className="flex align-center justify-center p-y-small-30">
-                  <Icon>
-                    <WebIcon.More />
-                  </Icon>
-                </span>
-              )}
+              <span className="flex align-center justify-center p-y-small-40">
+                <Icon>
+                  <WebIcon.More />
+                </Icon>
+              </span>
+              {isPending || (isUserPending && <Spinner />)}
             </DropdownMenu.Trigger>
           </Tooltip>
-
           <DropdownMenu.Content>
             <DropdownMenu.Item
               onClick={() => handleViewChange("preview")}
@@ -151,28 +154,16 @@ function ProjectsHeader({
           </DropdownMenu.Content>
         </DropdownMenu>
       </DropdownMenu.Root>
-      <span className="fs-medium-10 opacity-default-10">/</span>
-      <div className="flex align-center g-medium-10 w-100">
-        <Tooltip content="Open in new tab">
-          <Button
-            disabled={disableIframeInteractions}
-            variant="border"
-            sizing="small"
-            aria-label="Open in new tab"
-            onClick={handleNewTab}
-          >
-            <span className="flex align-center justify-center p-y-small-60">
-              <Icon>
-                <PixelIcon.Open />
-              </Icon>
-            </span>
-          </Button>
-        </Tooltip>
 
+      <URLBadge
+        variant="border"
+        // shape="round"
+        className="flex align-center justify-between g-medium-30"
+      >
         <Tooltip content="Refresh page">
           <Button
             disabled={disableIframeInteractions}
-            variant="border"
+            variant="ghost"
             sizing="small"
             aria-label="Refresh page"
             onClick={handleRefresh}
@@ -184,15 +175,25 @@ function ProjectsHeader({
             </span>
           </Button>
         </Tooltip>
-        <Field
-          variant="secondary"
-          sizing="small"
-          readOnly
-          className="fs-medium-10"
-          value={fragment?.sandboxUrl ?? "/"}
-          style={{ width: "100%" }}
-        />
-      </div>
+
+        <div className="fs-medium-10 flex">{fragment?.sandboxUrl ?? "/"}</div>
+
+        <Tooltip content="Open in new tab">
+          <Button
+            disabled={disableIframeInteractions}
+            variant="ghost"
+            sizing="small"
+            aria-label="Open in new tab"
+            onClick={handleNewTab}
+          >
+            <span className="flex align-center justify-center p-y-small-60">
+              <Icon>
+                <PixelIcon.Open />
+              </Icon>
+            </span>
+          </Button>
+        </Tooltip>
+      </URLBadge>
     </StyledMenu>
   );
 }
