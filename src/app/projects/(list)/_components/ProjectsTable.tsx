@@ -7,7 +7,7 @@ import { motion, type Variants } from "framer-motion";
 
 import { useRouter } from "next/navigation";
 
-import { Badge, Dialog, DropdownMenu } from "@usefui/components";
+import { Badge, Button, Dialog, DropdownMenu } from "@usefui/components";
 import { Icon, PixelIcon, WebIcon } from "@usefui/icons";
 import {
   Card,
@@ -21,8 +21,12 @@ import { maskKey } from "@/utils/data-tables";
 import { format, formatDistanceToNow } from "date-fns";
 
 import type { MessageRole, MessageType } from "generated/prisma";
+import Link from "next/link";
 
 const AnimatedContainer = styled(motion(CardsGrid))<{ variants?: Variants }>``;
+const CardLink = styled(Link)`
+  text-decoration: none;
+`;
 
 const stagger: Variants = {
   hidden: { opacity: 0 },
@@ -78,22 +82,20 @@ function ProjectsTable({
           <motion.div key={project.id} variants={slide}>
             <Card
               footer={
-                <footer className="p-medium-30 flex align-center justify-between w-100">
+                <CardLink
+                  href={`/projects/${project.id}`}
+                  className="p-medium-30 flex align-center justify-between w-100"
+                >
                   <span className="flex align-center g-medium-10 fs-medium-10 opacity-default-60">
                     <Icon fillOpacity={0.3}>
                       <PixelIcon.Clock />
                     </Icon>
                     Updated&nbsp;{lastUpdate}
                   </span>
-                  {/* <Button
-                    variant="ghost"
-                    onMouseDown={() => router.push(`/projects/${project.id}`)}
-                  >
-                    <Icon>
-                      <PixelIcon.ArrowRight />
-                    </Icon>
-                  </Button> */}
-                </footer>
+                  <Icon>
+                    <PixelIcon.CornerUpRight />
+                  </Icon>
+                </CardLink>
               }
             >
               <header className="flex align-center justify-between m-b-large-30">
@@ -107,17 +109,15 @@ function ProjectsTable({
                 </kbd>
 
                 <div className="flex align-center g-medium-10">
-                  <Dialog.Root>
-                    <Dialog.Trigger variant="ghost" sizing="small" rawicon>
-                      <span className="flex align-center justify-center p-y-small-60">
-                        <Icon>
-                          <PixelIcon.Close />
-                        </Icon>
-                      </span>
-                    </Dialog.Trigger>
-                    <DeleteProjectDialog projectId={project.id} />
-                  </Dialog.Root>
-                  <span className="fs-medium-10 opacity-default-10">/</span>
+                  {/* <Button
+                    variant="ghost"
+                    onMouseDown={() => router.push(`/projects/${project.id}`)}
+                  >
+                    <Icon>
+                      <PixelIcon.ArrowRight />
+                    </Icon>
+                  </Button>
+                  <span className="fs-medium-10 opacity-default-10">/</span> */}
                   <Dialog.Root>
                     <DropdownMenu.Root>
                       <DropdownMenu>
@@ -174,6 +174,17 @@ function ProjectsTable({
                       currentName={project.name}
                       projectId={project.id}
                     />
+                  </Dialog.Root>
+                  <span className="fs-medium-10 opacity-default-10">/</span>
+                  <Dialog.Root>
+                    <Dialog.Trigger variant="ghost" sizing="small" rawicon>
+                      <span className="flex align-center justify-center p-y-small-60">
+                        <Icon>
+                          <PixelIcon.Close />
+                        </Icon>
+                      </span>
+                    </Dialog.Trigger>
+                    <DeleteProjectDialog projectId={project.id} />
                   </Dialog.Root>
                 </div>
               </header>
