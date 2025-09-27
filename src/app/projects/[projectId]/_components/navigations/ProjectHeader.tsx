@@ -86,7 +86,7 @@ function ProjectsHeader({
                   <WebIcon.More />
                 </Icon>
               </span>
-              {isPending || (isUserPending && <Spinner />)}
+              {isPending && isUserPending && <Spinner />}
             </DropdownMenu.Trigger>
           </Tooltip>
           <DropdownMenu.Content>

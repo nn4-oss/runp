@@ -66,7 +66,7 @@ export const SplitText: React.FC<SplitTextProps> = ({
   stagger = 0.03,
   once = true,
 }) => {
-  const characters = text.split("");
+  const characters = Array.from(text);
 
   const containerVariants = {
     hidden: {},

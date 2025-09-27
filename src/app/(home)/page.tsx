@@ -19,14 +19,22 @@ async function Page() {
       <footer className="p-medium-60  flex justify-center align-en g-medium-10">
         <p className="fs-medium-10">
           <span className="opacity-default-60">Built by</span>&nbsp;
-          <a target="_blank" href="https://github.com/nnsncl">
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://github.com/nnsncl"
+          >
             nnsncl
           </a>
           .
           <span className="opacity-default-60">
             &nbsp;The source code is available on&nbsp;
           </span>
-          <a target="_blank" href="https://github.com/nn4-oss/runp">
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://github.com/nn4-oss/runp"
+          >
             Github
           </a>
           .

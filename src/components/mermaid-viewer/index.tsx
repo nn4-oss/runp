@@ -27,7 +27,7 @@ function MermaidViewer({ code, scale }: { scale: number; code: string }) {
     mermaid.initialize({
       startOnLoad: false,
       theme: colorMode === "dark" ? "dark" : "neutral",
-      securityLevel: "loose",
+      securityLevel: "strict",
       fontFamily: "Inter, sans-serif",
     });
 

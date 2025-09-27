@@ -90,7 +90,9 @@ function DiagramHeader({
           variant="ghost"
           sizing="small"
           onClick={() =>
-            diagramScale !== 0 && setDiagramScale(diagramScale - 0.1)
+            setDiagramScale((prev) =>
+              Math.max(0.1, Number((prev - 0.1).toFixed(2))),
+            )
           }
         >
           <Icon>
