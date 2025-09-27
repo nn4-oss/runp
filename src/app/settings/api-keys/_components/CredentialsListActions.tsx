@@ -4,7 +4,6 @@ import React from "react";
 
 import { Sheet, Tooltip } from "@usefui/components";
 import { CreateCredentialDialog } from "@/components";
-import { Icon, PixelIcon } from "@usefui/icons";
 
 function CredentialsListActions() {
   return (
@@ -12,10 +11,7 @@ function CredentialsListActions() {
       <Sheet.Root>
         <Tooltip content="Shortcut: ctrl&nbsp;+&nbsp;a">
           <Sheet.Trigger variant="border" sizing="medium">
-            <Icon>
-              <PixelIcon.Plus />
-            </Icon>
-            New API Key
+            Add New
           </Sheet.Trigger>
         </Tooltip>
 

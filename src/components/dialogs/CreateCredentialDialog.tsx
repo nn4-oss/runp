@@ -63,24 +63,6 @@ function CreateCredentialDialog() {
   const queryClient = useQueryClient();
   const sheet = useSheet();
 
-  const createCredential = useMutation(
-    trpc.credentials.create.mutationOptions({
-      // Invalidation has to be made after every queries and mutation are done.
-      // On success is disabled because fired too early in this case
-      onError: (error) => toast.error(error.message),
-    }),
-  );
-  const checkCredential = useMutation(
-    trpc.credentials.checkOpenAIKeyStatus.mutationOptions({
-      onError: (error) => toast.error(error.message),
-    }),
-  );
-
-  const linkIntegration = useMutation(trpc.integrations.link.mutationOptions());
-  const setPrimaryIntegration = useMutation(
-    trpc.integrations.setPrimary.mutationOptions(),
-  );
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     mode: "onChange",
@@ -91,6 +73,34 @@ function CreateCredentialDialog() {
       isPrimary: false,
     },
   });
+
+  const handleMutationError = (message: string) => {
+    toast.error(message);
+    form.reset();
+  };
+
+  const createCredential = useMutation(
+    trpc.credentials.create.mutationOptions({
+      // Invalidation has to be made after every queries and mutation are done.
+      // On success is disabled because fired too early in this case
+      onError: (error) => handleMutationError(error.message),
+    }),
+  );
+  const checkCredential = useMutation(
+    trpc.credentials.checkOpenAIKeyStatus.mutationOptions({
+      onError: (error) => handleMutationError(error.message),
+    }),
+  );
+  const linkIntegration = useMutation(
+    trpc.integrations.link.mutationOptions({
+      onError: (error) => handleMutationError(error.message),
+    }),
+  );
+  const setPrimaryIntegration = useMutation(
+    trpc.integrations.setPrimary.mutationOptions({
+      onError: (error) => handleMutationError(error.message),
+    }),
+  );
 
   const onSubmit = React.useCallback(
     async (values: z.infer<typeof formSchema>) => {

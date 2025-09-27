@@ -1,6 +1,7 @@
 export { default as AnimatedAgent } from "./animated-agent";
 export { default as AnimatedHero } from "./animated-hero";
 export { default as Breadcrumbs } from "./breadcrumbs";
+export { default as Card, CardsGrid } from "./cards";
 export { default as CodeEditor } from "./code-editor";
 export { default as ColorModes } from "./color-mode";
 export { default as CopyCode } from "./copy-code";
@@ -20,6 +21,8 @@ export { default as Textarea } from "./text-area";
 export { default as UserAvatar } from "./user-avatar";
 export { default as UsageRange } from "./usage-range";
 export { default as UsageBanner } from "./usage-banner";
+export { default as MermaidViewer } from "./mermaid-viewer";
+export { default as SplitText } from "./split-text";
 
 export { Spinner } from "./spinner";
 export { Pill } from "./pill";

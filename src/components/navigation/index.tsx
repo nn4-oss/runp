@@ -8,7 +8,6 @@ import { useQuery } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
 
 import AppAvatar from "./AppAvatar";
-import SignedOutLinks from "./SignedOutLinks";
 import SignedOutActions from "./SignedOutActions";
 import SignedInActions from "./SignedInActions";
 
@@ -30,7 +29,6 @@ function Navigation() {
       <div className="flex align-center g-medium-30 w-100">
         <AppAvatar />
         <SignedInActions />
-        <SignedOutLinks />
       </div>
 
       <div className="flex g-medium-10 align-center justify-end w-100">

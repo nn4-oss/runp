@@ -2,14 +2,17 @@
 
 import React from "react";
 import styled from "styled-components";
+import { motion } from "framer-motion";
 
 import { useRouter } from "next/navigation";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
 import { useKeyPress } from "@usefui/hooks";
 import { useForm } from "react-hook-form";
+import { useColorMode } from "@usefui/tokens";
 
 import Link from "next/link";
+import PromptTemplates from "./PromptTemplates";
 
 import { Icon, PixelIcon } from "@usefui/icons";
 import { Button } from "@usefui/components";
@@ -19,6 +22,8 @@ import {
   Spinner,
   Textarea,
 } from "@/components";
+
+import { PulsingBorder } from "@paper-design/shaders-react";
 
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -30,11 +35,13 @@ const PromptContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  max-width: var(--breakpoint-tablet);
+  max-width: var(--breakpoint-tablet-small);
   margin: 0 auto;
   z-index: var(--depth-default-10);
 `;
 const PromptWrapper = styled.form`
+  z-index: 90;
+  position: relative;
   border: var(--measurement-small-30) solid var(--font-color-alpha-10);
   border-radius: var(--measurement-medium-60);
 
@@ -71,7 +78,18 @@ const ProBanner = styled.div`
   transform: translateY(var(--pos-y));
   animation: fadeIn 1s cubic-bezier(0.075, 0.82, 0.165, 1);
 
-  z-index: -1;
+  z-index: 10;
+`;
+const ShaderBackground = styled(motion.div)`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  pointer-events: none;
 `;
 
 const formSchema = z.object({
@@ -86,6 +104,7 @@ function HomePrompt() {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const shortcutControls = useKeyPress("Enter", true, "ctrlKey");
+  const { colorMode } = useColorMode();
 
   const { data: user } = useQuery(trpc.user.get.queryOptions());
   const { data: config } = useQuery(
@@ -133,6 +152,24 @@ function HomePrompt() {
     return integration.service === "OPENAI";
   });
 
+  const shaderColors = React.useMemo(() => {
+    return (["dark", "system"] as (typeof colorMode)[]).includes(colorMode)
+      ? [
+          "rgba(255, 255, 255, 1)",
+          "rgba(255, 255, 255, 0.1)",
+          "rgba(255, 255, 255, 0.2)",
+          "rgba(255, 255, 255, 0.3)",
+          "rgba(255, 255, 255, 0.4)",
+        ]
+      : [
+          "rgba(255, 255, 255, 1)",
+          "rgba(255, 127, 17, 0.1)",
+          "rgba(255, 127, 17, 0.2)",
+          "rgba(255, 127, 17, 0.3)",
+          "rgba(255, 127, 17, 0.4)",
+        ];
+  }, [colorMode]);
+
   const onSubmit = React.useCallback(
     async (values: z.infer<typeof formSchema>) => {
       await createProject.mutateAsync({
@@ -162,50 +199,81 @@ function HomePrompt() {
   return (
     <PromptContainer>
       <PromptWrapper
-        className="p-medium-60 w-100"
+        className="w-100"
         onSubmit={form.handleSubmit(onSubmit)}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
       >
-        <Textarea
-          autoComplete="off"
-          id="prompt-content"
-          placeholder="Ask runp to build.."
-          className="p-b-large-10"
-          disabled={createProject.isPending}
-          {...form.register("content")}
-        />
+        <ShaderBackground
+          initial={{ opacity: 0 }}
+          animate={{ opacity: isFocused ? 0 : 1 }}
+          transition={{
+            duration: 2,
+          }}
+        >
+          <PulsingBorder
+            style={{ height: "146.5%", minWidth: "143%" }}
+            colorBack="rgba(0, 0, 0, 0)"
+            roundness={0.18}
+            thickness={0}
+            softness={1}
+            intensity={0.3}
+            bloom={2}
+            spots={1}
+            spotSize={0.25}
+            pulse={0}
+            smoke={0.35}
+            smokeSize={0.4}
+            scale={0.7}
+            rotation={Math.PI / 10}
+            offsetX={0}
+            offsetY={0}
+            speed={Math.PI / 10}
+            colors={shaderColors}
+          />
+        </ShaderBackground>
+        <div className="p-medium-60">
+          <Textarea
+            autoComplete="off"
+            id="prompt-content"
+            placeholder="Ask runp to build.."
+            className="p-b-large-10"
+            disabled={createProject.isPending}
+            {...form.register("content")}
+          />
 
-        <div className="flex align-center justify-between">
-          <PromptOptions />
+          <div className="flex align-center justify-between">
+            <PromptOptions />
 
-          <div className="flex align-center g-medium-30">
-            <kbd>
-              <span className="fs-small-50 opacity-default-30">
-                Ctrl&nbsp;+&nbsp;Enter
-              </span>
-            </kbd>
+            <div className="flex align-center g-medium-30">
+              <kbd>
+                <span className="fs-small-50 opacity-default-30">
+                  Ctrl&nbsp;+&nbsp;Enter
+                </span>
+              </kbd>
 
-            <ReflectiveButton
-              type="submit"
-              sizing="small"
-              variant="mono"
-              onClick={form.handleSubmit(onSubmit)}
-              disabled={createProject.isPending || !form.formState.isValid}
-            >
-              <span className="p-y-small-30">
-                {createProject.isPending ? (
-                  <Spinner />
-                ) : (
-                  <Icon>
-                    <PixelIcon.ArrowUp />
-                  </Icon>
-                )}
-              </span>
-            </ReflectiveButton>
+              <ReflectiveButton
+                type="submit"
+                sizing="small"
+                variant="mono"
+                onClick={form.handleSubmit(onSubmit)}
+                disabled={createProject.isPending || !form.formState.isValid}
+              >
+                <span className="p-y-small-30">
+                  {createProject.isPending ? (
+                    <Spinner />
+                  ) : (
+                    <Icon>
+                      <PixelIcon.ArrowUp />
+                    </Icon>
+                  )}
+                </span>
+              </ReflectiveButton>
+            </div>
           </div>
         </div>
       </PromptWrapper>
+
       {showProBanner && !hasOpenAiAPIKeyDefined && (
         <ProBanner className="flex align-end justify-between">
           <span className="fs-medium-10 opacity-default-60 flex align-center g-medium-10">
@@ -231,6 +299,14 @@ function HomePrompt() {
           </Button>
         </ProBanner>
       )}
+
+      <span
+        className={
+          showProBanner && !hasOpenAiAPIKeyDefined ? "" : "m-t-medium-60"
+        }
+      >
+        <PromptTemplates />
+      </span>
     </PromptContainer>
   );
 }

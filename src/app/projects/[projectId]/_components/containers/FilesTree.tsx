@@ -70,7 +70,7 @@ function Tree({ file, parentPath, selectedValue, onSelect }: TreeProps) {
         <Accordion.Content
           value={name}
           defaultOpen
-          className="grid g-medium-30 p-y-medium-30"
+          className={`grid g-medium-30 p-b-medium-30 ${items.length !== 0 && "p-t-medium-30"}`}
         >
           {/**Recursive use of the component */}
           {items.map((subitem) => {
@@ -96,7 +96,7 @@ function Tree({ file, parentPath, selectedValue, onSelect }: TreeProps) {
 
 function FilesTree({ files, value, onSelect }: FilesTreeProps) {
   return (
-    <TreeWrapper scrollbar className="p-x-medium-30 p-y-medium-60">
+    <TreeWrapper scrollbar className="p-medium-30">
       {files?.map((file) => {
         const name = Array.isArray(file) ? file[0] : file;
         return (

@@ -3,6 +3,7 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
 
+import { Avatar } from "@usefui/components";
 import { AnimatedAgent } from "@/components";
 
 const Blink = keyframes`
@@ -40,7 +41,9 @@ function LoadingBubble() {
   return (
     <div className="grid p-medium-30">
       <div className="flex align-center g-medium-30">
-        <AnimatedAgent />
+        <Avatar sizing="small" style={{ background: "var(--font-color)" }}>
+          <AnimatedAgent />
+        </Avatar>
         <div
           className="grid"
           role="status"

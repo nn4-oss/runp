@@ -25,7 +25,7 @@ function ProjectListActions() {
         sizing="medium"
         onMouseDown={() => router.push("/")}
       >
-        New chat
+        New
       </Button>
       <DropdownMenu.Root>
         <DropdownMenu>

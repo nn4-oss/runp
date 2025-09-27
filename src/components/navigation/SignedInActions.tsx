@@ -14,7 +14,13 @@ function SignedInActions() {
 
   return (
     <SignedIn>
-      <span className="opacity-default-10">/</span>
+      <span className="opacity-default-10 p-x-medium-10">/</span>
+      <Dialog.Root>
+        <UserAvatar />
+        <UpgradeScopeDialog />
+      </Dialog.Root>
+      <span className="opacity-default-10 p-x-medium-10">/</span>
+
       <div className="flex align-center g-medium-10">
         <Tooltip content="New chat">
           <Button
@@ -46,11 +52,6 @@ function SignedInActions() {
           </Button>
         </Tooltip>
       </div>
-      <span className="opacity-default-10">/</span>
-      <Dialog.Root>
-        <UserAvatar />
-        <UpgradeScopeDialog />
-      </Dialog.Root>
     </SignedIn>
   );
 }

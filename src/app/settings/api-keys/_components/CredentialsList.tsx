@@ -8,8 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import CredentialsListActions from "./CredentialsListActions";
 import CredentialsTable from "./CredentialsTable";
 
-import { FixedHeader, Spinner } from "@/components";
-import { Page } from "@usefui/components";
+import { FixedHeader, Spinner, SplitText } from "@/components";
 
 function CredentialsList() {
   const trpc = useTRPC();
@@ -19,19 +18,25 @@ function CredentialsList() {
 
   if (isPending) {
     return (
-      <Page.Content className="w-100 h-100 flex align-center justify-center">
+      <div className="w-100 h-100 flex align-center justify-center">
         <Spinner />
-      </Page.Content>
+      </div>
     );
   }
 
   const hasData = credentials && credentials?.length !== 0;
-
   return (
-    <Page.Content className="w-100 h-100" scrollbar>
+    <React.Fragment>
       <FixedHeader className="grid">
         <div className="flex justify-between align-center p-y-medium-60 p-x-medium-60">
-          <p className="fs-medium-20">API Keys</p>
+          <p className="fs-medium-20">
+            <SplitText
+              stagger={0.02}
+              duration={0.1}
+              variant="fade"
+              text="API Keys"
+            />
+          </p>
 
           <CredentialsListActions />
         </div>
@@ -46,7 +51,7 @@ function CredentialsList() {
 
         {hasData && <CredentialsTable data={credentials} />}
       </div>
-    </Page.Content>
+    </React.Fragment>
   );
 }
 

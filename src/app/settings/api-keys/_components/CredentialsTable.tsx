@@ -3,12 +3,15 @@
 import React from "react";
 import styled from "styled-components";
 
-import { Badge, Dialog, Table, Tooltip } from "@usefui/components";
+import { motion, type Variants } from "framer-motion";
+
+import { Badge, Dialog, Tooltip } from "@usefui/components";
 import { Icon, PixelIcon } from "@usefui/icons";
 import {
-  CopyCode,
-  // UpdateCredentialDialog,
+  Card,
+  CardsGrid,
   DeleteCredentialDialog,
+  SplitText,
 } from "@/components";
 
 import { format, formatDistanceToNow } from "date-fns";
@@ -16,9 +19,28 @@ import { maskKey } from "@/utils/data-tables";
 
 import type { ThirdPartyServiceType } from "generated/prisma";
 
-const StyledTable = styled(Table)`
-  background-color: var(--contrast-color);
-`;
+const AnimatedContainer = styled(motion(CardsGrid))<{ variants?: Variants }>``;
+
+const stagger: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.05,
+      delayChildren: 0.1,
+    },
+  },
+};
+const slide: Variants = {
+  hidden: {
+    opacity: 0,
+    y: -3,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+  },
+};
 
 function CredentialsTable({
   data,
@@ -37,26 +59,66 @@ function CredentialsTable({
   }[];
 }) {
   return (
-    <StyledTable className="w-100">
-      <Table.Body>
-        {data.map((credential) => {
-          const createdAt = format(credential.createdAt, "dd/MM/yyyy");
-          const lastUpdate = formatDistanceToNow(credential.updatedAt, {
-            addSuffix: true,
-          });
+    <AnimatedContainer variants={stagger} initial="hidden" animate="visible">
+      {data.map((credential) => {
+        const createdAt = format(credential.createdAt, "dd/MM/yyyy");
+        const lastUpdate = formatDistanceToNow(credential.updatedAt, {
+          addSuffix: true,
+        });
 
-          return (
-            <Table.Row key={credential.id}>
-              <Table.Cell>
-                <span className="flex  align-center g-medium-10">
-                  <p className="fs-medium-10">{credential.name}</p>
-                  <span className="opacity-default-10">/</span>
+        return (
+          <motion.div key={credential.id} variants={slide}>
+            <Card
+              key={credential.id}
+              footer={
+                <footer className="p-medium-30 g-medium-10 flex align-center w-100">
+                  <Icon fillOpacity={0.1}>
+                    <PixelIcon.Clock />
+                  </Icon>
+                  <span className="fs-medium-10 opacity-default-60">
+                    Updated&nbsp;{lastUpdate}
+                  </span>
+                </footer>
+              }
+            >
+              <header className="flex align-center justify-between m-b-large-30">
+                <kbd className="fs-small-60 opacity-default-30">
+                  <SplitText
+                    stagger={0.02}
+                    duration={0.1}
+                    variant="fade"
+                    text={maskKey(credential.id)}
+                  />
+                </kbd>
 
+                <div className="flex align-center g-medium-10">
+                  <Dialog.Root>
+                    <Dialog.Trigger variant="ghost" sizing="small" rawicon>
+                      <span className="flex align-center justify-center p-y-small-60">
+                        <Icon>
+                          <PixelIcon.Close />
+                        </Icon>
+                      </span>
+                    </Dialog.Trigger>
+                    <DeleteCredentialDialog credentialName={credential.name} />
+                  </Dialog.Root>
+                </div>
+              </header>
+              <div className="flex justify-between align-end g-medium-30 w-100">
+                <div className="w-100">
+                  <p className="fs-medium-20">{credential.name}</p>
+                  <p className="fs-medium-10 opacity-default-30">
+                    Created&nbsp;{createdAt}
+                  </p>
+                </div>
+
+                <div className="flex align-center g-medium-30 justify-end">
                   {credential.integrations.map((integration, index) => (
                     <React.Fragment key={index}>
-                      <Badge variant="border">
-                        <kbd className="fs-small-60">{integration.service}</kbd>
-                      </Badge>
+                      <kbd className="fs-small-60 opacity-default-60">
+                        {integration.service}
+                      </kbd>
+
                       {integration.isPrimary ? (
                         <Tooltip content="Active">
                           <Badge variant="success">
@@ -80,70 +142,13 @@ function CredentialsTable({
                       )}
                     </React.Fragment>
                   ))}
-                </span>
-              </Table.Cell>
-
-              <Table.Cell>
-                <span className="flex align-center g-medium-10">
-                  <Badge variant="border">
-                    <kbd className="fs-small-60">
-                      {maskKey(credential.value)}
-                    </kbd>
-                  </Badge>
-                  <CopyCode value={credential.value} />
-                </span>
-              </Table.Cell>
-
-              <Table.Cell>
-                <span className="flex  g-medium-10 align-center">
-                  <Tooltip content="Created At">
-                    <Badge variant="border">
-                      <Icon>
-                        <PixelIcon.Calendar />
-                      </Icon>
-                      {createdAt}
-                    </Badge>
-                  </Tooltip>
-                  <Tooltip content="Updated At">
-                    <Badge variant="border">
-                      <Icon>
-                        <PixelIcon.Clock />
-                      </Icon>
-                      {lastUpdate}
-                    </Badge>
-                  </Tooltip>
-                </span>
-              </Table.Cell>
-
-              <Table.Cell className="flex justify-end">
-                {/* <Dialog.Root>
-                  <Dialog.Trigger variant="border" sizing="small" rawicon>
-                    <span className="flex align-center justify-center p-y-small-60">
-                      <Icon>
-                        <PixelIcon.EditBox />
-                      </Icon>
-                    </span>
-                  </Dialog.Trigger>
-
-                  <UpdateCredentialDialog credentialId={credential.id} />
-                </Dialog.Root> */}
-                <Dialog.Root>
-                  <Dialog.Trigger variant="border" sizing="small" rawicon>
-                    <span className="flex align-center justify-center p-y-small-60">
-                      <Icon>
-                        <PixelIcon.Close />
-                      </Icon>
-                    </span>
-                  </Dialog.Trigger>
-
-                  <DeleteCredentialDialog credentialName={credential.name} />
-                </Dialog.Root>
-              </Table.Cell>
-            </Table.Row>
-          );
-        })}
-      </Table.Body>
-    </StyledTable>
+                </div>
+              </div>
+            </Card>
+          </motion.div>
+        );
+      })}
+    </AnimatedContainer>
   );
 }
 

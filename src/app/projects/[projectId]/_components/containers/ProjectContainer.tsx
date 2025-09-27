@@ -22,7 +22,6 @@ function ProjectContainer({
   fragment,
 }: ProjectContainerProps) {
   const [sandboxKey, setSandboxKey] = React.useState(0);
-
   return (
     <ViewsContainer>
       <ProjectsHeader
@@ -31,7 +30,6 @@ function ProjectContainer({
         setSandboxKey={setSandboxKey}
         setCurrentView={setCurrentView}
       />
-
       <AppContainer className="h-100 w-100 flex align-center justify-center">
         <ViewContainer
           fragment={fragment}

@@ -3,6 +3,7 @@
 import React from "react";
 
 import ProjectPreview from "./ProjectPreview";
+import DiagramPreview from "./DiagramPreview";
 import CodeEditorHeader from "../navigations/CodeEditorHeader";
 import FilesTree from "./FilesTree";
 
@@ -44,6 +45,7 @@ function ViewContainer({
   const isPending = !fragment?.sandboxUrl;
   const isPreviewMode = !isPending && fragment && currentView === "preview";
   const isCodeMode = !isPending && fragment && currentView === "code";
+  const isDiagramMode = !isPending && fragment && currentView === "diagram";
   const showRightPanel = selectedFile && files;
 
   const handleOnSelectFile = React.useCallback(
@@ -56,7 +58,6 @@ function ViewContainer({
 
   /** Auto-select first file */
   React.useEffect(() => setSelectedFile(getFirstFileKey(files)), [files]);
-
   return (
     <div className="w-100 h-100">
       {isPending && (
@@ -74,7 +75,7 @@ function ViewContainer({
 
       {isCodeMode && (
         <SplitScreen
-          defaultWidth={25}
+          defaultWidth={30}
           left={
             <FilesTree
               files={filesTree}
@@ -109,6 +110,10 @@ function ViewContainer({
             </React.Fragment>
           }
         />
+      )}
+
+      {isDiagramMode && files && (
+        <DiagramPreview code={files["diagram.mermaid"] ?? ""} />
       )}
     </div>
   );
