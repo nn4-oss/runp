@@ -14,5 +14,9 @@ export const SCOPES_FEATURES = {
     "LLM and Sandbox configurations",
     "Unlock Runp at full capacity",
   ],
-  // ENTERPRISE: [],
+  ENTERPRISE: [
+    "Unlimited messages /month",
+    "Custom Integration",
+    "Custom Docker Image",
+  ],
 };
