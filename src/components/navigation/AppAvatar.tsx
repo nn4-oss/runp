@@ -44,16 +44,13 @@ function AppAvatar() {
 
           <Divider className="m-y-medium-10" />
 
-          <DropdownMenu.Item
-            className="w-100 flex align-center g-medium-30"
-            onMouseDown={() => router.push("/docs")}
-          >
+          <DropdownMenu.Item className="w-100 flex align-center g-medium-30">
             <span className="flex align-center justify-center">
               <Icon>
-                <PixelIcon.BookOpen />
+                <PixelIcon.Message />
               </Icon>
             </span>
-            Documentation
+            Feedbacks
           </DropdownMenu.Item>
 
           <DropdownMenu.Item

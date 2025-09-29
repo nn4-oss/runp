@@ -9,8 +9,6 @@ import { Button } from "@usefui/components";
 function SignedOutActions() {
   return (
     <SignedOut>
-      <span className="opacity-default-10">/</span>
-
       <SignInButton>
         <ReflectiveButton variant="border" sizing="medium">
           Sign&nbsp;In

@@ -1,6 +1,5 @@
 "use client";
 
-import pkg from "../../../package.json";
 import React from "react";
 import styled from "styled-components";
 
@@ -11,9 +10,9 @@ import AppAvatar from "./AppAvatar";
 import SignedOutActions from "./SignedOutActions";
 import SignedInActions from "./SignedInActions";
 
-import { Page, Dialog, Tooltip } from "@usefui/components";
+import { Page, Dialog } from "@usefui/components";
 import { ScopeEnum } from "generated/prisma";
-import { ReflectiveButton, UpgradeScopeDialog } from "..";
+import { UpgradeScopeDialog } from "..";
 import { SignedIn } from "@clerk/nextjs";
 
 const StyledMenu = styled(Page.Navigation)`
@@ -40,15 +39,9 @@ function Navigation() {
               </Dialog.Trigger>
 
               <UpgradeScopeDialog />
-              <span className="opacity-default-10">/</span>
             </Dialog.Root>
           )}
         </SignedIn>
-        <Tooltip content="Version">
-          <ReflectiveButton variant="border" sizing="medium">
-            v{pkg.version}
-          </ReflectiveButton>
-        </Tooltip>
 
         <SignedOutActions />
       </div>

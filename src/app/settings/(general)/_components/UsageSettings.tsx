@@ -11,7 +11,6 @@ import SubscribeActions from "./SubscribeActions";
 import { UsageRange, SkeletonLoader, Spinner } from "@/components";
 import { BorderWrapper } from "./GeneralSettings";
 import { Icon, PixelIcon } from "@usefui/icons";
-import { Divider } from "@usefui/components";
 
 import { formatDuration, intervalToDuration } from "date-fns";
 import { POINTS_PER_SCOPE } from "@/utils/scope-features";
@@ -66,15 +65,14 @@ function UsageSettings() {
               <h6 className="fs-medium-20">Usage</h6>
               <div>
                 <p className="fs-medium-10 opacity-default-60">
-                  You are currently using the&nbsp;
+                  You are currently on the&nbsp;
                   <b>{user?.scope.toLowerCase()}</b>
                   &nbsp;plan.
                 </p>
                 <p className="flex  g-medium-10 fs-medium-10 opacity-default-60">
                   Compare plans and options on our
                   <Link
-                    href="/pricing"
-                    target="_blank"
+                    href="/settings/pricing"
                     className="flex align-center g-medium-10"
                   >
                     pricing page
@@ -119,21 +117,6 @@ function UsageSettings() {
               </React.Fragment>
             )}
           </div>
-
-          <Divider className="m-y-medium-50" />
-          <p className="flex  g-medium-10 fs-medium-10 opacity-default-60">
-            See the detailed view on the
-            <Link
-              href="/settings/usage"
-              target="_blank"
-              className="flex align-center g-medium-10"
-            >
-              details page
-              <Icon>
-                <PixelIcon.Open />
-              </Icon>
-            </Link>
-          </p>
         </div>
       </div>
     </BorderWrapper>
