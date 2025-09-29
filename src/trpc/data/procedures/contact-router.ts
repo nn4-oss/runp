@@ -7,7 +7,7 @@ export const contactRouter = createTRPCRouter({
   contact: protectedProcedure
     .input(
       z.object({
-        subject: z.enum(["feedback", "contact", "support"]).optional(),
+        subject: z.enum(["feedback", "contact"]).optional(),
         content: z
           .string()
           .min(1, {
@@ -31,8 +31,6 @@ export const contactRouter = createTRPCRouter({
           return process.env.DISCORD_CONTACT_WEBHOOK_URL;
         if (input.subject === "feedback")
           return process.env.DISCORD_FEEDBACK_WEBHOOK_URL;
-        if (input.subject === "support")
-          return process.env.DISCORD_SUPPORT_WEBHOOK_URL;
       };
 
       const discordWebhookKey = getWebhookKey();

@@ -8,9 +8,10 @@ import { motion, type Variants } from "framer-motion";
 import { useTRPC } from "@/trpc/client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { Button, Divider } from "@usefui/components";
+import { Button, Dialog, Divider } from "@usefui/components";
 import { Icon, PixelIcon } from "@usefui/icons";
 import { BorderWrapper } from "../../(general)/_components/GeneralSettings";
+import { SendMessageDialog } from "@/components";
 
 import { toast } from "sonner";
 import { ScopeEnum } from "generated/prisma";
@@ -169,9 +170,12 @@ function PricingPlans() {
           ))}
         </div>
         <Divider className="m-y-large-10" />
-        <Button sizing="large" variant="primary" className="w-100">
-          Contact
-        </Button>
+        <Dialog.Root>
+          <Dialog.Trigger sizing="large" variant="primary" className="w-100">
+            Contact
+          </Dialog.Trigger>
+          <SendMessageDialog />
+        </Dialog.Root>
       </AnimatedWrapper>
     </PlansGrid>
   );
