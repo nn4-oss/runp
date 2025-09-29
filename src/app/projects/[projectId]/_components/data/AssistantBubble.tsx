@@ -9,20 +9,21 @@ import { Field } from "@usefui/components";
 
 import { format } from "date-fns";
 import type { BubbleProps } from "../../_types";
+import { SplitText } from "@/components";
 
 const BubbleText = styled.p`
-  font-weight: 500;
-  line-height: 1.2;
-  word-break: keep-all;
-
+  opacity: 0.6;
   font-size: var(--fontsize-medium-20) !important;
-
-  max-width: calc(var(--measurement-large-90) * 1.5);
-  width: 100%;
+  line-height: 1.5;
+  font-weight: 500;
 
   syntax: "*";
   inherits: false;
   initial-value: solid;
+  word-break: keep-all;
+
+  max-width: calc(var(--measurement-large-90) * 1.5);
+  width: 100%;
 `;
 
 function AssistantBubble({
@@ -31,6 +32,7 @@ function AssistantBubble({
   fragment,
   createdAt,
   isActiveFragment,
+
   onFragmentClick,
 }: BubbleProps) {
   const sanitizedContent = content.replace(/<\/?task_summary>/g, "").trim();

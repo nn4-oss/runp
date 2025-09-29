@@ -1,16 +1,28 @@
 "use client";
 
 import React from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 import { TextLimiter } from "@/components/breadcrumbs";
 import { Accordion, Button, Divider, Tooltip } from "@usefui/components";
 import { Icon, PixelIcon } from "@usefui/icons";
+import { SplitText } from "@/components";
 
 import { getFilesKeys } from "../../_utils";
 
 import type { FilesProps, FragmentBubbleProps } from "../../_types";
 
+const FadeIn = keyframes`
+    from {
+        opacity: var(--opacity-default-10);
+    }
+    to {
+        opacity: var(--opacity-default-60);
+    }
+`;
+const FadeInText = styled.span`
+  animation: ${FadeIn} linear 1s;
+`;
 const WrappedAccordion = styled(Accordion)`
   display: block;
   width: 100%;
@@ -32,7 +44,6 @@ function FragmentBubble({
   isActiveFragment,
 }: FragmentBubbleProps) {
   const filesKeys = getFilesKeys(fragment?.files as FilesProps | null);
-
   return (
     <Accordion.Root>
       <WrappedAccordion data-active={String(isActiveFragment)}>
@@ -46,7 +57,14 @@ function FragmentBubble({
             <Icon>
               <PixelIcon.ChevronDown />
             </Icon>
-            {fragment?.title}
+            <FadeInText>
+              <SplitText
+                stagger={0.02}
+                duration={0.1}
+                variant="fade"
+                text={String(fragment?.title)}
+              />
+            </FadeInText>
           </Accordion.Trigger>
 
           {!isActiveFragment && (
