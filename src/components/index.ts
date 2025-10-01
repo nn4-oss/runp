@@ -11,6 +11,7 @@ export { default as UpgradeScopeDialog } from "./dialogs/UpgradeScopeDialog";
 export { default as DeleteProjectDialog } from "./dialogs/DeleteProjectDialog";
 export { default as DeleteCredentialDialog } from "./dialogs/DeleteCredentialDialog";
 export { default as SendMessageDialog } from "./dialogs/SendMessageDialog";
+export { default as SendFeedbackDialog } from "./dialogs/SendFeedbackDialog";
 export { default as UpdateNameDialog } from "./dialogs/UpdateNameDialog";
 export { default as Navigation } from "./navigation";
 export { default as PromptOptions } from "./prompt-options";
