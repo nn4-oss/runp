@@ -170,6 +170,13 @@ model Usage {
   expire  DateTime?
 }
 
+// Rate limiting per user's feedbacks/contact messages.
+model ContactMessages {
+  key     String    @id @default(uuid())
+  points  Int
+  expire  DateTime?
+}
+
 // Each user can have at most one configuration (1:1 relation).
 // Cascade delete ensures configurations are removed with their user.
 model Configuration {
