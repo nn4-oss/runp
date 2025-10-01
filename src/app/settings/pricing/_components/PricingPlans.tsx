@@ -10,8 +10,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { Button, Dialog, Divider } from "@usefui/components";
 import { Icon, PixelIcon } from "@usefui/icons";
-import { BorderWrapper } from "../../(general)/_components/GeneralSettings";
-import { SendMessageDialog } from "@/components";
+import { SendMessageDialog, BorderWrapper } from "@/components";
 
 import { toast } from "sonner";
 import { ScopeEnum } from "generated/prisma";
@@ -155,7 +154,9 @@ function PricingPlans() {
       <AnimatedWrapper className="p-medium-60" variants={slide}>
         <hgroup className="grid g-medium-30">
           <h6 className="fs-medium-40">Runp&nbsp;Enterprise</h6>
-          <span className="fs-medium-20 flex align-center">Let's talk</span>
+          <span className="fs-medium-20 flex align-center">
+            Let&apos;s talk
+          </span>
         </hgroup>
         <Divider className="m-y-large-10" />
 

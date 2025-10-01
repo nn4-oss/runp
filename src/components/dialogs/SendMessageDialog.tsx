@@ -6,9 +6,8 @@ import { useTRPC } from "@/trpc/client";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-import { Spinner, Textarea } from "@/components";
+import { Spinner, Textarea, BorderWrapper } from "@/components";
 import { Button, Dialog, Field, Portal, useDialog } from "@usefui/components";
-import { BorderWrapper } from "@/app/settings/(general)/_components/GeneralSettings";
 
 import { toast } from "sonner";
 
@@ -34,7 +33,7 @@ function SendMessageDialog() {
       onSuccess: async () => {
         dialog.methods?.toggleDialog?.();
         form.reset();
-        toast("Thanks you for reaching out!", {
+        toast("Thank you for reaching out!", {
           description:
             "A member of the team will contact you as soon as possible.",
         });
@@ -70,8 +69,8 @@ function SendMessageDialog() {
         <hgroup className="m-b-large-10 grid g-medium-30">
           <h6>Get an Enterprise trial of Runp.</h6>
           <p className="fs-medium-20 opacity-default-60">
-            Let's meet to talk about the value of Runp and Foundation UI for
-            your enterprise.
+            Let&apos;s meet to talk about the value of Runp and Foundation UI
+            for your enterprise.
           </p>
         </hgroup>
 

@@ -7,7 +7,7 @@ import { motion, type Variants } from "framer-motion";
 
 import { Accordion, Divider } from "@usefui/components";
 import { Icon, PixelIcon } from "@usefui/icons";
-import { BorderWrapper } from "../../(general)/_components/GeneralSettings";
+import { BorderWrapper } from "@/components";
 
 const FAQGrid = styled.div`
   max-width: var(--breakpoint-tablet);

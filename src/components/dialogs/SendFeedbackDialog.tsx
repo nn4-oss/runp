@@ -6,9 +6,8 @@ import { useTRPC } from "@/trpc/client";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { SkeletonLoader, Spinner, Textarea } from "@/components";
+import { Spinner, Textarea, BorderWrapper } from "@/components";
 import { Button, Dialog, Field, Portal, useDialog } from "@usefui/components";
-import { BorderWrapper } from "@/app/settings/(general)/_components/GeneralSettings";
 
 import { toast } from "sonner";
 
@@ -36,7 +35,7 @@ function SendFeedbackDialog() {
 
         dialog.methods?.toggleDialog?.();
         form.reset();
-        toast("Thanks you for reaching out!");
+        toast("Thank you for reaching out!");
       },
       onError: () => toast.error("Something went wrong."),
     }),
@@ -70,8 +69,8 @@ function SendFeedbackDialog() {
         <hgroup className="m-b-large-10 grid g-medium-30">
           <h6>Give feedback</h6>
           <p className="fs-medium-20 opacity-default-60">
-            Your feedback helps shape this place. We'd love to hear what went
-            well or how we can improve the product experience.
+            Your feedback helps shape this place. We&apos;d love to hear what
+            went well or how we can improve the product experience.
           </p>
         </hgroup>
         <span></span>

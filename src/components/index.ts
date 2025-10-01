@@ -1,6 +1,7 @@
 export { default as AnimatedAgent } from "./animated-agent";
 export { default as AnimatedHero } from "./animated-hero";
 export { default as Breadcrumbs } from "./breadcrumbs";
+
 export { default as Card, CardsGrid } from "./cards";
 export { default as CodeEditor } from "./code-editor";
 export { default as ColorModes } from "./color-mode";
@@ -27,6 +28,7 @@ export { default as MermaidViewer } from "./mermaid-viewer";
 export { default as SplitText } from "./split-text";
 
 export { Spinner } from "./spinner";
+export { BorderWrapper } from "./border-wrapper";
 export { Pill } from "./pill";
 export { AppContainer } from "./container";
 export { FixedHeader } from "./fixed-header";

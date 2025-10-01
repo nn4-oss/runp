@@ -9,7 +9,6 @@ import { Field } from "@usefui/components";
 
 import { format } from "date-fns";
 import type { BubbleProps } from "../../_types";
-import { SplitText } from "@/components";
 
 const BubbleText = styled.p`
   opacity: 0.6;

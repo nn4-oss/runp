@@ -8,8 +8,12 @@ import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import SubscribeActions from "./SubscribeActions";
 
-import { UsageRange, SkeletonLoader, Spinner } from "@/components";
-import { BorderWrapper } from "./GeneralSettings";
+import {
+  UsageRange,
+  SkeletonLoader,
+  Spinner,
+  BorderWrapper,
+} from "@/components";
 import { Icon, PixelIcon } from "@usefui/icons";
 
 import { formatDuration, intervalToDuration } from "date-fns";

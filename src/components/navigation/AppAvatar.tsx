@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 import { ColorModes, SendFeedbackDialog } from "../";
 import { ScrollArea, DropdownMenu, Divider, Dialog } from "@usefui/components";
 import { Icon, PixelIcon, SocialIcon } from "@usefui/icons";
+import { useTRPC } from "@/trpc/client";
+import { useQuery } from "@tanstack/react-query";
 
 export const BrandSVG = () => {
   return (
@@ -16,6 +18,7 @@ export const BrandSVG = () => {
 
 function AppAvatar() {
   const router = useRouter();
+  const trpc = useTRPC();
 
   return (
     <Dialog.Root>
@@ -55,6 +58,7 @@ function AppAvatar() {
                 Feedbacks
               </DropdownMenu.Item>
             </Dialog.Trigger>
+
             <DropdownMenu.Item
               className="w-100 flex align-center g-medium-30"
               onClick={() =>

@@ -14,7 +14,7 @@ import {
   Textarea,
 } from "@/components";
 import { Badge, Checkbox, Divider } from "@usefui/components";
-import { BorderWrapper } from "./GeneralSettings";
+import { BorderWrapper } from "@/components";
 
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";

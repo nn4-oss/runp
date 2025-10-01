@@ -5,13 +5,13 @@ import styled from "styled-components";
 
 import { useTRPC } from "@/trpc/client";
 import { useQuery } from "@tanstack/react-query";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 import AppLayout from "./AppLayout";
 
 import { Button, Page, ScrollArea, Toolbar, Tooltip } from "@usefui/components";
 import { AppContainer } from "@/components";
-import { Icon, PixelIcon, WebIcon } from "@usefui/icons";
+import { Icon, PixelIcon } from "@usefui/icons";
 
 const StyledToolbar = styled(Toolbar)`
   background-color: var(--contrast-color) !important;
