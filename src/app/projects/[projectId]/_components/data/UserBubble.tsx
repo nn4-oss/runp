@@ -25,7 +25,7 @@ const Bubble = styled(Badge)`
   border-radius: var(--measurement-medium-60) !important;
 
   font-weight: 500;
-  line-height: 1.1;
+  line-height: 1.2;
   word-break: keep-all;
 
   font-size: var(--fontsize-medium-20) !important;
@@ -44,7 +44,7 @@ const CornerSVG = styled.svg`
   display: block;
 
   position: absolute;
-  top: calc(var(--measurement-small-30) * -1);
+  top: calc(var(--measurement-small-60) * -1);
   right: 0px;
 
   transition-property: scale, fill;

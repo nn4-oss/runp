@@ -5,13 +5,13 @@ import styled from "styled-components";
 
 import { useTRPC } from "@/trpc/client";
 import { useQuery } from "@tanstack/react-query";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 import AppLayout from "./AppLayout";
 
 import { Button, Page, ScrollArea, Toolbar, Tooltip } from "@usefui/components";
 import { AppContainer } from "@/components";
-import { Icon, PixelIcon, WebIcon } from "@usefui/icons";
+import { Icon, PixelIcon } from "@usefui/icons";
 
 const StyledToolbar = styled(Toolbar)`
   background-color: var(--contrast-color) !important;
@@ -29,17 +29,17 @@ const SettingsLinks = [
     disabled: false,
   },
   {
-    icon: <WebIcon.Key />,
+    icon: <PixelIcon.Lock />,
     label: "API Keys",
     path: "/settings/api-keys",
     disabled: false,
   },
-  // {
-  //   icon: <PixelIcon.Trending />,
-  //   label: "Usage",
-  //   path: "/settings/usage",
-  //   disabled: true,
-  // },
+  {
+    icon: <PixelIcon.Zap />,
+    label: "Pricing",
+    path: "/settings/pricing",
+    disabled: false,
+  },
   {
     icon: <PixelIcon.User />,
     label: "Profile",
@@ -55,8 +55,6 @@ function SettingsLayout({
 }>) {
   const trpc = useTRPC();
   const router = useRouter();
-  const pathname = usePathname();
-
   const { data: user, isPending } = useQuery(trpc.user.get.queryOptions());
 
   return (
@@ -65,15 +63,12 @@ function SettingsLayout({
         <Toolbar.Root>
           {!isPending && user?.scope && (
             <StyledToolbar side="left" sizing="small" height="auto">
-              <Toolbar.Section showoncollapse className="grid g-medium-10">
+              <Toolbar.Section
+                showoncollapse
+                className="grid g-medium-50 p-x-medium-30 p-t-medium-50"
+              >
                 {SettingsLinks.map((link) => {
-                  const currentPath = pathname
-                    .split("/")
-                    .filter(Boolean)
-                    .join("/");
-                  const isCurrentPath = `/${currentPath}` === link.path;
                   const isDisabled = link.disabled;
-
                   const onClick = () => {
                     if (!isDisabled) router.push(link.path);
                   };
@@ -81,8 +76,8 @@ function SettingsLayout({
                   return (
                     <Tooltip key={link.label} content={link.label}>
                       <Button
-                        variant={isCurrentPath ? "mono" : "border"}
                         sizing="small"
+                        variant="ghost"
                         className="flex align-center g-medium-30"
                         disabled={isDisabled}
                         onMouseDown={onClick}

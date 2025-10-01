@@ -2,8 +2,7 @@
 
 import React from "react";
 
-import { BorderWrapper } from "./GeneralSettings";
-import { ColorModes } from "@/components";
+import { ColorModes, BorderWrapper } from "@/components";
 
 function PreferencesSettings() {
   return (

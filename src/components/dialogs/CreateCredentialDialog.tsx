@@ -43,7 +43,7 @@ const CheckboxWrapper = styled(Field.Wrapper)`
   }
 `;
 
-const serviceEnum = z.enum(["OPENAI", "E2B"]);
+const serviceEnum = z.enum(["OPENAI"]);
 
 const formSchema = z.object({
   name: z

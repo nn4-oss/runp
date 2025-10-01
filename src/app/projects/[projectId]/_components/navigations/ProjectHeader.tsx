@@ -33,11 +33,15 @@ const URLBadge = styled(Badge)`
   padding-left: var(--measurement-medium-40) !important;
   padding-right: var(--measurement-medium-40) !important;
 
-  span {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 1;
-    overflow: hidden;
+  text-align: center;
+
+  div {
+    span {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 1;
+      overflow: hidden;
+    }
   }
 `;
 
@@ -155,44 +159,42 @@ function ProjectsHeader({
         </DropdownMenu>
       </DropdownMenu.Root>
 
-      <URLBadge
-        variant="border"
-        // shape="round"
-        className="flex align-center justify-between g-medium-30"
-      >
-        <Tooltip content="Refresh page">
-          <Button
-            disabled={disableIframeInteractions}
-            variant="ghost"
-            sizing="small"
-            aria-label="Refresh page"
-            onClick={handleRefresh}
-          >
-            <span className="flex align-center justify-center p-y-small-60">
-              <Icon>
-                <PixelIcon.Reload />
-              </Icon>
-            </span>
-          </Button>
-        </Tooltip>
+      <URLBadge variant="border">
+        <div className="flex align-center justify-between g-medium-30 w-100">
+          <Tooltip content="Refresh page">
+            <Button
+              disabled={disableIframeInteractions}
+              variant="ghost"
+              sizing="small"
+              aria-label="Refresh page"
+              onClick={handleRefresh}
+            >
+              <span className="flex align-center justify-center p-y-small-60">
+                <Icon>
+                  <PixelIcon.Reload />
+                </Icon>
+              </span>
+            </Button>
+          </Tooltip>
 
-        <div className="fs-medium-10 flex">{fragment?.sandboxUrl ?? "/"}</div>
+          <span className="fs-medium-10">{fragment?.sandboxUrl ?? "/"}</span>
 
-        <Tooltip content="Open in new tab">
-          <Button
-            disabled={disableIframeInteractions}
-            variant="ghost"
-            sizing="small"
-            aria-label="Open in new tab"
-            onClick={handleNewTab}
-          >
-            <span className="flex align-center justify-center p-y-small-60">
-              <Icon>
-                <PixelIcon.Open />
-              </Icon>
-            </span>
-          </Button>
-        </Tooltip>
+          <Tooltip content="Open in new tab">
+            <Button
+              disabled={disableIframeInteractions}
+              variant="ghost"
+              sizing="small"
+              aria-label="Open in new tab"
+              onClick={handleNewTab}
+            >
+              <span className="flex align-center justify-center p-y-small-60">
+                <Icon>
+                  <PixelIcon.Open />
+                </Icon>
+              </span>
+            </Button>
+          </Tooltip>
+        </div>
       </URLBadge>
     </StyledMenu>
   );

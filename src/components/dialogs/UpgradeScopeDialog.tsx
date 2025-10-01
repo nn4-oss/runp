@@ -88,7 +88,7 @@ function UpgradeScopeDialog() {
         <hgroup className="m-b-large-10 grid g-medium-30">
           <h6>Explore More Plans</h6>
           <p className="fs-medium-20">
-            You are currently using the&nbsp;
+            You are currently on the&nbsp;
             <PlanTag>{user?.scope.toLowerCase() ?? ScopeEnum.FREE}</PlanTag>
             &nbsp;plan.
             {isFreeScope && (
@@ -182,8 +182,7 @@ function UpgradeScopeDialog() {
           <span className="fs-medium-10 flex align-center g-medium-10 opacity-default-30">
             Compare plans and options on our
             <Link
-              href="/pricing"
-              target="_blank"
+              href="/settings/pricing"
               className="flex align-center g-medium-10"
             >
               pricing page
