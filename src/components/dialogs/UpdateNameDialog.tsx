@@ -6,8 +6,14 @@ import { useTRPC } from "@/trpc/client";
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { Spinner } from "@/components";
-import { Button, Dialog, Field, Portal, useDialog } from "@usefui/components";
+import {
+  Button,
+  Dialog,
+  Field,
+  Portal,
+  useDialog,
+  Spinner,
+} from "@usefui/components";
 
 import { toast } from "sonner";
 
@@ -87,13 +93,18 @@ function UpdateNameDialog({
         </form>
 
         <div className="flex align-center justify-end g-medium-10">
-          <Dialog.Control variant="border" sizing="medium">
+          <Dialog.Control
+            variant="border"
+            sizing="medium"
+            animation="reflective"
+          >
             Cancel
           </Dialog.Control>
           <Button
             type="submit"
             sizing="medium"
             variant="mono"
+            animation="reflective"
             disabled={updateProject.isPending}
             onClick={form.handleSubmit(onSubmit)}
           >

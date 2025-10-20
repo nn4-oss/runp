@@ -7,8 +7,8 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 
 import GeneralSettings from "./GeneralSettings";
 
-import { FixedHeader, Spinner, SplitText } from "@/components";
-import { Button } from "@usefui/components";
+import { FixedHeader, SplitText } from "@/components";
+import { Spinner, Button } from "@usefui/components";
 
 import { toast } from "sonner";
 
@@ -61,6 +61,7 @@ function SettingsList() {
           <Button
             variant="border"
             sizing="medium"
+            animation="reflective"
             disabled={disableReset || deleteConfig.isPending}
             onClick={handleReset}
           >

@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import ReflectiveButton from "../reflective-button";
 
 import { SignedOut, SignInButton, SignUpButton } from "@clerk/nextjs";
 import { Button } from "@usefui/components";
@@ -10,12 +9,12 @@ function SignedOutActions() {
   return (
     <SignedOut>
       <SignInButton>
-        <ReflectiveButton variant="border" sizing="medium">
+        <Button variant="mono" sizing="medium" animation="reflective">
           Sign&nbsp;In
-        </ReflectiveButton>
+        </Button>
       </SignInButton>
       <SignUpButton>
-        <Button variant="primary" sizing="medium">
+        <Button variant="border" sizing="medium" animation="reflective">
           Sign&nbsp;Up
         </Button>
       </SignUpButton>

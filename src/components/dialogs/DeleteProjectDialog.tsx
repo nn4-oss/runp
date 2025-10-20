@@ -7,18 +7,9 @@ import { useTRPC } from "@/trpc/client";
 import { useRouter } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { Button, Dialog, useDialog, Portal } from "@usefui/components";
+import { Button, Spinner, Dialog, useDialog, Portal } from "@usefui/components";
 
 import { toast } from "sonner";
-import { Spinner } from "@/components";
-
-const DangerButton = styled(Button)`
-  background-color: var(--color-red) !important;
-
-  span {
-    color: white !important;
-  }
-`;
 
 function DeleteProjectDialog({ projectId }: { projectId: string }) {
   const trpc = useTRPC();
@@ -56,17 +47,22 @@ function DeleteProjectDialog({ projectId }: { projectId: string }) {
           </p>
         </hgroup>
         <div className="flex align-center justify-end g-medium-10">
-          <Dialog.Control variant="border" sizing="medium">
+          <Dialog.Control
+            variant="border"
+            sizing="medium"
+            animation="reflective"
+          >
             Cancel
           </Dialog.Control>
-          <DangerButton
+          <Button
             sizing="medium"
+            variant="danger"
             disabled={deleteProject.isPending}
             onClick={() => onDelete()}
           >
             <span>Delete</span>
             {deleteProject.isPending && <Spinner />}
-          </DangerButton>
+          </Button>
         </div>
       </Dialog>
 

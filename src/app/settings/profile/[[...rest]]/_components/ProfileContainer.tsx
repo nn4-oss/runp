@@ -3,9 +3,10 @@
 import React from "react";
 import styled from "styled-components";
 
-import { Button } from "@usefui/components";
 import { UserProfile } from "@clerk/nextjs";
-import { Spinner, FixedHeader, SplitText } from "@/components";
+
+import { Spinner, Button } from "@usefui/components";
+import { FixedHeader, SplitText } from "@/components";
 import { Icon, PixelIcon, SocialIcon } from "@usefui/icons";
 
 const ClerkProfileWrapper = styled.div`
@@ -31,6 +32,7 @@ function ProfileContainer() {
 
           <Button
             variant="border"
+            animation="reflective"
             sizing="medium"
             onClick={() =>
               window.open("https://clerk.com/", "_blank", "noopener,noreferrer")

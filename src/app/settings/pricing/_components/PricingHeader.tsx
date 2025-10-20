@@ -2,8 +2,8 @@
 
 import React from "react";
 
-import { Button } from "@usefui/components";
-import { FixedHeader, SplitText } from "@/components";
+import { Dialog } from "@usefui/components";
+import { FixedHeader, SendMessageDialog, SplitText } from "@/components";
 
 function PricingHeader() {
   return (
@@ -18,9 +18,16 @@ function PricingHeader() {
           />
         </p>
 
-        <Button variant="border" sizing="medium">
-          Book a demo
-        </Button>
+        <Dialog.Root>
+          <Dialog.Trigger
+            animation="reflective"
+            variant="border"
+            sizing="medium"
+          >
+            Book a demo
+          </Dialog.Trigger>
+          <SendMessageDialog />
+        </Dialog.Root>
       </div>
     </FixedHeader>
   );

@@ -5,6 +5,7 @@ import React from "react";
 import { ColorModeProvider, js_design_tokens } from "@usefui/tokens";
 
 import {
+  generateColorClasses,
   generateCSSVariables,
   generateDimensionClasses,
   generateFontSizesClasses,
@@ -23,7 +24,9 @@ const cssWidthHeightClasses = generateDimensionClasses();
 const cssSizeClasses = generateSizeClasses(design_tokens.measurement);
 const cssFSClasses = generateFontSizesClasses(design_tokens.fontsize);
 const cssOpacityClasses = generateOpacityClasses(design_tokens.opacity);
-
+const cssColorClasses = generateColorClasses(
+  js_design_tokens.design_tokens.color,
+);
 const cssVariables = generateCSSVariables({
   name: js_design_tokens.name,
   design_tokens,
@@ -43,6 +46,7 @@ const CSSRoot = createGlobalStyle`
 		${cssSizeClasses}
 		${cssFSClasses}
 		${cssOpacityClasses}
+		${cssColorClasses}
 		${cssLayoutClasses}
     ${cssWidthHeightClasses}
 

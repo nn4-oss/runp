@@ -26,6 +26,7 @@ function SignedInActions() {
           <Button
             variant="border"
             sizing="small"
+            animation="reflective"
             aria-label="Projects"
             onMouseDown={() => router.push("/")}
           >
@@ -41,6 +42,7 @@ function SignedInActions() {
           <Button
             variant="border"
             sizing="small"
+            animation="reflective"
             aria-label="Projects"
             onMouseDown={() => router.push("/projects")}
           >

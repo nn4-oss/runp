@@ -3,7 +3,6 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
 
-import { TextLimiter } from "@/components/breadcrumbs";
 import { Accordion, Button, Divider, Tooltip } from "@usefui/components";
 import { Icon, PixelIcon } from "@usefui/icons";
 import { SplitText } from "@/components";
@@ -100,12 +99,7 @@ function FragmentBubble({
                 <Icon opacity={0.3}>
                   <PixelIcon.File />
                 </Icon>
-                <span className="fs-medium-10">{name}</span>
-                <TextLimiter>
-                  <div className="fs-medium-10 opacity-default-60">
-                    {fileKey}
-                  </div>
-                </TextLimiter>
+                <p className="fs-medium-10 opacity-default-60">{fileKey}</p>
               </div>
             );
           })}

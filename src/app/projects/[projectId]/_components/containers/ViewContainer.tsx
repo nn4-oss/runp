@@ -7,7 +7,8 @@ import DiagramPreview from "./DiagramPreview";
 import CodeEditorHeader from "../navigations/CodeEditorHeader";
 import FilesTree from "./FilesTree";
 
-import { Spinner, SplitScreen, CodeEditor } from "@/components";
+import { Resizable, Spinner } from "@usefui/components";
+import { CodeEditor } from "@/components";
 import { getFirstFileKey, convertFilesToTree } from "../../_utils";
 
 import type { Fragment } from "generated/prisma";
@@ -74,7 +75,7 @@ function ViewContainer({
       )}
 
       {isCodeMode && (
-        <SplitScreen
+        <Resizable
           defaultWidth={30}
           left={
             <FilesTree

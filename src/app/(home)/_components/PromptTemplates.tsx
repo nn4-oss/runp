@@ -10,10 +10,9 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
 import { useClerk } from "@clerk/nextjs";
 
-import { ReflectiveButton } from "@/components";
-
 import { PREDEFINED_FEATURES_PROMPTS } from "../_prompts/predefined-features-prompts";
 import { toast } from "sonner";
+import { Button } from "@usefui/components";
 
 const TemplatesContainer = styled(motion.div)<{ variants?: Variants }>`
   max-width: var(--breakpoint-tablet-small);
@@ -88,14 +87,16 @@ function PromptTemplates() {
     >
       {PREDEFINED_FEATURES_PROMPTS.map((task) => (
         <motion.span key={task.label} variants={slide}>
-          <ReflectiveButton
+          <Button
             sizing="medium"
             variant="border"
+            animation="reflective"
+            shape="round"
             disabled={createProject.isPending}
             onClick={() => onPredefinedPromptSelection(task.content)}
           >
             <span className="fs-medium-10">{task.label}</span>
-          </ReflectiveButton>
+          </Button>
         </motion.span>
       ))}
     </TemplatesContainer>

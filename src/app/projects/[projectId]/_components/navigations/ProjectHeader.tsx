@@ -6,9 +6,15 @@ import styled from "styled-components";
 import { useTRPC } from "@/trpc/client";
 import { useQuery } from "@tanstack/react-query";
 
-import { Page, Tooltip, Button, DropdownMenu, Badge } from "@usefui/components";
+import {
+  Page,
+  Tooltip,
+  Button,
+  DropdownMenu,
+  Badge,
+  Spinner,
+} from "@usefui/components";
 import { Icon, PixelIcon, WebIcon } from "@usefui/icons";
-import { Spinner } from "@/components";
 
 import type { Fragment } from "generated/prisma";
 import type { ViewProps } from "../../_types";
@@ -81,6 +87,7 @@ function ProjectsHeader({
         <DropdownMenu>
           <Tooltip content="Views">
             <DropdownMenu.Trigger
+              animation="reflective"
               variant="border"
               sizing="small"
               disabled={isPending || isUserPending}

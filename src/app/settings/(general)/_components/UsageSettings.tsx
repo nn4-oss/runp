@@ -8,13 +8,9 @@ import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import SubscribeActions from "./SubscribeActions";
 
-import {
-  UsageRange,
-  SkeletonLoader,
-  Spinner,
-  BorderWrapper,
-} from "@/components";
+import { Skeleton, Spinner } from "@usefui/components";
 import { Icon, PixelIcon } from "@usefui/icons";
+import { UsageRange, BorderWrapper } from "@/components";
 
 import { formatDuration, intervalToDuration } from "date-fns";
 import { POINTS_PER_SCOPE } from "@/utils/scope-features";
@@ -59,7 +55,7 @@ function UsageSettings() {
       <div className="grid g-medium-60">
         {isUserPending && (
           <div className="flex justify-between align-start g-large-10">
-            <SkeletonLoader />
+            <Skeleton />
             <Spinner />
           </div>
         )}
@@ -102,7 +98,7 @@ function UsageSettings() {
           )}
 
           <div className="flex align-center justify-between m-b-medium-30">
-            {isUsagePending && <SkeletonLoader />}
+            {isUsagePending && <Skeleton />}
             {!isUsagePending && (
               <React.Fragment>
                 <p className="fs-medium-10">

@@ -8,18 +8,14 @@ import { useForm } from "react-hook-form";
 import { useKeyPress } from "@usefui/hooks";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import {
-  PromptOptions,
-  ReflectiveButton,
-  Spinner,
-  Textarea,
-  UsageBanner,
-} from "@/components";
+import { PromptOptions, Textarea, UsageBanner } from "@/components";
+import { Spinner } from "@usefui/components";
 import { Icon, PixelIcon } from "@usefui/icons";
 
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { utteranceValueSchema } from "@/schemas/utterances-schema";
+import { Button } from "@usefui/components";
 
 const PromptWrapper = styled.form`
   border: var(--measurement-small-30) solid var(--font-color-alpha-10);
@@ -151,10 +147,11 @@ function MessagesPrompt({ projectId }: { projectId: string }) {
             </span>
           </kbd>
 
-          <ReflectiveButton
+          <Button
             type="submit"
             sizing="small"
             variant="mono"
+            animation="reflective"
             onClick={form.handleSubmit(onSubmit)}
             disabled={createMessage.isPending || !form.formState.isValid}
           >
@@ -167,7 +164,7 @@ function MessagesPrompt({ projectId }: { projectId: string }) {
                 </Icon>
               )}
             </span>
-          </ReflectiveButton>
+          </Button>
         </div>
       </div>
     </PromptWrapper>

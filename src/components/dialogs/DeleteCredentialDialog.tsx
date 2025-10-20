@@ -6,18 +6,9 @@ import styled from "styled-components";
 import { useTRPC } from "@/trpc/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { Button, Dialog, Portal, useDialog } from "@usefui/components";
+import { Button, Spinner, Dialog, Portal, useDialog } from "@usefui/components";
 
 import { toast } from "sonner";
-import { Spinner } from "@/components";
-
-const DangerButton = styled(Button)`
-  background-color: var(--color-red) !important;
-
-  span {
-    color: white !important;
-  }
-`;
 
 function DeleteCredentialDialog({
   credentialName,
@@ -62,17 +53,22 @@ function DeleteCredentialDialog({
           </p>
         </hgroup>
         <div className="flex align-center justify-end g-medium-10">
-          <Dialog.Control variant="border" sizing="medium">
+          <Dialog.Control
+            variant="border"
+            sizing="medium"
+            animation="reflective"
+          >
             Cancel
           </Dialog.Control>
-          <DangerButton
+          <Button
+            variant="danger"
             sizing="medium"
             disabled={deleteCredential.isPending}
             onClick={() => onDelete()}
           >
             <span>Delete</span>
             {deleteCredential.isPending && <Spinner />}
-          </DangerButton>
+          </Button>
         </div>
       </Dialog>
 

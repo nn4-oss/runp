@@ -110,6 +110,7 @@ function PricingPlans() {
         <Button
           sizing="large"
           variant="border"
+          animation="reflective"
           className="w-100"
           disabled={isFreeScope || updateUser.isPending}
           onClick={() => onSubmit(ScopeEnum.FREE)}
@@ -142,6 +143,7 @@ function PricingPlans() {
         <Button
           sizing="large"
           variant="border"
+          animation="reflective"
           className="w-100"
           disabled={user?.scope === ScopeEnum.PRO || updateUser.isPending}
           onClick={() => onSubmit(ScopeEnum.PRO)}

@@ -7,13 +7,15 @@ import { useTRPC } from "@/trpc/client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 
+import { Textarea } from "@/components";
 import {
-  ReflectiveButton,
-  SkeletonLoader,
+  Badge,
+  Button,
+  Checkbox,
   Spinner,
-  Textarea,
-} from "@/components";
-import { Badge, Checkbox, Divider } from "@usefui/components";
+  Divider,
+  Skeleton,
+} from "@usefui/components";
 import { BorderWrapper } from "@/components";
 
 import { z } from "zod";
@@ -129,7 +131,7 @@ function LLMSettings({ isFreeScope }: { isFreeScope: boolean }) {
     >
       {isPending && (
         <div className="flex justify-between align-start g-large-10">
-          <SkeletonLoader />
+          <Skeleton />
           <Spinner />
         </div>
       )}
@@ -203,9 +205,10 @@ function LLMSettings({ isFreeScope }: { isFreeScope: boolean }) {
           </div>
 
           <footer className="w-100 flex justify-end align-center">
-            <ReflectiveButton
+            <Button
               variant="mono"
               sizing="medium"
+              animation="reflective"
               disabled={
                 isFreeScope || createConfig.isPending || updateConfig.isPending
               }
@@ -214,7 +217,7 @@ function LLMSettings({ isFreeScope }: { isFreeScope: boolean }) {
               Save
               {createConfig.isPending ||
                 (updateConfig.isPending && <Spinner />)}
-            </ReflectiveButton>
+            </Button>
           </footer>
         </React.Fragment>
       )}

@@ -16,12 +16,14 @@ import {
   ScrollArea,
   useSheet,
   Button,
+  Spinner,
+  PrivacyField,
 } from "@usefui/components";
-import { PrivacyField, Spinner } from "../";
 
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
+import { Icon, PixelIcon } from "@usefui/icons";
 
 const Banner = styled(Badge)`
   /* width: 100% !important; */
@@ -248,6 +250,16 @@ function CreateCredentialDialog() {
                   API Key
                 </Field.Label>
                 <PrivacyField
+                  textIcon={
+                    <Icon>
+                      <PixelIcon.Eye />
+                    </Icon>
+                  }
+                  passwordIcon={
+                    <Icon>
+                      <PixelIcon.EyeClosed />
+                    </Icon>
+                  }
                   id="credential-value"
                   variant="secondary"
                   sizing="medium"
@@ -291,6 +303,7 @@ function CreateCredentialDialog() {
 
           <div className="flex align-center justify-end g-medium-10 p-b-large-10">
             <Sheet.Trigger
+              animation="reflective"
               variant="border"
               sizing="medium"
               onClick={() => form.reset()}
@@ -300,6 +313,7 @@ function CreateCredentialDialog() {
             <Button
               type="submit"
               variant="mono"
+              animation="reflective"
               sizing="medium"
               disabled={
                 createCredential.isPending ||

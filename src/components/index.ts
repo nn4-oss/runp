@@ -1,11 +1,7 @@
 export { default as AnimatedAgent } from "./animated-agent";
-export { default as AnimatedHero } from "./animated-hero";
-export { default as Breadcrumbs } from "./breadcrumbs";
 
-export { default as Card, CardsGrid } from "./cards";
 export { default as CodeEditor } from "./code-editor";
 export { default as ColorModes } from "./color-mode";
-export { default as CopyCode } from "./copy-code";
 export { default as CreateCredentialDialog } from "./dialogs/CreateCredentialDialog";
 export { default as UpdateCredentialDialog } from "./dialogs/UpdateCredentialDialog";
 export { default as UpgradeScopeDialog } from "./dialogs/UpgradeScopeDialog";
@@ -16,10 +12,7 @@ export { default as SendFeedbackDialog } from "./dialogs/SendFeedbackDialog";
 export { default as UpdateNameDialog } from "./dialogs/UpdateNameDialog";
 export { default as Navigation } from "./navigation";
 export { default as PromptOptions } from "./prompt-options";
-export { default as PrivacyField } from "./privacy-field";
-export { default as ReflectiveButton } from "./reflective-button";
-export { default as SplitScreen } from "./split-screen";
-export { default as SkeletonLoader } from "./skeleton";
+
 export { default as Textarea } from "./text-area";
 export { default as UserAvatar } from "./user-avatar";
 export { default as UsageRange } from "./usage-range";
@@ -27,8 +20,6 @@ export { default as UsageBanner } from "./usage-banner";
 export { default as MermaidViewer } from "./mermaid-viewer";
 export { default as SplitText } from "./split-text";
 
-export { Spinner } from "./spinner";
 export { BorderWrapper } from "./border-wrapper";
-export { Pill } from "./pill";
 export { AppContainer } from "./container";
 export { FixedHeader } from "./fixed-header";

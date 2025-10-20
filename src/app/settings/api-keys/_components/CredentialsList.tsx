@@ -8,7 +8,8 @@ import { useQuery } from "@tanstack/react-query";
 import CredentialsListActions from "./CredentialsListActions";
 import CredentialsTable from "./CredentialsTable";
 
-import { FixedHeader, Spinner, SplitText } from "@/components";
+import { Spinner } from "@usefui/components";
+import { FixedHeader, SplitText } from "@/components";
 
 function CredentialsList() {
   const trpc = useTRPC();

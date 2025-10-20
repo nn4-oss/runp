@@ -6,8 +6,15 @@ import { useTRPC } from "@/trpc/client";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-import { Spinner, Textarea, BorderWrapper } from "@/components";
-import { Button, Dialog, Field, Portal, useDialog } from "@usefui/components";
+import { Textarea, BorderWrapper } from "@/components";
+import {
+  Spinner,
+  Button,
+  Dialog,
+  Field,
+  Portal,
+  useDialog,
+} from "@usefui/components";
 
 import { toast } from "sonner";
 
@@ -122,13 +129,18 @@ function SendMessageDialog() {
         </form>
 
         <footer className="flex align-center justify-end g-medium-10">
-          <Dialog.Control variant="border" sizing="medium">
+          <Dialog.Control
+            variant="border"
+            sizing="medium"
+            animation="reflective"
+          >
             Cancel
           </Dialog.Control>
           <Button
             type="submit"
             sizing="medium"
             variant="mono"
+            animation="reflective"
             disabled={sendContactRequest.isPending}
             onClick={form.handleSubmit(onSubmit)}
           >

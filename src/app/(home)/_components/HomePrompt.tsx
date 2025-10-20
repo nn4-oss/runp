@@ -15,13 +15,8 @@ import Link from "next/link";
 import PromptTemplates from "./PromptTemplates";
 
 import { Icon, PixelIcon } from "@usefui/icons";
-import { Button } from "@usefui/components";
-import {
-  PromptOptions,
-  ReflectiveButton,
-  Spinner,
-  Textarea,
-} from "@/components";
+import { Button, Spinner } from "@usefui/components";
+import { PromptOptions, Textarea } from "@/components";
 
 import { PulsingBorder } from "@paper-design/shaders-react";
 
@@ -153,21 +148,28 @@ function HomePrompt() {
   });
 
   const shaderColors = React.useMemo(() => {
-    return (["dark", "system"] as (typeof colorMode)[]).includes(colorMode)
-      ? [
-          "rgba(255, 255, 255, 1)",
-          "rgba(255, 255, 255, 0.1)",
-          "rgba(255, 255, 255, 0.2)",
-          "rgba(255, 255, 255, 0.3)",
-          "rgba(255, 255, 255, 0.4)",
-        ]
-      : [
-          "rgba(255, 255, 255, 1)",
-          "rgba(255, 127, 17, 0.1)",
-          "rgba(255, 127, 17, 0.2)",
-          "rgba(255, 127, 17, 0.3)",
-          "rgba(255, 127, 17, 0.4)",
-        ];
+    return [
+      "rgba(255, 255, 255, 1)",
+      "rgba(255, 255, 255, 0.1)",
+      "rgba(255, 255, 255, 0.2)",
+      "rgba(255, 255, 255, 0.3)",
+      "rgba(255, 255, 255, 0.4)",
+    ];
+    // return (["dark", "system"] as (typeof colorMode)[]).includes(colorMode)
+    //   ? [
+    //       "rgba(255, 255, 255, 1)",
+    //       "rgba(255, 255, 255, 0.1)",
+    //       "rgba(255, 255, 255, 0.2)",
+    //       "rgba(255, 255, 255, 0.3)",
+    //       "rgba(255, 255, 255, 0.4)",
+    //     ]
+    //   : [
+    //       "rgba(255, 255, 255, 1)",
+    //       "rgba(255, 127, 17, 0.1)",
+    //       "rgba(255, 127, 17, 0.2)",
+    //       "rgba(255, 127, 17, 0.3)",
+    //       "rgba(255, 127, 17, 0.4)",
+    //     ];
   }, [colorMode]);
 
   const onSubmit = React.useCallback(
@@ -252,10 +254,11 @@ function HomePrompt() {
                 </span>
               </kbd>
 
-              <ReflectiveButton
+              <Button
                 type="submit"
                 sizing="small"
                 variant="mono"
+                animation="reflective"
                 onClick={form.handleSubmit(onSubmit)}
                 disabled={createProject.isPending || !form.formState.isValid}
               >
@@ -268,7 +271,7 @@ function HomePrompt() {
                     </Icon>
                   )}
                 </span>
-              </ReflectiveButton>
+              </Button>
             </div>
           </div>
         </div>
