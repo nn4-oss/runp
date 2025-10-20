@@ -20,6 +20,5 @@ export { default as UsageBanner } from "./usage-banner";
 export { default as MermaidViewer } from "./mermaid-viewer";
 export { default as SplitText } from "./split-text";
 
-export { BorderWrapper } from "./border-wrapper";
 export { AppContainer } from "./container";
 export { FixedHeader } from "./fixed-header";

@@ -2,11 +2,12 @@
 
 import React from "react";
 
-import { ColorModes, BorderWrapper } from "@/components";
+import { ColorModes } from "@/components";
+import { Card } from "@usefui/components";
 
 function PreferencesSettings() {
   return (
-    <BorderWrapper className="p-medium-60">
+    <Card.Body className="p-medium-60">
       <div className="flex align-center justify-between g-medium-10">
         <hgroup className="w-100 grid g-medium-10">
           <h6 className="fs-medium-20">Preferences</h6>
@@ -17,7 +18,7 @@ function PreferencesSettings() {
 
         <ColorModes />
       </div>
-    </BorderWrapper>
+    </Card.Body>
   );
 }
 

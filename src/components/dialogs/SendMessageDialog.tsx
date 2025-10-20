@@ -6,7 +6,7 @@ import { useTRPC } from "@/trpc/client";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-import { Textarea, BorderWrapper } from "@/components";
+import { Textarea } from "@/components";
 import {
   Spinner,
   Button,
@@ -14,6 +14,7 @@ import {
   Field,
   Portal,
   useDialog,
+  Card,
 } from "@usefui/components";
 
 import { toast } from "sonner";
@@ -117,13 +118,13 @@ function SendMessageDialog() {
               >
                 How can we help?
               </Field.Label>
-              <BorderWrapper className="p-medium-30  ">
+              <Card.Body className="p-medium-30  ">
                 <Textarea
                   id="message-content"
                   style={{ height: "var(--measurement-large-60)" }}
                   {...form.register("content")}
                 />
-              </BorderWrapper>
+              </Card.Body>
             </Field.Wrapper>
           </Field.Root>
         </form>

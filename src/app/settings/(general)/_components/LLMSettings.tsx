@@ -15,8 +15,8 @@ import {
   Spinner,
   Divider,
   Skeleton,
+  Card,
 } from "@usefui/components";
-import { BorderWrapper } from "@/components";
 
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -123,12 +123,7 @@ function LLMSettings({ isFreeScope }: { isFreeScope: boolean }) {
   }, [configuration, form]);
 
   return (
-    <BorderWrapper
-      as="form"
-      className="p-medium-60"
-      onSubmit={form.handleSubmit(onSubmit)}
-      key={configuration?.id}
-    >
+    <Card.Body className="p-medium-60">
       {isPending && (
         <div className="flex justify-between align-start g-large-10">
           <Skeleton />
@@ -136,7 +131,7 @@ function LLMSettings({ isFreeScope }: { isFreeScope: boolean }) {
         </div>
       )}
       {isSuccess && (
-        <React.Fragment>
+        <form onSubmit={form.handleSubmit(onSubmit)} key={configuration?.id}>
           <div className="flex align-center justify-between g-medium-10">
             <hgroup className="w-100 grid g-medium-10">
               <div className="flex g-medium-10 align-center">
@@ -219,9 +214,9 @@ function LLMSettings({ isFreeScope }: { isFreeScope: boolean }) {
                 (updateConfig.isPending && <Spinner />)}
             </Button>
           </footer>
-        </React.Fragment>
+        </form>
       )}
-    </BorderWrapper>
+    </Card.Body>
   );
 }
 

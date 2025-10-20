@@ -5,16 +5,12 @@ import styled from "styled-components";
 
 import { motion, type Variants } from "framer-motion";
 
-import { Accordion, Divider } from "@usefui/components";
+import { Accordion, Card, Divider } from "@usefui/components";
 import { Icon, PixelIcon } from "@usefui/icons";
-import { BorderWrapper } from "@/components";
 
 const FAQGrid = styled.div`
   max-width: var(--breakpoint-tablet);
 `;
-const AnimatedWrapper = styled(motion(BorderWrapper))<{
-  variants?: Variants;
-}>``;
 
 const FAQ_CONTENT = [
   {
@@ -62,51 +58,48 @@ const slide: Variants = {
 
 function PricingFAQ() {
   return (
-    <AnimatedWrapper
-      className="p-medium-60"
-      variants={stagger}
-      initial="hidden"
-      animate="visible"
-    >
-      <hgroup className="m-b-medium-60">
-        <h6 className="fs-medium-20">Frequently Asked Questions</h6>
-      </hgroup>
+    <Card.Body>
+      <motion.div variants={stagger} initial="hidden" animate="visible">
+        <hgroup className="m-b-medium-60">
+          <h6 className="fs-medium-20">Frequently Asked Questions</h6>
+        </hgroup>
 
-      <Accordion.Root>
-        <Accordion className="grid g-medium-60">
-          {FAQ_CONTENT.map((item, key) => (
-            <React.Fragment key={item.title}>
-              <Divider className="m-y-medium-30" />
-              <motion.div variants={slide}>
-                <Accordion.Trigger
-                  value={String(key)}
-                  style={{ textAlign: "left" }}
-                >
-                  <div className="flex g-medium-60 justify-between">
-                    <p className="fs-medium-30">{item.title}</p>
-                    <span>
-                      <Icon>
-                        <PixelIcon.ChevronsVertical />
-                      </Icon>
-                    </span>
-                  </div>
-                </Accordion.Trigger>
-                <Accordion.Content value={String(key)}>
-                  <FAQGrid>
-                    <p className="fs-medium-20 opacity-default-60 m-t-medium-30">
-                      {item.desc}
-                    </p>
-                  </FAQGrid>
-                </Accordion.Content>
-              </motion.div>
-              {key === FAQ_CONTENT.length - 1 && (
+        <Accordion.Root>
+          <Accordion className="grid g-medium-60">
+            {FAQ_CONTENT.map((item, key) => (
+              <React.Fragment key={item.title}>
                 <Divider className="m-y-medium-30" />
-              )}
-            </React.Fragment>
-          ))}
-        </Accordion>
-      </Accordion.Root>
-    </AnimatedWrapper>
+                <motion.div variants={slide}>
+                  <Accordion.Trigger
+                    value={String(key)}
+                    style={{ textAlign: "left" }}
+                  >
+                    <div className="flex g-medium-60 justify-between">
+                      <p className="fs-medium-30">{item.title}</p>
+                      <span>
+                        <Icon>
+                          <PixelIcon.ChevronsVertical />
+                        </Icon>
+                      </span>
+                    </div>
+                  </Accordion.Trigger>
+                  <Accordion.Content value={String(key)}>
+                    <FAQGrid>
+                      <p className="fs-medium-20 opacity-default-60 m-t-medium-30">
+                        {item.desc}
+                      </p>
+                    </FAQGrid>
+                  </Accordion.Content>
+                </motion.div>
+                {key === FAQ_CONTENT.length - 1 && (
+                  <Divider className="m-y-medium-30" />
+                )}
+              </React.Fragment>
+            ))}
+          </Accordion>
+        </Accordion.Root>
+      </motion.div>
+    </Card.Body>
   );
 }
 

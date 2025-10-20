@@ -8,9 +8,9 @@ import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import SubscribeActions from "./SubscribeActions";
 
-import { Skeleton, Spinner } from "@usefui/components";
+import { Card, Skeleton, Spinner } from "@usefui/components";
 import { Icon, PixelIcon } from "@usefui/icons";
-import { UsageRange, BorderWrapper } from "@/components";
+import { UsageRange } from "@/components";
 
 import { formatDuration, intervalToDuration } from "date-fns";
 import { POINTS_PER_SCOPE } from "@/utils/scope-features";
@@ -51,7 +51,7 @@ function UsageSettings() {
   const displayUsage = !!usage && !!metadata;
 
   return (
-    <BorderWrapper className="p-medium-60">
+    <Card.Body className="p-medium-60">
       <div className="grid g-medium-60">
         {isUserPending && (
           <div className="flex justify-between align-start g-large-10">
@@ -119,7 +119,7 @@ function UsageSettings() {
           </div>
         </div>
       </div>
-    </BorderWrapper>
+    </Card.Body>
   );
 }
 
