@@ -14,7 +14,7 @@ import {
   Page,
   Tooltip,
 } from "@usefui/components";
-import { Icon, PixelIcon, WebIcon } from "@usefui/icons";
+import { Icon, PixelIcon } from "@usefui/icons";
 
 import { formatDistanceToNow } from "date-fns";
 

@@ -92,8 +92,6 @@ function FragmentBubble({
         >
           <Divider className="m-t-medium-60" />
           {filesKeys.map((fileKey) => {
-            const name = fileKey.split("/").at(-1);
-
             return (
               <div key={fileKey} className="flex align-center g-medium-10">
                 <Icon opacity={0.3}>
