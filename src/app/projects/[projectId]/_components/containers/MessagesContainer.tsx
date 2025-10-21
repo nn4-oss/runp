@@ -6,8 +6,7 @@ import MessagesHeader from "../navigations/MessagesHeader";
 import MessagesStream from "./MessagesStream";
 import MessagesPrompt from "../data/MessagesPrompt";
 
-import { ScrollArea } from "@usefui/components";
-import { SkeletonLoader, Spinner } from "@/components";
+import { ScrollArea, Skeleton, Spinner } from "@usefui/components";
 import { ViewsContainer } from "./ViewsContainer";
 
 import type { Fragment } from "generated/prisma";
@@ -25,7 +24,7 @@ function MessagesContainer({
 }: MessageContainerProps) {
   return (
     <ViewsContainer>
-      <React.Suspense fallback={<SkeletonLoader />}>
+      <React.Suspense fallback={<Skeleton />}>
         <MessagesHeader projectId={projectId} />
       </React.Suspense>
 

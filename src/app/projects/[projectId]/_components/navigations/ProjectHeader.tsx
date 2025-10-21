@@ -6,9 +6,16 @@ import styled from "styled-components";
 import { useTRPC } from "@/trpc/client";
 import { useQuery } from "@tanstack/react-query";
 
-import { Page, Tooltip, Button, DropdownMenu, Badge } from "@usefui/components";
+import {
+  Page,
+  Tooltip,
+  Button,
+  DropdownMenu,
+  Badge,
+  Field,
+  CopyButton,
+} from "@usefui/components";
 import { Icon, PixelIcon, WebIcon } from "@usefui/icons";
-import { Spinner } from "@/components";
 
 import type { Fragment } from "generated/prisma";
 import type { ViewProps } from "../../_types";
@@ -25,24 +32,6 @@ const StyledMenu = styled(Page.Navigation)`
   background-color: transparent;
   padding-left: 0;
   padding-right: var(--measurement-small-10) !important;
-`;
-const URLBadge = styled(Badge)`
-  width: 100% !important;
-  min-width: 0 !important;
-
-  padding-left: var(--measurement-medium-40) !important;
-  padding-right: var(--measurement-medium-40) !important;
-
-  text-align: center;
-
-  div {
-    span {
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 1;
-      overflow: hidden;
-    }
-  }
 `;
 
 function ProjectsHeader({
@@ -76,21 +65,23 @@ function ProjectsHeader({
     !fragment?.sandboxUrl || ["code", "diagram"].includes(currentView);
 
   return (
-    <StyledMenu className="flex align-center justify-between g-medium-10 w-100">
+    <StyledMenu className="flex align-center justify-start g-medium-10 w-100">
       <DropdownMenu.Root>
         <DropdownMenu>
           <Tooltip content="Views">
             <DropdownMenu.Trigger
-              variant="border"
+              animation="reflective"
+              variant="secondary"
               sizing="small"
               disabled={isPending || isUserPending}
             >
-              <span className="flex align-center justify-center p-y-small-40">
+              <span className="flex align-center justify-center p-y-small-60">
                 <Icon>
-                  <WebIcon.More />
+                  {currentView === "preview" && <WebIcon.Globe />}
+                  {currentView === "code" && <WebIcon.Code />}
+                  {currentView === "diagram" && <WebIcon.Decisions />}
                 </Icon>
               </span>
-              {isPending && isUserPending && <Spinner />}
             </DropdownMenu.Trigger>
           </Tooltip>
           <DropdownMenu.Content>
@@ -100,7 +91,7 @@ function ProjectsHeader({
             >
               <span className="flex align-center justify-center p-y-small-30">
                 <Icon>
-                  <PixelIcon.Eye />
+                  <WebIcon.Globe />
                 </Icon>
               </span>
               Preview
@@ -159,43 +150,60 @@ function ProjectsHeader({
         </DropdownMenu>
       </DropdownMenu.Root>
 
-      <URLBadge variant="border">
-        <div className="flex align-center justify-between g-medium-30 w-100">
-          <Tooltip content="Refresh page">
-            <Button
-              disabled={disableIframeInteractions}
-              variant="ghost"
-              sizing="small"
-              aria-label="Refresh page"
-              onClick={handleRefresh}
-            >
-              <span className="flex align-center justify-center p-y-small-60">
-                <Icon>
-                  <PixelIcon.Reload />
-                </Icon>
-              </span>
-            </Button>
-          </Tooltip>
-
-          <span className="fs-medium-10">{fragment?.sandboxUrl ?? "/"}</span>
-
-          <Tooltip content="Open in new tab">
-            <Button
-              disabled={disableIframeInteractions}
-              variant="ghost"
-              sizing="small"
-              aria-label="Open in new tab"
-              onClick={handleNewTab}
-            >
-              <span className="flex align-center justify-center p-y-small-60">
-                <Icon>
-                  <PixelIcon.Open />
-                </Icon>
-              </span>
-            </Button>
-          </Tooltip>
-        </div>
-      </URLBadge>
+      <Field
+        variant="secondary"
+        sizing="small"
+        readOnly
+        style={{ width: "100%" }}
+        value={fragment?.sandboxUrl ?? "/"}
+      />
+      <Tooltip content="Refresh page">
+        <Button
+          disabled={disableIframeInteractions}
+          variant="secondary"
+          sizing="small"
+          animation="reflective"
+          aria-label="Refresh page"
+          onClick={handleRefresh}
+          rawicon
+        >
+          <span className="flex align-center justify-center p-y-small-80 p-x-small-30">
+            <Icon>
+              <PixelIcon.Reload />
+            </Icon>
+          </span>
+        </Button>
+      </Tooltip>
+      <Tooltip content="Open in new tab">
+        <Button
+          variant="secondary"
+          sizing="small"
+          animation="reflective"
+          aria-label="Open in new tab"
+          onClick={handleNewTab}
+        >
+          <span className="flex align-center justify-center p-y-small-60">
+            <Icon>
+              <PixelIcon.Open />
+            </Icon>
+          </span>
+        </Button>
+      </Tooltip>
+      <CopyButton
+        variant="secondary"
+        sizing="small"
+        animation="reflective"
+        value={fragment?.sandboxUrl ?? "/"}
+        tooltip={{
+          copyLabel: "Copy URL",
+        }}
+      >
+        <span className="flex align-center justify-center p-y-small-60">
+          <Icon>
+            <PixelIcon.Clipboard />
+          </Icon>
+        </span>
+      </CopyButton>
     </StyledMenu>
   );
 }

@@ -10,9 +10,9 @@ import { useQuery } from "@tanstack/react-query";
 import ProjectListActions from "./ProjectListActions";
 import ProjectsTable from "./ProjectsTable";
 
-import { AppContainer, FixedHeader, Spinner, SplitText } from "@/components";
-import { Field } from "@usefui/components";
+import { Field, Spinner } from "@usefui/components";
 import { Icon, PixelIcon } from "@usefui/icons";
+import { AppContainer, FixedHeader, SplitText } from "@/components";
 
 const SearchContainer = styled.div`
   width: 100%;

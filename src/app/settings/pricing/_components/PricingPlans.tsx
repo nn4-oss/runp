@@ -8,9 +8,9 @@ import { motion, type Variants } from "framer-motion";
 import { useTRPC } from "@/trpc/client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { Button, Dialog, Divider } from "@usefui/components";
+import { Button, Card, Dialog, Divider } from "@usefui/components";
 import { Icon, PixelIcon } from "@usefui/icons";
-import { SendMessageDialog, BorderWrapper } from "@/components";
+import { SendMessageDialog } from "@/components";
 
 import { toast } from "sonner";
 import { ScopeEnum } from "generated/prisma";
@@ -26,9 +26,6 @@ const PlansGrid = styled(motion.div)<{ variants?: Variants }>`
     grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
   }
 `;
-const AnimatedWrapper = styled(motion(BorderWrapper))<{
-  variants?: Variants;
-}>``;
 
 const stagger: Variants = {
   hidden: { opacity: 0 },
@@ -86,98 +83,118 @@ function PricingPlans() {
 
   return (
     <PlansGrid variants={stagger} initial="hidden" animate="visible">
-      <AnimatedWrapper className="p-medium-60" variants={slide}>
-        <hgroup className="grid g-medium-30">
-          <h6 className="fs-medium-40">Runp&nbsp;Free</h6>
-          <span className="fs-medium-20 flex align-center">
-            Free&nbsp;
-            <span className="opacity-default-30 fs-medium-10">/month</span>
-          </span>
-        </hgroup>
-        <Divider className="m-y-large-10" />
-        <div className="grid g-medium-60">
-          {SCOPES_FEATURES.FREE.map((feat, key) => (
-            <div key={key} className="flex align-center g-medium-30">
-              <Icon>
-                <PixelIcon.Check />
-              </Icon>
-              <p className="fs-medium-20">{feat}</p>
+      <motion.div variants={slide}>
+        <Card.Body>
+          <div>
+            <hgroup className="grid g-medium-30">
+              <h6 className="fs-medium-40">Runp&nbsp;Free</h6>
+              <span className="fs-medium-20 flex align-center">
+                Free&nbsp;
+                <span className="opacity-default-30 fs-medium-10">/month</span>
+              </span>
+            </hgroup>
+            <Divider className="m-y-large-10" />
+            <div className="grid g-medium-60">
+              {SCOPES_FEATURES.FREE.map((feat, key) => (
+                <div key={key} className="flex align-center g-medium-30">
+                  <Icon>
+                    <PixelIcon.Check />
+                  </Icon>
+                  <p className="fs-medium-20">{feat}</p>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-        <Divider className="m-y-large-10" />
+            <Divider className="m-y-large-10" />
 
-        <Button
-          sizing="large"
-          variant="border"
-          className="w-100"
-          disabled={isFreeScope || updateUser.isPending}
-          onClick={() => onSubmit(ScopeEnum.FREE)}
-        >
-          {isFreeScope ? "Current plan" : "Start building for free"}
-        </Button>
-      </AnimatedWrapper>
-      <AnimatedWrapper className="p-medium-60" variants={slide}>
-        <hgroup className="grid g-medium-30">
-          <h6 className="fs-medium-40">Runp&nbsp;Pro</h6>
+            <Button
+              sizing="large"
+              variant="secondary"
+              animation="reflective"
+              className="w-100"
+              disabled={isFreeScope || updateUser.isPending}
+              onClick={() => onSubmit(ScopeEnum.FREE)}
+            >
+              {isFreeScope ? "Current plan" : "Start building for free"}
+            </Button>
+          </div>
+        </Card.Body>
+      </motion.div>
 
-          <span className="fs-medium-20 flex align-center">
-            Free&nbsp;
-            <span className="opacity-default-30 fs-medium-10">/month</span>
-          </span>
-        </hgroup>
-        <Divider className="m-y-large-10" />
+      <motion.div variants={slide}>
+        <Card.Body>
+          <div>
+            <hgroup className="grid g-medium-30">
+              <h6 className="fs-medium-40">Runp&nbsp;Pro</h6>
 
-        <div className="grid g-medium-60">
-          {SCOPES_FEATURES.PRO.map((feat, key) => (
-            <div key={key} className="flex align-center g-medium-30">
-              <Icon>
-                <PixelIcon.Check />
-              </Icon>
-              <p className="fs-medium-20">{feat}</p>
+              <span className="fs-medium-20 flex align-center">
+                Free&nbsp;
+                <span className="opacity-default-30 fs-medium-10">/month</span>
+              </span>
+            </hgroup>
+            <Divider className="m-y-large-10" />
+
+            <div className="grid g-medium-60">
+              {SCOPES_FEATURES.PRO.map((feat, key) => (
+                <div key={key} className="flex align-center g-medium-30">
+                  <Icon>
+                    <PixelIcon.Check />
+                  </Icon>
+                  <p className="fs-medium-20">{feat}</p>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-        <Divider className="m-y-large-10" />
-        <Button
-          sizing="large"
-          variant="border"
-          className="w-100"
-          disabled={user?.scope === ScopeEnum.PRO || updateUser.isPending}
-          onClick={() => onSubmit(ScopeEnum.PRO)}
-        >
-          {user?.scope === ScopeEnum.PRO
-            ? "Current plan"
-            : "Upgrade to runp PRO"}
-        </Button>
-      </AnimatedWrapper>
-      <AnimatedWrapper className="p-medium-60" variants={slide}>
-        <hgroup className="grid g-medium-30">
-          <h6 className="fs-medium-40">Runp&nbsp;Enterprise</h6>
-          <span className="fs-medium-20 flex align-center">
-            Let&apos;s talk
-          </span>
-        </hgroup>
-        <Divider className="m-y-large-10" />
+            <Divider className="m-y-large-10" />
+            <Button
+              sizing="large"
+              variant="secondary"
+              animation="reflective"
+              className="w-100"
+              disabled={user?.scope === ScopeEnum.PRO || updateUser.isPending}
+              onClick={() => onSubmit(ScopeEnum.PRO)}
+            >
+              {user?.scope === ScopeEnum.PRO
+                ? "Current plan"
+                : "Upgrade to runp PRO"}
+            </Button>
+          </div>
+        </Card.Body>
+      </motion.div>
 
-        <div className="grid g-medium-60">
-          {SCOPES_FEATURES.ENTERPRISE.map((feat, key) => (
-            <div key={key} className="flex align-center g-medium-30">
-              <Icon>
-                <PixelIcon.Check />
-              </Icon>
-              <p className="fs-medium-20">{feat}</p>
+      <motion.div variants={slide}>
+        <Card.Body>
+          <div>
+            <hgroup className="grid g-medium-30">
+              <h6 className="fs-medium-40">Runp&nbsp;Enterprise</h6>
+              <span className="fs-medium-20 flex align-center">
+                Let&apos;s talk
+              </span>
+            </hgroup>
+            <Divider className="m-y-large-10" />
+
+            <div className="grid g-medium-60">
+              {SCOPES_FEATURES.ENTERPRISE.map((feat, key) => (
+                <div key={key} className="flex align-center g-medium-30">
+                  <Icon>
+                    <PixelIcon.Check />
+                  </Icon>
+                  <p className="fs-medium-20">{feat}</p>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-        <Divider className="m-y-large-10" />
-        <Dialog.Root>
-          <Dialog.Trigger sizing="large" variant="primary" className="w-100">
-            Contact
-          </Dialog.Trigger>
-          <SendMessageDialog />
-        </Dialog.Root>
-      </AnimatedWrapper>
+            <Divider className="m-y-large-10" />
+            <Dialog.Root>
+              <Dialog.Trigger
+                sizing="large"
+                variant="primary"
+                className="w-100"
+              >
+                Contact
+              </Dialog.Trigger>
+              <SendMessageDialog />
+            </Dialog.Root>
+          </div>
+        </Card.Body>
+      </motion.div>
     </PlansGrid>
   );
 }

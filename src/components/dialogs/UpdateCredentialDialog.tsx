@@ -16,9 +16,9 @@ import {
   Dialog,
   Field,
   Portal,
+  Spinner,
   useDialog,
 } from "@usefui/components";
-import { Spinner } from "@/components";
 
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -173,13 +173,17 @@ function UpdateCredentialDialog({ credentialId }: { credentialId: string }) {
         </form>
 
         <div className="flex align-center justify-end g-medium-10">
-          <Dialog.Control variant="border" sizing="medium">
+          <Dialog.Control
+            variant="secondary"
+            sizing="medium"
+            animation="reflective"
+          >
             Cancel
           </Dialog.Control>
           <Button
             type="submit"
             sizing="medium"
-            variant="mono"
+            variant="primary"
             disabled={
               updateCredential.isPending || setPrimaryIntegration.isPending
             }

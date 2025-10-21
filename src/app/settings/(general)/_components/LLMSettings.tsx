@@ -7,14 +7,16 @@ import { useTRPC } from "@/trpc/client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 
+import { Textarea } from "@/components";
 import {
-  ReflectiveButton,
-  SkeletonLoader,
+  Badge,
+  Button,
+  Checkbox,
   Spinner,
-  Textarea,
-} from "@/components";
-import { Badge, Checkbox, Divider } from "@usefui/components";
-import { BorderWrapper } from "@/components";
+  Divider,
+  Skeleton,
+  Card,
+} from "@usefui/components";
 
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -121,20 +123,15 @@ function LLMSettings({ isFreeScope }: { isFreeScope: boolean }) {
   }, [configuration, form]);
 
   return (
-    <BorderWrapper
-      as="form"
-      className="p-medium-60"
-      onSubmit={form.handleSubmit(onSubmit)}
-      key={configuration?.id}
-    >
+    <Card.Body className="p-medium-60">
       {isPending && (
         <div className="flex justify-between align-start g-large-10">
-          <SkeletonLoader />
+          <Skeleton />
           <Spinner />
         </div>
       )}
       {isSuccess && (
-        <React.Fragment>
+        <form onSubmit={form.handleSubmit(onSubmit)} key={configuration?.id}>
           <div className="flex align-center justify-between g-medium-10">
             <hgroup className="w-100 grid g-medium-10">
               <div className="flex g-medium-10 align-center">
@@ -159,7 +156,7 @@ function LLMSettings({ isFreeScope }: { isFreeScope: boolean }) {
               <Checkbox
                 id="diagrams"
                 sizing="medium"
-                variant="border"
+                variant="secondary"
                 disabled={isFreeScope}
                 defaultChecked={configuration?.diagrams}
                 onClick={() => {
@@ -203,9 +200,10 @@ function LLMSettings({ isFreeScope }: { isFreeScope: boolean }) {
           </div>
 
           <footer className="w-100 flex justify-end align-center">
-            <ReflectiveButton
-              variant="mono"
+            <Button
+              variant="primary"
               sizing="medium"
+              animation="reflective"
               disabled={
                 isFreeScope || createConfig.isPending || updateConfig.isPending
               }
@@ -214,11 +212,11 @@ function LLMSettings({ isFreeScope }: { isFreeScope: boolean }) {
               Save
               {createConfig.isPending ||
                 (updateConfig.isPending && <Spinner />)}
-            </ReflectiveButton>
+            </Button>
           </footer>
-        </React.Fragment>
+        </form>
       )}
-    </BorderWrapper>
+    </Card.Body>
   );
 }
 

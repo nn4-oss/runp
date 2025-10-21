@@ -10,7 +10,11 @@ function CredentialsListActions() {
     <div className="flex align-center g-medium-10">
       <Sheet.Root>
         <Tooltip content="Shortcut: ctrl&nbsp;+&nbsp;a">
-          <Sheet.Trigger variant="border" sizing="medium">
+          <Sheet.Trigger
+            variant="secondary"
+            sizing="medium"
+            animation="reflective"
+          >
             Add New
           </Sheet.Trigger>
         </Tooltip>

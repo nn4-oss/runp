@@ -2,9 +2,9 @@
 
 import React from "react";
 
-import { CopyCode } from "@/components";
-import { Button, Tooltip } from "@usefui/components";
+import { Button, CopyButton, Tooltip } from "@usefui/components";
 import { Icon, PixelIcon } from "@usefui/icons";
+
 import { toast } from "sonner";
 
 interface DiagramHeaderProperties {
@@ -110,7 +110,11 @@ function DiagramHeader({
         </Button>
       </div>
       <div className="flex align-center g-medium-30">
-        <CopyCode value={code} />
+        <CopyButton value={code}>
+          <Icon>
+            <PixelIcon.Clipboard />
+          </Icon>
+        </CopyButton>
         <Tooltip content="Download">
           <Button variant="ghost" sizing="small" onClick={handleExport}>
             <Icon>

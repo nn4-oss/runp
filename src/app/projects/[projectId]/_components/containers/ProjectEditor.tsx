@@ -5,7 +5,7 @@ import React from "react";
 import MessagesContainer from "./MessagesContainer";
 import ProjectContainer from "./ProjectContainer";
 
-import { SplitScreen } from "@/components";
+import { Resizable } from "@usefui/components";
 
 import type { Fragment } from "generated/prisma";
 import type { ViewProps } from "../../_types";
@@ -17,7 +17,7 @@ function ProjectEditor({ projectId }: { projectId: string }) {
   );
 
   return (
-    <SplitScreen
+    <Resizable
       defaultWidth={33}
       left={
         <MessagesContainer

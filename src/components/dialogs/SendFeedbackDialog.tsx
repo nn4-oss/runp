@@ -6,8 +6,16 @@ import { useTRPC } from "@/trpc/client";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { Spinner, Textarea, BorderWrapper } from "@/components";
-import { Button, Dialog, Field, Portal, useDialog } from "@usefui/components";
+import { Textarea } from "@/components";
+import {
+  Spinner,
+  Button,
+  Dialog,
+  Field,
+  Portal,
+  useDialog,
+  Card,
+} from "@usefui/components";
 
 import { toast } from "sonner";
 
@@ -80,26 +88,30 @@ function SendFeedbackDialog() {
         >
           <Field.Root>
             <Field.Wrapper>
-              <BorderWrapper className="p-medium-30">
+              <Card.Body className="p-medium-30">
                 <Textarea
                   id="message-content"
                   style={{ height: "var(--measurement-large-60)" }}
                   placeholder="Your feedback.."
                   {...form.register("content")}
                 />
-              </BorderWrapper>
+              </Card.Body>
               <Field.Meta variant="hint">Feedbacks are anonymous</Field.Meta>
             </Field.Wrapper>
           </Field.Root>
         </form>
         <footer className="flex align-center justify-end g-medium-10">
-          <Dialog.Control variant="border" sizing="medium">
+          <Dialog.Control
+            variant="secondary"
+            sizing="medium"
+            animation="reflective"
+          >
             Cancel
           </Dialog.Control>
           <Button
             type="submit"
             sizing="medium"
-            variant="mono"
+            variant="primary"
             disabled={sendFeedback.isPending}
             onClick={form.handleSubmit(onSubmit)}
           >
