@@ -258,11 +258,12 @@ function HomePrompt() {
                 type="submit"
                 sizing="small"
                 variant="mono"
+                shape="round"
                 animation="reflective"
                 onClick={form.handleSubmit(onSubmit)}
                 disabled={createProject.isPending || !form.formState.isValid}
               >
-                <span className="p-y-small-30">
+                <span className="p-y-small-60 flex align-center justify-center">
                   {createProject.isPending ? (
                     <Spinner />
                   ) : (

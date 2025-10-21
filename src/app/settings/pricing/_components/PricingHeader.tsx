@@ -21,7 +21,7 @@ function PricingHeader() {
         <Dialog.Root>
           <Dialog.Trigger
             animation="reflective"
-            variant="border"
+            variant="secondary"
             sizing="medium"
           >
             Book a demo

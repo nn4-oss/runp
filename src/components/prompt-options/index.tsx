@@ -11,7 +11,7 @@ function PromptOptions() {
   return (
     <div className="flex align-center g-medium-10">
       <Tooltip content="OpenAI-gpt-4.1">
-        <Button animation="reflective" sizing="small" variant="border">
+        <Button animation="reflective" sizing="small" variant="secondary">
           <span className="p-y-small-60 flex align-center justify-center">
             <Icon>
               <SocialIcon.OpenAi />
@@ -24,7 +24,7 @@ function PromptOptions() {
         <Button
           animation="reflective"
           sizing="small"
-          variant="border"
+          variant="secondary"
           onMouseDown={() => router.push("/settings")}
         >
           <span className="p-y-small-60 flex align-center justify-center">

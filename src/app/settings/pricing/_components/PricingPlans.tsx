@@ -108,7 +108,7 @@ function PricingPlans() {
 
             <Button
               sizing="large"
-              variant="border"
+              variant="secondary"
               animation="reflective"
               className="w-100"
               disabled={isFreeScope || updateUser.isPending}
@@ -146,7 +146,7 @@ function PricingPlans() {
             <Divider className="m-y-large-10" />
             <Button
               sizing="large"
-              variant="border"
+              variant="secondary"
               animation="reflective"
               className="w-100"
               disabled={user?.scope === ScopeEnum.PRO || updateUser.isPending}

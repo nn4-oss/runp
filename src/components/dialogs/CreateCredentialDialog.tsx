@@ -304,7 +304,7 @@ function CreateCredentialDialog() {
           <div className="flex align-center justify-end g-medium-10 p-b-large-10">
             <Sheet.Trigger
               animation="reflective"
-              variant="border"
+              variant="secondary"
               sizing="medium"
               onClick={() => form.reset()}
             >
@@ -312,8 +312,7 @@ function CreateCredentialDialog() {
             </Sheet.Trigger>
             <Button
               type="submit"
-              variant="mono"
-              animation="reflective"
+              variant="primary"
               sizing="medium"
               disabled={
                 createCredential.isPending ||

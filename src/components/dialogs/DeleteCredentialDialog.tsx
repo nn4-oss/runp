@@ -54,7 +54,7 @@ function DeleteCredentialDialog({
         </hgroup>
         <div className="flex align-center justify-end g-medium-10">
           <Dialog.Control
-            variant="border"
+            variant="secondary"
             sizing="medium"
             animation="reflective"
           >

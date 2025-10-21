@@ -21,7 +21,7 @@ function ProjectListActions() {
   return (
     <div className="flex align-center g-medium-10">
       <Button
-        variant="border"
+        variant="secondary"
         animation="reflective"
         sizing="medium"
         onMouseDown={() => router.push("/")}
@@ -31,7 +31,7 @@ function ProjectListActions() {
       <DropdownMenu.Root>
         <DropdownMenu>
           <DropdownMenu.Trigger
-            variant="border"
+            variant="secondary"
             sizing="medium"
             animation="reflective"
           >

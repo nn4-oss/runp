@@ -3,28 +3,29 @@
 import React from "react";
 
 import { useRouter } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import { useTRPC } from "@/trpc/client";
+
+import UpgradeScopeDialog from "../dialogs/UpgradeScopeDialog";
 
 import { SignedIn } from "@clerk/nextjs";
 import { Button, Dialog, Tooltip } from "@usefui/components";
 import { Icon, PixelIcon } from "@usefui/icons";
-import { UpgradeScopeDialog, UserAvatar } from "../";
+
+import { ScopeEnum } from "generated/prisma";
 
 function SignedInActions() {
   const router = useRouter();
+  const trpc = useTRPC();
+
+  const { data: user } = useQuery(trpc.user.get.queryOptions());
 
   return (
     <SignedIn>
-      <span className="opacity-default-10 p-x-medium-10">/</span>
-      <Dialog.Root>
-        <UserAvatar />
-        <UpgradeScopeDialog />
-      </Dialog.Root>
-      <span className="opacity-default-10 p-x-medium-10">/</span>
-
       <div className="flex align-center g-medium-10">
         <Tooltip content="New chat">
           <Button
-            variant="border"
+            variant="secondary"
             sizing="small"
             animation="reflective"
             aria-label="Projects"
@@ -40,7 +41,7 @@ function SignedInActions() {
 
         <Tooltip content="Projects">
           <Button
-            variant="border"
+            variant="secondary"
             sizing="small"
             animation="reflective"
             aria-label="Projects"
@@ -53,6 +54,20 @@ function SignedInActions() {
             </span>
           </Button>
         </Tooltip>
+
+        {user?.scope === ScopeEnum.FREE && (
+          <Dialog.Root>
+            <Dialog.Trigger
+              variant="mono"
+              sizing="medium"
+              animation="reflective"
+            >
+              Upgrade
+            </Dialog.Trigger>
+
+            <UpgradeScopeDialog />
+          </Dialog.Root>
+        )}
       </div>
     </SignedIn>
   );

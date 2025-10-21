@@ -156,7 +156,7 @@ function LLMSettings({ isFreeScope }: { isFreeScope: boolean }) {
               <Checkbox
                 id="diagrams"
                 sizing="medium"
-                variant="border"
+                variant="secondary"
                 disabled={isFreeScope}
                 defaultChecked={configuration?.diagrams}
                 onClick={() => {
@@ -201,7 +201,7 @@ function LLMSettings({ isFreeScope }: { isFreeScope: boolean }) {
 
           <footer className="w-100 flex justify-end align-center">
             <Button
-              variant="mono"
+              variant="primary"
               sizing="medium"
               animation="reflective"
               disabled={

@@ -151,11 +151,12 @@ function MessagesPrompt({ projectId }: { projectId: string }) {
             type="submit"
             sizing="small"
             variant="mono"
+            shape="round"
             animation="reflective"
             onClick={form.handleSubmit(onSubmit)}
             disabled={createMessage.isPending || !form.formState.isValid}
           >
-            <span className="p-y-small-30">
+            <span className="p-y-small-60 flex align-center justify-center">
               {createMessage.isPending ? (
                 <Spinner />
               ) : (

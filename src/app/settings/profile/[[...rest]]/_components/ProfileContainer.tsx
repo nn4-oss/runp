@@ -31,7 +31,7 @@ function ProfileContainer() {
           </p>
 
           <Button
-            variant="border"
+            variant="secondary"
             animation="reflective"
             sizing="medium"
             onClick={() =>

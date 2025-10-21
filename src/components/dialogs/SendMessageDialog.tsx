@@ -131,7 +131,7 @@ function SendMessageDialog() {
 
         <footer className="flex align-center justify-end g-medium-10">
           <Dialog.Control
-            variant="border"
+            variant="secondary"
             sizing="medium"
             animation="reflective"
           >
@@ -140,8 +140,7 @@ function SendMessageDialog() {
           <Button
             type="submit"
             sizing="medium"
-            variant="mono"
-            animation="reflective"
+            variant="primary"
             disabled={sendContactRequest.isPending}
             onClick={form.handleSubmit(onSubmit)}
           >

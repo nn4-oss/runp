@@ -102,7 +102,7 @@ function SendFeedbackDialog() {
         </form>
         <footer className="flex align-center justify-end g-medium-10">
           <Dialog.Control
-            variant="border"
+            variant="secondary"
             sizing="medium"
             animation="reflective"
           >
@@ -111,8 +111,7 @@ function SendFeedbackDialog() {
           <Button
             type="submit"
             sizing="medium"
-            variant="mono"
-            animation="reflective"
+            variant="primary"
             disabled={sendFeedback.isPending}
             onClick={form.handleSubmit(onSubmit)}
           >

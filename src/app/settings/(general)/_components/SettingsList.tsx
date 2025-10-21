@@ -59,7 +59,7 @@ function SettingsList() {
           </p>
 
           <Button
-            variant="border"
+            variant="secondary"
             sizing="medium"
             animation="reflective"
             disabled={disableReset || deleteConfig.isPending}

@@ -82,7 +82,6 @@ function UserAvatar() {
     <DropdownMenu.Root>
       <DropdownMenu>
         <DropdownMenu.Trigger>
-          <StyledAvatar src={avatarImageSrc} />
           <div className="flex align-center g-medium-10 ">
             {user?.scope && (
               <Badge variant="secondary">
@@ -90,6 +89,7 @@ function UserAvatar() {
               </Badge>
             )}
           </div>
+          <StyledAvatar src={avatarImageSrc} />
         </DropdownMenu.Trigger>
 
         <ScrollArea as={DropdownMenu.Content}>

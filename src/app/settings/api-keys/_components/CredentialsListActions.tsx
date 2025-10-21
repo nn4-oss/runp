@@ -11,7 +11,7 @@ function CredentialsListActions() {
       <Sheet.Root>
         <Tooltip content="Shortcut: ctrl&nbsp;+&nbsp;a">
           <Sheet.Trigger
-            variant="border"
+            variant="secondary"
             sizing="medium"
             animation="reflective"
           >

@@ -16,6 +16,8 @@ import {
 } from "@usefui/components";
 import { Icon, PixelIcon, WebIcon } from "@usefui/icons";
 
+import { formatDistanceToNow } from "date-fns";
+
 const StyledMenu = styled(Page.Navigation)`
   border: none !important;
   padding-left: 0 !important;
@@ -41,24 +43,19 @@ function MessagesHeader({ projectId }: { projectId: string }) {
 
   return (
     <StyledMenu className="w-100 flex g-medium-30 p-x-medium-30 align-center justify-between">
-      <Truncate className="fs-medium-20 opacity-default-60">
-        <SplitText
-          stagger={0.02}
-          duration={0.1}
-          variant="fade"
-          text={project.name}
-        />
-      </Truncate>
-
-      <div className="flex g-medium-10 align-center justify-start">
+      <div className="flex g-medium-30 align-center justify-start">
         <Dialog.Root>
           <DropdownMenu.Root>
             <DropdownMenu>
               <Tooltip content="Options">
-                <DropdownMenu.Trigger variant="ghost" sizing="small">
-                  <span className="flex align-center justify-center p-y-small-30">
+                <DropdownMenu.Trigger
+                  variant="secondary"
+                  animation="reflective"
+                  sizing="small"
+                >
+                  <span className="flex align-center justify-center p-y-small-60">
                     <Icon>
-                      <WebIcon.More />
+                      <PixelIcon.ChevronsVertical />
                     </Icon>
                   </span>
                 </DropdownMenu.Trigger>
@@ -104,10 +101,38 @@ function MessagesHeader({ projectId }: { projectId: string }) {
 
           <UpdateNameDialog currentName={project.name} projectId={projectId} />
         </Dialog.Root>
-        <span className="fs-medium-10 opacity-default-10">/</span>
+
+        <div>
+          <Truncate className="fs-medium-10 opacity-default-60">
+            <SplitText
+              stagger={0.02}
+              duration={0.1}
+              variant="fade"
+              text={project.name}
+            />
+          </Truncate>
+          <Truncate className="fs-small-50 opacity-default-30">
+            <SplitText
+              stagger={0.02}
+              duration={0.1}
+              delay={0.3}
+              variant="fade"
+              text={formatDistanceToNow(project.createdAt, {
+                addSuffix: true,
+              })}
+            />
+          </Truncate>
+        </div>
+      </div>
+
+      <div className="flex g-medium-10 align-center justify-start">
         <Dialog.Root>
           <Tooltip content="Delete">
-            <Dialog.Trigger variant="ghost" sizing="small" rawicon>
+            <Dialog.Trigger
+              variant="secondary"
+              animation="reflective"
+              sizing="small"
+            >
               <span className="flex align-center justify-center p-y-small-60">
                 <Icon>
                   <PixelIcon.Close />

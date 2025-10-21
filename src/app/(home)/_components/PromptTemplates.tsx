@@ -89,7 +89,7 @@ function PromptTemplates() {
         <motion.span key={task.label} variants={slide}>
           <Button
             sizing="medium"
-            variant="border"
+            variant="secondary"
             animation="reflective"
             shape="round"
             disabled={createProject.isPending}
