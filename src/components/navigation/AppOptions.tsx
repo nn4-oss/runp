@@ -2,40 +2,36 @@
 
 import React from "react";
 
-import { useRouter } from "next/navigation";
-
-import BrandIcon from "../brand-icon";
-
-import { ScrollArea, DropdownMenu, Divider, Dialog } from "@usefui/components";
-import { Icon, PixelIcon, SocialIcon } from "@usefui/icons";
+import {
+  ScrollArea,
+  DropdownMenu,
+  Divider,
+  Dialog,
+  Tooltip,
+} from "@usefui/components";
+import { Icon, PixelIcon, SocialIcon, WebIcon } from "@usefui/icons";
 import { ColorModes, SendFeedbackDialog } from "../";
 
-function AppAvatar() {
-  const router = useRouter();
-
+function AppOptions() {
   return (
     <Dialog.Root>
       <DropdownMenu.Root>
         <DropdownMenu>
-          <DropdownMenu.Trigger variant="ghost" rawicon>
-            <Icon fill="none" width={29.36} height={29.36} viewBox="0 0 32 48">
-              <BrandIcon />
-            </Icon>
-          </DropdownMenu.Trigger>
+          <Tooltip content="Options">
+            <DropdownMenu.Trigger
+              variant="secondary"
+              sizing="small"
+              animation="reflective"
+            >
+              <span className="flex align-center justify-center p-y-small-60">
+                <Icon>
+                  <WebIcon.Settings />
+                </Icon>
+              </span>
+            </DropdownMenu.Trigger>
+          </Tooltip>
 
           <ScrollArea as={DropdownMenu.Content}>
-            <DropdownMenu.Item
-              className="w-100 flex align-center g-medium-30"
-              onMouseDown={() => router.push("/")}
-            >
-              <Icon>
-                <PixelIcon.ChevronLeft />
-              </Icon>
-              Homepage
-            </DropdownMenu.Item>
-
-            <Divider className="m-y-medium-10" />
-
             <Dialog.Trigger variant="ghost" className="w-100" rawicon>
               <DropdownMenu.Item className="w-100 flex align-center g-medium-30">
                 <span className="flex align-center justify-center">
@@ -92,4 +88,4 @@ function AppAvatar() {
   );
 }
 
-export default AppAvatar;
+export default AppOptions;

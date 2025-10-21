@@ -3,11 +3,16 @@
 import React from "react";
 import styled from "styled-components";
 
-import AppAvatar from "./AppAvatar";
+import { useRouter } from "next/navigation";
+
+import AppOptions from "./AppOptions";
+import BrandIcon from "../brand-icon";
 import SignedInActions from "./SignedInActions";
 
 import { SignedIn, SignedOut, SignInButton, SignUpButton } from "@clerk/nextjs";
 import { Page, Dialog, Button } from "@usefui/components";
+import { Icon } from "@usefui/icons";
+
 import { UpgradeScopeDialog, UserAvatar } from "..";
 
 const StyledMenu = styled(Page.Navigation)`
@@ -16,10 +21,17 @@ const StyledMenu = styled(Page.Navigation)`
 `;
 
 function Navigation() {
+  const router = useRouter();
+
   return (
     <StyledMenu className="w-100 flex p-x-medium-30 align-center justify-between">
       <div className="flex align-center g-medium-30 w-100">
-        <AppAvatar />
+        <Button variant="ghost" rawicon onMouseDown={() => router.push("/")}>
+          <Icon fill="none" width={29.36} height={29.36} viewBox="0 0 32 48">
+            <BrandIcon />
+          </Icon>
+        </Button>
+
         <SignedInActions />
       </div>
 
@@ -42,6 +54,8 @@ function Navigation() {
             <UpgradeScopeDialog />
           </Dialog.Root>
         </SignedIn>
+
+        <AppOptions />
       </div>
     </StyledMenu>
   );
