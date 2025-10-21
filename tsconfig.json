@@ -26,7 +26,6 @@
 
     /* Path Aliases */
     "baseUrl": ".",
-    "ignoreDeprecations": "6.0", // Remove after full migration to TS 7.0
     "paths": {
       "@/*": ["./src/*"]
     }
