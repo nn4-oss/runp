@@ -27,9 +27,16 @@ const cssOpacityClasses = generateOpacityClasses(design_tokens.opacity);
 const cssColorClasses = generateColorClasses(
   js_design_tokens.design_tokens.color,
 );
+
 const cssVariables = generateCSSVariables({
   name: js_design_tokens.name,
-  design_tokens,
+  design_tokens: {
+    color: design_tokens.color,
+    measurement: design_tokens.measurement,
+    fontsize: design_tokens.fontsize,
+    opacity: design_tokens.opacity,
+    depth: design_tokens.depth,
+  },
 });
 
 const CSSRoot = createGlobalStyle`
@@ -58,6 +65,12 @@ const CSSRoot = createGlobalStyle`
 		--breakpoint-desktop-small: 1240px;
 		--breakpoint-desktop: 1440px;
 		--breakpoint-desktop-large: 1589px;
+
+    --font-mono: "berkeleyMono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
+
+    kbd, pre, code {
+      font-family: var(--font-mono);
+    }
 	}
 `;
 
@@ -69,11 +82,11 @@ export function ClientProvider({
   const colorModeConfig = React.useMemo(
     () => ({
       body: {
-        light: "var(--color-mono-light)",
+        light: "var(--color-mono-white)",
         dark: "var(--color-mono-darkest)",
       },
       contrast: {
-        light: "var(--color-mono-white)",
+        light: "var(--color-mono-light)",
         dark: "var(--color-mono-darker)",
       },
     }),

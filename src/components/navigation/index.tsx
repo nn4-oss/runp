@@ -27,7 +27,7 @@ function Navigation() {
     <StyledMenu className="w-100 flex p-x-medium-30 align-center justify-between">
       <div className="flex align-center g-medium-30 w-100">
         <Button variant="ghost" rawicon onMouseDown={() => router.push("/")}>
-          <Icon fill="none" width={29.36} height={29.36} viewBox="0 0 32 48">
+          <Icon fill="none" width={24} height={24} viewBox="0 0 32 48">
             <BrandIcon />
           </Icon>
         </Button>

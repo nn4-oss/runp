@@ -18,7 +18,7 @@ import { utteranceValueSchema } from "@/schemas/utterances-schema";
 import { Button } from "@usefui/components";
 
 const PromptWrapper = styled.form`
-  border: var(--measurement-small-30) solid var(--font-color-alpha-10);
+  /* border: var(--measurement-small-30) solid var(--font-color-alpha-10); */
   border-radius: var(--measurement-medium-30);
 
   background: var(--contrast-color);

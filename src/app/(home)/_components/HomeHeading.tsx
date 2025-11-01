@@ -15,8 +15,8 @@ const HeadingGroup = styled(motion.hgroup)<{
 const AnimatedTitle = styled(motion.h1)<{
   variants: Variants;
 }>`
-  font-size: clamp(var(--fontsize-large-30), 5vw, var(--fontsize-large-60));
-  font-weight: 500 !important;
+  font-size: clamp(var(--fontsize-large-10), 5vw, var(--fontsize-large-20));
+  font-weight: 400 !important;
   letter-spacing: calc((1.1618px * 2) * -1);
   position: relative;
 `;

@@ -37,10 +37,10 @@ const PromptContainer = styled.div`
 const PromptWrapper = styled.form`
   z-index: 90;
   position: relative;
-  border: var(--measurement-small-30) solid var(--font-color-alpha-10);
+  /* border: var(--measurement-small-30) solid var(--font-color-alpha-10); */
   border-radius: var(--measurement-medium-60);
 
-  background: var(--contrast-color);
+  background: var(--body-color);
 
   will-change: border-color;
   transition: border-color ease-in-out 0.2s;
@@ -147,31 +147,6 @@ function HomePrompt() {
     return integration.service === "OPENAI";
   });
 
-  const shaderColors = React.useMemo(() => {
-    return [
-      "rgba(255, 255, 255, 1)",
-      "rgba(255, 255, 255, 0.1)",
-      "rgba(255, 255, 255, 0.2)",
-      "rgba(255, 255, 255, 0.3)",
-      "rgba(255, 255, 255, 0.4)",
-    ];
-    // return (["dark", "system"] as (typeof colorMode)[]).includes(colorMode)
-    //   ? [
-    //       "rgba(255, 255, 255, 1)",
-    //       "rgba(255, 255, 255, 0.1)",
-    //       "rgba(255, 255, 255, 0.2)",
-    //       "rgba(255, 255, 255, 0.3)",
-    //       "rgba(255, 255, 255, 0.4)",
-    //     ]
-    //   : [
-    //       "rgba(255, 255, 255, 1)",
-    //       "rgba(255, 127, 17, 0.1)",
-    //       "rgba(255, 127, 17, 0.2)",
-    //       "rgba(255, 127, 17, 0.3)",
-    //       "rgba(255, 127, 17, 0.4)",
-    //     ];
-  }, [colorMode]);
-
   const onSubmit = React.useCallback(
     async (values: z.infer<typeof formSchema>) => {
       await createProject.mutateAsync({
@@ -206,7 +181,7 @@ function HomePrompt() {
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
       >
-        <ShaderBackground
+        {/* <ShaderBackground
           initial={{ opacity: 0 }}
           animate={{ opacity: isFocused ? 0 : 1 }}
           transition={{
@@ -216,24 +191,30 @@ function HomePrompt() {
           <PulsingBorder
             style={{ height: "146.5%", minWidth: "143%" }}
             colorBack="rgba(0, 0, 0, 0)"
-            roundness={0.18}
-            thickness={0}
-            softness={1}
-            intensity={0.3}
-            bloom={2}
+            roundness={0.24}
+            thickness={0.3}
+            softness={5}
+            intensity={0.4}
+            bloom={10}
             spots={1}
-            spotSize={0.25}
-            pulse={0}
+            spotSize={0.3}
+            pulse={0.1}
             smoke={0.35}
-            smokeSize={0.4}
+            smokeSize={0.3}
             scale={0.7}
             rotation={Math.PI / 10}
             offsetX={0}
             offsetY={0}
             speed={Math.PI / 10}
-            colors={shaderColors}
+            colors={[
+              "#FFFFFF50",
+              "#FFFFFF40",
+              "#FFFFFF30",
+              "#FFFFFF20",
+              "#FFFFFF10",
+            ]}
           />
-        </ShaderBackground>
+        </ShaderBackground> */}
         <div className="p-medium-60">
           <Textarea
             autoComplete="off"
