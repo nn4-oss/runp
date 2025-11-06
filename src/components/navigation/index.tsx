@@ -5,7 +5,6 @@ import styled from "styled-components";
 
 import { useRouter } from "next/navigation";
 
-import AppOptions from "./AppOptions";
 import BrandIcon from "../brand-icon";
 import SignedInActions from "./SignedInActions";
 
@@ -25,13 +24,12 @@ function Navigation() {
 
   return (
     <StyledMenu className="w-100 flex p-x-medium-30 align-center justify-between">
-      <div className="flex align-center g-medium-30 w-100">
+      <div className="flex align-center g-medium-10 w-100">
         <Button variant="ghost" rawicon onMouseDown={() => router.push("/")}>
           <Icon fill="none" width={24} height={24} viewBox="0 0 32 48">
             <BrandIcon />
           </Icon>
         </Button>
-
         <SignedInActions />
       </div>
 
@@ -48,14 +46,13 @@ function Navigation() {
             </Button>
           </SignUpButton>
         </SignedOut>
+
         <SignedIn>
           <Dialog.Root>
             <UserAvatar />
             <UpgradeScopeDialog />
           </Dialog.Root>
         </SignedIn>
-
-        <AppOptions />
       </div>
     </StyledMenu>
   );

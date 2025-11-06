@@ -10,7 +10,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { PromptOptions, Textarea, UsageBanner } from "@/components";
 import { Spinner } from "@usefui/components";
-import { Icon, PixelIcon } from "@usefui/icons";
+import { Icon } from "@usefui/icons";
 
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -161,7 +161,7 @@ function MessagesPrompt({ projectId }: { projectId: string }) {
                 <Spinner />
               ) : (
                 <Icon>
-                  <PixelIcon.ArrowUp />
+                  <Icon.ArrowUp />
                 </Icon>
               )}
             </span>

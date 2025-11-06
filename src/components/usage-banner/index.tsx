@@ -7,7 +7,7 @@ import { useTRPC } from "@/trpc/client";
 import { useQuery } from "@tanstack/react-query";
 
 import { Badge, Button, Tooltip } from "@usefui/components";
-import { Icon, PixelIcon } from "@usefui/icons";
+import { Icon } from "@usefui/icons";
 
 import { formatDuration, intervalToDuration } from "date-fns";
 
@@ -86,7 +86,7 @@ function UsageBanner({ points, beforeNext }: UsageBannerProps) {
       <Tooltip content="Hide">
         <Button variant="ghost" onClick={() => setShow(false)}>
           <Icon>
-            <PixelIcon.Close />
+            <Icon.Remove />
           </Icon>
         </Button>
       </Tooltip>

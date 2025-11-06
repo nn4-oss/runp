@@ -9,7 +9,7 @@ import Link from "next/link";
 import SubscribeActions from "./SubscribeActions";
 
 import { Card, Skeleton, Spinner } from "@usefui/components";
-import { Icon, PixelIcon } from "@usefui/icons";
+import { Icon } from "@usefui/icons";
 import { UsageRange } from "@/components";
 
 import { formatDuration, intervalToDuration } from "date-fns";
@@ -77,7 +77,7 @@ function UsageSettings() {
                   >
                     pricing page
                     <Icon>
-                      <PixelIcon.Open />
+                      <Icon.ChevronRight />
                     </Icon>
                   </Link>
                 </p>
@@ -109,7 +109,7 @@ function UsageSettings() {
 
                 <span className="fs-small-60 opacity-default-30 flex align-center g-medium-10">
                   <Icon>
-                    <PixelIcon.Reload />
+                    <Icon.Reload />
                   </Icon>
                   Reset&nbsp;in&nbsp;
                   {resetDuration}

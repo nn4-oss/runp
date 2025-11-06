@@ -2,23 +2,19 @@
 
 import React from "react";
 import styled from "styled-components";
-import { motion } from "framer-motion";
 
 import { useRouter } from "next/navigation";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
 import { useKeyPress } from "@usefui/hooks";
 import { useForm } from "react-hook-form";
-import { useColorMode } from "@usefui/tokens";
 
 import Link from "next/link";
 import PromptTemplates from "./PromptTemplates";
 
-import { Icon, PixelIcon } from "@usefui/icons";
+import { Icon } from "@usefui/icons";
 import { Button, Spinner } from "@usefui/components";
 import { PromptOptions, Textarea } from "@/components";
-
-import { PulsingBorder } from "@paper-design/shaders-react";
 
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -75,17 +71,6 @@ const ProBanner = styled.div`
 
   z-index: 10;
 `;
-const ShaderBackground = styled(motion.div)`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  user-select: none;
-  pointer-events: none;
-`;
 
 const formSchema = z.object({
   content: utteranceValueSchema,
@@ -99,7 +84,6 @@ function HomePrompt() {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const shortcutControls = useKeyPress("Enter", true, "ctrlKey");
-  const { colorMode } = useColorMode();
 
   const { data: user } = useQuery(trpc.user.get.queryOptions());
   const { data: config } = useQuery(
@@ -181,40 +165,6 @@ function HomePrompt() {
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
       >
-        {/* <ShaderBackground
-          initial={{ opacity: 0 }}
-          animate={{ opacity: isFocused ? 0 : 1 }}
-          transition={{
-            duration: 2,
-          }}
-        >
-          <PulsingBorder
-            style={{ height: "146.5%", minWidth: "143%" }}
-            colorBack="rgba(0, 0, 0, 0)"
-            roundness={0.24}
-            thickness={0.3}
-            softness={5}
-            intensity={0.4}
-            bloom={10}
-            spots={1}
-            spotSize={0.3}
-            pulse={0.1}
-            smoke={0.35}
-            smokeSize={0.3}
-            scale={0.7}
-            rotation={Math.PI / 10}
-            offsetX={0}
-            offsetY={0}
-            speed={Math.PI / 10}
-            colors={[
-              "#FFFFFF50",
-              "#FFFFFF40",
-              "#FFFFFF30",
-              "#FFFFFF20",
-              "#FFFFFF10",
-            ]}
-          />
-        </ShaderBackground> */}
         <div className="p-medium-60">
           <Textarea
             autoComplete="off"
@@ -249,7 +199,7 @@ function HomePrompt() {
                     <Spinner />
                   ) : (
                     <Icon>
-                      <PixelIcon.ArrowUp />
+                      <Icon.ArrowUp />
                     </Icon>
                   )}
                 </span>
@@ -263,7 +213,7 @@ function HomePrompt() {
         <ProBanner className="flex align-end justify-between">
           <span className="fs-medium-10 opacity-default-60 flex align-center g-medium-10">
             <Icon>
-              <PixelIcon.Lock />
+              <Icon.LockNarrow />
             </Icon>
             <Link href="/settings/api-keys">Define and link</Link>
             your own
@@ -279,7 +229,7 @@ function HomePrompt() {
             onClick={() => setShowUsage(false)}
           >
             <Icon>
-              <PixelIcon.Close />
+              <Icon.Remove />
             </Icon>
           </Button>
         </ProBanner>

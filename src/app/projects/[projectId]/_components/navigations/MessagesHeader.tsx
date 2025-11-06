@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { useTRPC } from "@/trpc/client";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
-import { DeleteProjectDialog, SplitText, UpdateNameDialog } from "@/components";
+import { SplitText, UpdateNameDialog } from "@/components";
 import {
   Button,
   Dialog,
@@ -14,7 +14,7 @@ import {
   Page,
   Tooltip,
 } from "@usefui/components";
-import { Icon, PixelIcon } from "@usefui/icons";
+import { Icon } from "@usefui/icons";
 
 import { formatDistanceToNow } from "date-fns";
 
@@ -49,15 +49,13 @@ function MessagesHeader({ projectId }: { projectId: string }) {
             <DropdownMenu>
               <Tooltip content="Options">
                 <DropdownMenu.Trigger
-                  variant="secondary"
+                  variant="ghost"
                   animation="reflective"
                   sizing="small"
                 >
-                  <span className="flex align-center justify-center p-y-small-60">
-                    <Icon>
-                      <PixelIcon.ChevronsVertical />
-                    </Icon>
-                  </span>
+                  <Icon>
+                    <Icon.ThreeDotsVertical />
+                  </Icon>
                 </DropdownMenu.Trigger>
               </Tooltip>
 
@@ -73,7 +71,7 @@ function MessagesHeader({ projectId }: { projectId: string }) {
                     style={{ width: "100%", justifyContent: "start" }}
                   >
                     <Icon>
-                      <PixelIcon.EditBox />
+                      <Icon.EditNarrowSquare />
                     </Icon>
                     Rename
                   </Dialog.Trigger>
@@ -90,7 +88,7 @@ function MessagesHeader({ projectId }: { projectId: string }) {
                     }}
                   >
                     <Icon>
-                      <PixelIcon.Duplicate />
+                      <Icon.CopyDashed />
                     </Icon>
                     Copy Project ID
                   </Button>
@@ -123,26 +121,6 @@ function MessagesHeader({ projectId }: { projectId: string }) {
             />
           </Truncate>
         </div>
-      </div>
-
-      <div className="flex g-medium-10 align-center justify-start">
-        <Dialog.Root>
-          <Tooltip content="Delete">
-            <Dialog.Trigger
-              variant="secondary"
-              animation="reflective"
-              sizing="small"
-            >
-              <span className="flex align-center justify-center p-y-small-60">
-                <Icon>
-                  <PixelIcon.Close />
-                </Icon>
-              </span>
-            </Dialog.Trigger>
-          </Tooltip>
-
-          <DeleteProjectDialog projectId={projectId} />
-        </Dialog.Root>
       </div>
     </StyledMenu>
   );

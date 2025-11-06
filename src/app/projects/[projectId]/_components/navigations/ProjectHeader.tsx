@@ -15,7 +15,7 @@ import {
   Field,
   CopyButton,
 } from "@usefui/components";
-import { Icon, PixelIcon, WebIcon } from "@usefui/icons";
+import { Icon } from "@usefui/icons";
 
 import type { Fragment } from "generated/prisma";
 import type { ViewProps } from "../../_types";
@@ -77,9 +77,9 @@ function ProjectsHeader({
             >
               <span className="flex align-center justify-center p-y-small-60">
                 <Icon>
-                  {currentView === "preview" && <WebIcon.Globe />}
-                  {currentView === "code" && <WebIcon.Code />}
-                  {currentView === "diagram" && <WebIcon.Decisions />}
+                  {currentView === "preview" && <Icon.Browser />}
+                  {currentView === "code" && <Icon.CodeFile />}
+                  {currentView === "diagram" && <Icon.FlowsHorizontal />}
                 </Icon>
               </span>
             </DropdownMenu.Trigger>
@@ -91,14 +91,14 @@ function ProjectsHeader({
             >
               <span className="flex align-center justify-center p-y-small-30">
                 <Icon>
-                  <WebIcon.Globe />
+                  <Icon.Browser />
                 </Icon>
               </span>
               Preview
               {currentView === "preview" && (
                 <span className="justify-end w-100 flex">
                   <Icon>
-                    <PixelIcon.ChevronRight />
+                    <Icon.ChevronRight />
                   </Icon>
                 </span>
               )}
@@ -109,14 +109,14 @@ function ProjectsHeader({
             >
               <span className="flex align-center justify-center p-y-small-30">
                 <Icon>
-                  <WebIcon.Code />
+                  <Icon.CodeFile />
                 </Icon>
               </span>
               Code
               {currentView === "code" && (
                 <span className="justify-end flex w-100">
                   <Icon>
-                    <PixelIcon.ChevronRight />
+                    <Icon.ChevronRight />
                   </Icon>
                 </span>
               )}
@@ -128,7 +128,7 @@ function ProjectsHeader({
             >
               <span className="flex align-center justify-center p-y-small-30">
                 <Icon>
-                  <WebIcon.Decisions />
+                  <Icon.FlowsHorizontal />
                 </Icon>
               </span>
               Diagram
@@ -141,7 +141,7 @@ function ProjectsHeader({
 
                 {currentView === "diagram" && (
                   <Icon>
-                    <PixelIcon.ChevronRight />
+                    <Icon.ChevronRight />
                   </Icon>
                 )}
               </span>
@@ -169,7 +169,7 @@ function ProjectsHeader({
         >
           <span className="flex align-center justify-center p-y-small-80 p-x-small-30">
             <Icon>
-              <PixelIcon.Reload />
+              <Icon.Reload />
             </Icon>
           </span>
         </Button>
@@ -184,7 +184,7 @@ function ProjectsHeader({
         >
           <span className="flex align-center justify-center p-y-small-60">
             <Icon>
-              <PixelIcon.Open />
+              <Icon.LinkExternal />
             </Icon>
           </span>
         </Button>
@@ -200,7 +200,7 @@ function ProjectsHeader({
       >
         <span className="flex align-center justify-center p-y-small-60">
           <Icon>
-            <PixelIcon.Clipboard />
+            <Icon.CopyDashed />
           </Icon>
         </span>
       </CopyButton>

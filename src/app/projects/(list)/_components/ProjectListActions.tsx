@@ -5,7 +5,7 @@ import React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { Button, DropdownMenu } from "@usefui/components";
-import { Icon, PixelIcon } from "@usefui/icons";
+import { Icon } from "@usefui/icons";
 
 function ProjectListActions() {
   const searchParams = useSearchParams();
@@ -37,7 +37,7 @@ function ProjectListActions() {
           >
             Sort by
             <Icon>
-              <PixelIcon.Sort />
+              <Icon.FilterLine />
             </Icon>
           </DropdownMenu.Trigger>
           <DropdownMenu.Content>
@@ -46,7 +46,7 @@ function ProjectListActions() {
               onClick={() => handSort("asc")}
             >
               <Icon>
-                <PixelIcon.ArrowUp />
+                <Icon.ArrowUp />
               </Icon>
               Ascending
             </DropdownMenu.Item>
@@ -55,7 +55,7 @@ function ProjectListActions() {
               onClick={() => handSort("desc")}
             >
               <Icon>
-                <PixelIcon.ArrowDown />
+                <Icon.ArrowDown />
               </Icon>
               Descending
             </DropdownMenu.Item>

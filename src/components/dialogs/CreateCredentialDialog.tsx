@@ -19,11 +19,11 @@ import {
   Spinner,
   PrivacyField,
 } from "@usefui/components";
+import { Icon } from "@usefui/icons";
 
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { Icon, PixelIcon } from "@usefui/icons";
 
 const Banner = styled(Badge)`
   /* width: 100% !important; */
@@ -252,12 +252,12 @@ function CreateCredentialDialog() {
                 <PrivacyField
                   textIcon={
                     <Icon>
-                      <PixelIcon.Eye />
+                      <Icon.Eye />
                     </Icon>
                   }
                   passwordIcon={
                     <Icon>
-                      <PixelIcon.EyeClosed />
+                      <Icon.EyeOff />
                     </Icon>
                   }
                   id="credential-value"

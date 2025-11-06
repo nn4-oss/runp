@@ -11,7 +11,7 @@ import ProjectListActions from "./ProjectListActions";
 import ProjectsTable from "./ProjectsTable";
 
 import { Field, Spinner } from "@usefui/components";
-import { Icon, PixelIcon } from "@usefui/icons";
+import { Icon } from "@usefui/icons";
 import { AppContainer, FixedHeader, SplitText } from "@/components";
 
 const SearchContainer = styled.div`
@@ -98,7 +98,7 @@ function ProjectsList() {
         <SearchContainer className="flex align-center p-y-medium-30 p-x-medium-60">
           <Field.Root>
             <Icon>
-              <PixelIcon.Search />
+              <Icon.Search />
             </Icon>
             <Field
               variant="ghost"

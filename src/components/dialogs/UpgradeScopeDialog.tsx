@@ -18,7 +18,7 @@ import {
   Badge,
   Tooltip,
 } from "@usefui/components";
-import { Icon, PixelIcon } from "@usefui/icons";
+import { Icon } from "@usefui/icons";
 
 import { ScopeEnum } from "generated/prisma";
 import { SCOPES_FEATURES } from "@/utils/scope-features";
@@ -125,7 +125,7 @@ function UpgradeScopeDialog() {
                       className="flex align-center g-medium-30 fs-medium-20"
                     >
                       <Icon>
-                        <PixelIcon.Check />
+                        <Icon.Check />
                       </Icon>
                       {feat}
                     </span>
@@ -157,7 +157,7 @@ function UpgradeScopeDialog() {
                       className="flex align-center g-medium-30 fs-medium-20"
                     >
                       <Icon>
-                        <PixelIcon.Check />
+                        <Icon.Check />
                       </Icon>
                       {feat}
                     </span>
@@ -187,7 +187,7 @@ function UpgradeScopeDialog() {
             >
               pricing page
               <Icon>
-                <PixelIcon.Open />
+                <Icon.ChevronRight />
               </Icon>
             </Link>
           </span>

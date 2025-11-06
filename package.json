@@ -44,7 +44,7 @@
     "@usefui/components": "^1.5.3",
     "@usefui/core": "^1.3.4",
     "@usefui/hooks": "^1.3.4",
-    "@usefui/icons": "^1.1.5",
+    "@usefui/icons": "^1.2.3",
     "@usefui/styles": "^1.4.4",
     "@usefui/tokens": "^1.5.4",
     "client-only": "^0.0.1",

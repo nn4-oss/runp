@@ -3,7 +3,7 @@
 import React from "react";
 
 import { Button, CopyButton, Tooltip } from "@usefui/components";
-import { Icon, PixelIcon } from "@usefui/icons";
+import { Icon } from "@usefui/icons";
 
 import { toast } from "sonner";
 
@@ -83,7 +83,7 @@ function DiagramHeader({
           onClick={() => setDiagramScale(diagramScale + 0.1)}
         >
           <Icon>
-            <PixelIcon.Plus />
+            <Icon.Add />
           </Icon>
         </Button>
         <Button
@@ -96,7 +96,7 @@ function DiagramHeader({
           }
         >
           <Icon>
-            <PixelIcon.Minus />
+            <Icon.Minus />
           </Icon>
         </Button>
         <Button
@@ -105,20 +105,20 @@ function DiagramHeader({
           onClick={() => setDiagramScale(1)}
         >
           <Icon>
-            <PixelIcon.Reload />
+            <Icon.Reload />
           </Icon>
         </Button>
       </div>
       <div className="flex align-center g-medium-30">
         <CopyButton value={code}>
           <Icon>
-            <PixelIcon.Clipboard />
+            <Icon.CopyDashed />
           </Icon>
         </CopyButton>
         <Tooltip content="Download">
           <Button variant="ghost" sizing="small" onClick={handleExport}>
             <Icon>
-              <PixelIcon.Download />
+              <Icon.Download />
             </Icon>
           </Button>
         </Tooltip>

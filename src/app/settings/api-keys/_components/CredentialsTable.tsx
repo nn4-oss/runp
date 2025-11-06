@@ -4,10 +4,10 @@ import React from "react";
 import { motion, type Variants } from "framer-motion";
 
 import { Badge, Dialog, Tooltip, Card } from "@usefui/components";
-import { Icon, PixelIcon } from "@usefui/icons";
+import { Icon } from "@usefui/icons";
 import { DeleteCredentialDialog, SplitText } from "@/components";
 
-import { format, formatDistanceToNow } from "date-fns";
+import { format } from "date-fns";
 import { maskKey } from "@/utils/data-tables";
 
 import type { ThirdPartyServiceType } from "generated/prisma";
@@ -54,9 +54,6 @@ function CredentialsTable({
       <Card.Grid sizing="large">
         {data.map((credential) => {
           const createdAt = format(credential.createdAt, "dd/MM/yyyy");
-          const lastUpdate = formatDistanceToNow(credential.updatedAt, {
-            addSuffix: true,
-          });
 
           return (
             <motion.div key={credential.id} variants={slide}>
@@ -82,7 +79,7 @@ function CredentialsTable({
                         >
                           <span className="flex align-center justify-center p-y-small-60">
                             <Icon>
-                              <PixelIcon.Close />
+                              <Icon.Trash />
                             </Icon>
                           </span>
                         </Dialog.Trigger>
@@ -110,12 +107,8 @@ function CredentialsTable({
                           {integration.isPrimary ? (
                             <Tooltip content="Active">
                               <Badge variant="success">
-                                <Icon
-                                  fill="var(--color-green)"
-                                  width={12}
-                                  height={12}
-                                >
-                                  <PixelIcon.CheckDouble />
+                                <Icon width={12} height={12}>
+                                  <Icon.LinkSkew />
                                 </Icon>
                               </Badge>
                             </Tooltip>
@@ -123,7 +116,7 @@ function CredentialsTable({
                             <Tooltip content="Inactive">
                               <Badge variant="border">
                                 <Icon width={12} height={12}>
-                                  <PixelIcon.EyeClosed />
+                                  <Icon.LinkOff />
                                 </Icon>
                               </Badge>
                             </Tooltip>
@@ -133,16 +126,6 @@ function CredentialsTable({
                     </div>
                   </div>
                 </Card.Body>
-                <Card.Meta>
-                  <footer className="p-medium-30 g-medium-10 flex align-center w-100">
-                    <Icon fillOpacity={0.1}>
-                      <PixelIcon.Clock />
-                    </Icon>
-                    <span className="fs-medium-10 opacity-default-60">
-                      Updated&nbsp;{lastUpdate}
-                    </span>
-                  </footer>
-                </Card.Meta>
               </Card>
             </motion.div>
           );

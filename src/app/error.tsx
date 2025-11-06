@@ -7,7 +7,7 @@ import AppLayout from "@/layouts/AppLayout";
 
 import { Button } from "@usefui/components";
 import { AppContainer } from "@/components";
-import { Icon, PixelIcon, SocialIcon } from "@usefui/icons";
+import { Icon } from "@usefui/icons";
 
 const Hgroup = styled.hgroup`
   text-align: center;
@@ -24,9 +24,6 @@ function ErrorPage() {
         <Hgroup>
           <div className="flex align-center justify-center g-medium-30">
             <h1>Uh oh</h1>
-            <Icon width={36} height={36}>
-              <PixelIcon.Downasaur />
-            </Icon>
           </div>
           <h1 className="fs-medium-20">
             An error occured, please try to refresh your browser.
@@ -42,7 +39,7 @@ function ErrorPage() {
               onClick={() => window.location.reload()}
             >
               <Icon>
-                <PixelIcon.Reload />
+                <Icon.Reload />
               </Icon>
               Refresh
             </Button>
@@ -57,8 +54,8 @@ function ErrorPage() {
                 )
               }
             >
-              <Icon viewBox="0 0 14 14">
-                <SocialIcon.Github />
+              <Icon>
+                <Icon.GitPull />
               </Icon>
               Open an issue
             </Button>

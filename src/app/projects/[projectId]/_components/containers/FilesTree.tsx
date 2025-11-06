@@ -4,7 +4,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { Accordion, Button, Divider, ScrollArea } from "@usefui/components";
-import { Icon, PixelIcon } from "@usefui/icons";
+import { Icon } from "@usefui/icons";
 
 import type { TreeItem } from "../../_utils";
 
@@ -44,12 +44,12 @@ function Tree({ file, parentPath, selectedValue, onSelect }: TreeProps) {
           rawicon
         >
           <Icon opacity={0.3}>
-            <PixelIcon.File />
+            <Icon.CodeFile />
           </Icon>
           {name}
           {isFileSelected && (
             <Icon>
-              <PixelIcon.ChevronRight />
+              <Icon.ChevronRight />
             </Icon>
           )}
         </Button>
@@ -63,7 +63,7 @@ function Tree({ file, parentPath, selectedValue, onSelect }: TreeProps) {
       <Accordion>
         <Accordion.Trigger value={name} variant="ghost" sizing="medium" rawicon>
           <Icon opacity={0.3}>
-            <PixelIcon.Folder />
+            <Icon.CodeFolder />
           </Icon>
           {name}
         </Accordion.Trigger>

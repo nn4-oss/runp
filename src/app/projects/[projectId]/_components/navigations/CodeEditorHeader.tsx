@@ -3,7 +3,7 @@
 import React from "react";
 
 import { Breadcrumb, CopyButton } from "@usefui/components";
-import { Icon, PixelIcon } from "@usefui/icons";
+import { Icon } from "@usefui/icons";
 
 function CodeEditorHeader({ path, code }: { path: string; code: string }) {
   return (
@@ -12,7 +12,7 @@ function CodeEditorHeader({ path, code }: { path: string; code: string }) {
 
       <CopyButton value={code}>
         <Icon>
-          <PixelIcon.Clipboard />
+          <Icon.CopyDashed />
         </Icon>
       </CopyButton>
     </header>

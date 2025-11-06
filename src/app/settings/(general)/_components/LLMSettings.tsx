@@ -156,7 +156,7 @@ function LLMSettings({ isFreeScope }: { isFreeScope: boolean }) {
               <Checkbox
                 id="diagrams"
                 sizing="medium"
-                variant="secondary"
+                variant="primary"
                 disabled={isFreeScope}
                 defaultChecked={configuration?.diagrams}
                 onClick={() => {
