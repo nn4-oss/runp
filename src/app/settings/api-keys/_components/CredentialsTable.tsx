@@ -7,7 +7,7 @@ import { Badge, Dialog, Tooltip, Card } from "@usefui/components";
 import { Icon } from "@usefui/icons";
 import { DeleteCredentialDialog, SplitText } from "@/components";
 
-import { format, formatDistanceToNow } from "date-fns";
+import { format } from "date-fns";
 import { maskKey } from "@/utils/data-tables";
 
 import type { ThirdPartyServiceType } from "generated/prisma";
@@ -54,9 +54,6 @@ function CredentialsTable({
       <Card.Grid sizing="large">
         {data.map((credential) => {
           const createdAt = format(credential.createdAt, "dd/MM/yyyy");
-          const lastUpdate = formatDistanceToNow(credential.updatedAt, {
-            addSuffix: true,
-          });
 
           return (
             <motion.div key={credential.id} variants={slide}>

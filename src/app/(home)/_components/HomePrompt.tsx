@@ -8,7 +8,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
 import { useKeyPress } from "@usefui/hooks";
 import { useForm } from "react-hook-form";
-import { useColorMode } from "@usefui/tokens";
 
 import Link from "next/link";
 import PromptTemplates from "./PromptTemplates";
