@@ -4,7 +4,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 
 import { Button, Tooltip } from "@usefui/components";
-import { Icon, PixelIcon, SocialIcon } from "@usefui/icons";
+import { Icon } from "@usefui/icons";
 
 function PromptOptions() {
   const router = useRouter();
@@ -14,7 +14,7 @@ function PromptOptions() {
         <Button animation="reflective" sizing="small" variant="secondary">
           <span className="p-y-small-60 flex align-center justify-center">
             <Icon>
-              <SocialIcon.OpenAi />
+              <Icon.OpenAi />
             </Icon>
           </span>
         </Button>
@@ -29,7 +29,7 @@ function PromptOptions() {
         >
           <span className="p-y-small-60 flex align-center justify-center">
             <Icon fill="var(--color-green)">
-              <PixelIcon.Sliders />
+              <Icon.AdjustmentHorizontal />
             </Icon>
           </span>
         </Button>

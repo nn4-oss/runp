@@ -15,9 +15,9 @@ import {
   DropdownMenu,
   ScrollArea,
 } from "@usefui/components";
-import { Icon, PixelIcon, SocialIcon } from "@usefui/icons";
+import { Icon } from "@usefui/icons";
 import { SignOutButton, useUser } from "@clerk/nextjs";
-import { UsageRange } from "..";
+import { ColorModes, UsageRange } from "..";
 
 import { formatDuration, intervalToDuration } from "date-fns";
 
@@ -35,6 +35,9 @@ const PointsWrapper = styled.div`
   background-color: var(--contrast-color);
   border-radius: var(--measurement-medium-30);
   border: var(--measurement-small-30) solid var(--font-color-alpha-10);
+`;
+const Content = styled(DropdownMenu.Content)`
+  max-height: var(--breakpoint-mobile-small) !important;
 `;
 
 const stripLongString = (content?: string) => {
@@ -83,12 +86,12 @@ function UserAvatar() {
       <DropdownMenu>
         <DropdownMenu.Trigger>
           <Icon>
-            <PixelIcon.ChevronsVertical />
+            <Icon.ThreeDotsVertical />
           </Icon>
           <StyledAvatar src={avatarImageSrc} />
         </DropdownMenu.Trigger>
 
-        <ScrollArea as={DropdownMenu.Content}>
+        <ScrollArea as={Content}>
           {user?.name && (
             <header className="grid p-x-medium-30 p-t-medium-30">
               <div className="flex align-center g-medium-30">
@@ -106,7 +109,6 @@ function UserAvatar() {
               <Divider className="m-y-medium-50" />
             </header>
           )}
-
           {usage && usageMetadata && (
             <PointsWrapper className="p-medium-30 m-b-medium-30">
               <hgroup className="flex align-center justify-between m-b-medium-30">
@@ -123,7 +125,7 @@ function UserAvatar() {
 
               <span className="fs-small-60 opacity-default-30 flex align-center g-medium-10">
                 <Icon>
-                  <PixelIcon.Reload />
+                  <Icon.Reload />
                 </Icon>
                 Reset&nbsp;in&nbsp;
                 {resetDuration}
@@ -142,7 +144,7 @@ function UserAvatar() {
             <DropdownMenu.Item className="w-100 flex align-center g-medium-30">
               <span>
                 <Icon>
-                  <PixelIcon.Zap />
+                  <Icon.Diamond />
                 </Icon>
               </span>
               Subscription
@@ -162,17 +164,10 @@ function UserAvatar() {
             className="w-100 flex align-center g-medium-30"
             onMouseDown={() => router.push("/settings/profile")}
           >
-            <span>
-              <Icon>
-                <PixelIcon.User />
-              </Icon>
-            </span>
+            <Icon>
+              <Icon.User />
+            </Icon>
             Profile
-            <span className="flex align-center justify-end w-100">
-              <Icon viewBox="0 0 18 18">
-                <SocialIcon.Clerk />
-              </Icon>
-            </span>
           </DropdownMenu.Item>
 
           <DropdownMenu.Item
@@ -180,9 +175,46 @@ function UserAvatar() {
             onMouseDown={() => router.push("/settings")}
           >
             <Icon>
-              <PixelIcon.Sliders />
+              <Icon.AdjustmentHorizontal />
             </Icon>
             Settings
+          </DropdownMenu.Item>
+
+          <Divider className="m-y-medium-10" />
+
+          <DropdownMenu.Item
+            className="w-100 flex align-center g-medium-30"
+            onClick={() =>
+              window.open(
+                "https://github.com/nn4-oss/runp",
+                "_blank",
+                "noopener,noreferrer",
+              )
+            }
+          >
+            <span className="flex align-center g-medium-30">
+              <Icon>
+                <Icon.GitPull />
+              </Icon>
+            </span>
+            Github
+            <span className="w-100 flex justify-end">
+              <Icon>
+                <Icon.LinkExternal />
+              </Icon>
+            </span>
+          </DropdownMenu.Item>
+
+          <DropdownMenu.Item className="flex align-center g-medium-30" radio>
+            <span className="flex align-center justify-center">
+              <Icon>
+                <Icon.ColorSwatch />
+              </Icon>
+            </span>
+            Appearance
+            <div className="flex w-100 justify-end">
+              <ColorModes />
+            </div>
           </DropdownMenu.Item>
 
           <Divider className="m-y-medium-10" />
@@ -190,7 +222,7 @@ function UserAvatar() {
           <SignOutButton>
             <DropdownMenu.Item className="w-100 flex align-center g-medium-30">
               <Icon>
-                <PixelIcon.Logout />
+                <Icon.Logout />
               </Icon>
               Sign&nbsp;Out
             </DropdownMenu.Item>

@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { motion, type Variants } from "framer-motion";
 
 import { Accordion, Card, Divider } from "@usefui/components";
-import { Icon, PixelIcon } from "@usefui/icons";
+import { Icon } from "@usefui/icons";
 
 const FAQGrid = styled.div`
   max-width: var(--breakpoint-tablet);
@@ -19,7 +19,7 @@ const FAQ_CONTENT = [
   },
   {
     title: "Do I have to pay anything to use Runp?",
-    desc: " No. Runp is free to use and will remain free. It's a lightweight tool focused on the usefui.dev stack rather than a full-featured alternative to top-tier generative AI apps. If you need the broadest capabilities, those platforms may be a better fit—but if you're working with usefui.dev and want something simple and fast, Runp is a great choice.",
+    desc: " No. Runp is free to use and will remain free. It's a lightweight tool focused on the usefui.dev stack rather than a full-featured alternative to top-tier generative AI apps. If you need the broadest capabilities, those platforms may be a better fit, but if you're working with usefui.dev and want something simple and fast, Runp is a great choice.",
   },
   {
     title: "Do my used credits carry over when I upgrade?",
@@ -78,7 +78,7 @@ function PricingFAQ() {
                       <p className="fs-medium-30">{item.title}</p>
                       <span>
                         <Icon>
-                          <PixelIcon.ChevronsVertical />
+                          <Icon.ChevronSelectorVertical />
                         </Icon>
                       </span>
                     </div>

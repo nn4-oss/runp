@@ -7,10 +7,11 @@ import { useQuery } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
 
 import UpgradeScopeDialog from "../dialogs/UpgradeScopeDialog";
+import SendFeedbackDialog from "../dialogs/SendFeedbackDialog";
 
 import { SignedIn } from "@clerk/nextjs";
 import { Button, Dialog, Tooltip } from "@usefui/components";
-import { Icon, PixelIcon } from "@usefui/icons";
+import { Icon } from "@usefui/icons";
 
 import { ScopeEnum } from "generated/prisma";
 
@@ -22,10 +23,10 @@ function SignedInActions() {
 
   return (
     <SignedIn>
-      <div className="flex align-center g-medium-10">
+      <div className="flex align-center g-small-30">
         <Tooltip content="New chat">
           <Button
-            variant="secondary"
+            variant="tertiary"
             sizing="small"
             animation="reflective"
             aria-label="Projects"
@@ -33,7 +34,7 @@ function SignedInActions() {
           >
             <span className="flex align-center justify-center p-y-small-60 g-medium-10">
               <Icon>
-                <PixelIcon.Plus />
+                <Icon.Add />
               </Icon>
             </span>
           </Button>
@@ -41,7 +42,7 @@ function SignedInActions() {
 
         <Tooltip content="Projects">
           <Button
-            variant="secondary"
+            variant="tertiary"
             sizing="small"
             animation="reflective"
             aria-label="Projects"
@@ -49,16 +50,34 @@ function SignedInActions() {
           >
             <span className="flex align-center justify-center p-y-small-60">
               <Icon>
-                <PixelIcon.Folder />
+                <Icon.CodeFolder />
               </Icon>
             </span>
           </Button>
         </Tooltip>
 
+        <Dialog.Root>
+          <Tooltip content="Feedback">
+            <Dialog.Trigger
+              variant="tertiary"
+              sizing="small"
+              animation="reflective"
+            >
+              <span className="flex align-center justify-center p-y-small-60 g-medium-10">
+                <Icon>
+                  <Icon.Announcement />
+                </Icon>
+              </span>
+            </Dialog.Trigger>
+          </Tooltip>
+
+          <SendFeedbackDialog />
+        </Dialog.Root>
+
         {user?.scope === ScopeEnum.FREE && (
           <Dialog.Root>
             <Dialog.Trigger
-              variant="mono"
+              variant="secondary"
               sizing="medium"
               animation="reflective"
             >

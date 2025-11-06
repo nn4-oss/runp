@@ -8,7 +8,7 @@ import { motion, type Variants } from "framer-motion";
 import { useRouter } from "next/navigation";
 
 import { Dialog, DropdownMenu, Card } from "@usefui/components";
-import { Icon, PixelIcon, WebIcon } from "@usefui/icons";
+import { Icon } from "@usefui/icons";
 
 import { DeleteProjectDialog, SplitText, UpdateNameDialog } from "@/components";
 
@@ -104,7 +104,7 @@ function ProjectsTable({
                             >
                               <span className="flex align-center justify-center p-y-small-60">
                                 <Icon>
-                                  <WebIcon.More />
+                                  <Icon.ThreeDotsHorizontal />
                                 </Icon>
                               </span>
                             </DropdownMenu.Trigger>
@@ -116,7 +116,7 @@ function ProjectsTable({
                                 }}
                               >
                                 <Icon>
-                                  <PixelIcon.Eye />
+                                  <Icon.Eye />
                                 </Icon>
                                 Details
                               </DropdownMenu.Item>
@@ -130,7 +130,7 @@ function ProjectsTable({
                               >
                                 <DropdownMenu.Item className="w-100 flex align-center g-medium-30">
                                   <Icon>
-                                    <PixelIcon.EditBox />
+                                    <Icon.EditNarrowSquare />
                                   </Icon>
                                   Rename
                                 </DropdownMenu.Item>
@@ -144,7 +144,7 @@ function ProjectsTable({
                                 }}
                               >
                                 <Icon>
-                                  <PixelIcon.Duplicate />
+                                  <Icon.CopyDashed />
                                 </Icon>
                                 Copy Project ID
                               </DropdownMenu.Item>
@@ -166,7 +166,7 @@ function ProjectsTable({
                         >
                           <span className="flex align-center justify-center p-y-small-60">
                             <Icon>
-                              <PixelIcon.Close />
+                              <Icon.Trash />
                             </Icon>
                           </span>
                         </Dialog.Trigger>
@@ -197,12 +197,12 @@ function ProjectsTable({
                   >
                     <span className="flex align-center g-medium-10 fs-medium-10 opacity-default-60">
                       <Icon fillOpacity={0.3}>
-                        <PixelIcon.Clock />
+                        <Icon.EditNarrowSquare />
                       </Icon>
                       Updated&nbsp;{lastUpdate}
                     </span>
                     <Icon>
-                      <PixelIcon.CornerUpRight />
+                      <Icon.ArrowCornerUpRight />
                     </Icon>
                   </CardLink>
                 </Card.Meta>

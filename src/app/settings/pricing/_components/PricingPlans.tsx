@@ -9,7 +9,7 @@ import { useTRPC } from "@/trpc/client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { Button, Card, Dialog, Divider } from "@usefui/components";
-import { Icon, PixelIcon } from "@usefui/icons";
+import { Icon } from "@usefui/icons";
 import { SendMessageDialog } from "@/components";
 
 import { toast } from "sonner";
@@ -98,7 +98,7 @@ function PricingPlans() {
               {SCOPES_FEATURES.FREE.map((feat, key) => (
                 <div key={key} className="flex align-center g-medium-30">
                   <Icon>
-                    <PixelIcon.Check />
+                    <Icon.Check />
                   </Icon>
                   <p className="fs-medium-20">{feat}</p>
                 </div>
@@ -137,7 +137,7 @@ function PricingPlans() {
               {SCOPES_FEATURES.PRO.map((feat, key) => (
                 <div key={key} className="flex align-center g-medium-30">
                   <Icon>
-                    <PixelIcon.Check />
+                    <Icon.Check />
                   </Icon>
                   <p className="fs-medium-20">{feat}</p>
                 </div>
@@ -175,7 +175,7 @@ function PricingPlans() {
               {SCOPES_FEATURES.ENTERPRISE.map((feat, key) => (
                 <div key={key} className="flex align-center g-medium-30">
                   <Icon>
-                    <PixelIcon.Check />
+                    <Icon.Check />
                   </Icon>
                   <p className="fs-medium-20">{feat}</p>
                 </div>

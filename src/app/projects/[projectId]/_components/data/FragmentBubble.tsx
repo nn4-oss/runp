@@ -4,7 +4,7 @@ import React from "react";
 import styled, { keyframes } from "styled-components";
 
 import { Accordion, Button, Divider, Tooltip } from "@usefui/components";
-import { Icon, PixelIcon } from "@usefui/icons";
+import { Icon } from "@usefui/icons";
 import { SplitText } from "@/components";
 
 import { getFilesKeys } from "../../_utils";
@@ -54,7 +54,7 @@ function FragmentBubble({
             style={{ justifyContent: "start", width: "100%" }}
           >
             <Icon>
-              <PixelIcon.ChevronDown />
+              <Icon.ChevronDown />
             </Icon>
             <FadeInText>
               <SplitText
@@ -73,7 +73,7 @@ function FragmentBubble({
             >
               <Button variant="ghost">
                 <Icon>
-                  <PixelIcon.CornerUpLeft />
+                  <Icon.ArrowCornerUpLeft />
                 </Icon>
               </Button>
             </Tooltip>
@@ -81,7 +81,7 @@ function FragmentBubble({
 
           {isActiveFragment && (
             <Icon>
-              <PixelIcon.ChevronRight />
+              <Icon.ChevronRight />
             </Icon>
           )}
         </div>
@@ -95,7 +95,7 @@ function FragmentBubble({
             return (
               <div key={fileKey} className="flex align-center g-medium-10">
                 <Icon opacity={0.3}>
-                  <PixelIcon.File />
+                  <Icon.CodeFile />
                 </Icon>
                 <p className="fs-medium-10 opacity-default-60">{fileKey}</p>
               </div>

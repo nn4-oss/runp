@@ -7,7 +7,7 @@ import { UserProfile } from "@clerk/nextjs";
 
 import { Spinner, Button } from "@usefui/components";
 import { FixedHeader, SplitText } from "@/components";
-import { Icon, PixelIcon, SocialIcon } from "@usefui/icons";
+import { Icon } from "@usefui/icons";
 
 const ClerkProfileWrapper = styled.div`
   .cl-rootBox,
@@ -38,12 +38,9 @@ function ProfileContainer() {
               window.open("https://clerk.com/", "_blank", "noopener,noreferrer")
             }
           >
-            <Icon viewBox="0 0 18 18">
-              <SocialIcon.Clerk />
-            </Icon>
             Powered by Clerk
             <Icon>
-              <PixelIcon.Open />
+              <Icon.LinkExternal />
             </Icon>
           </Button>
         </div>

@@ -11,7 +11,7 @@ const ogImage = {
   url: `${siteUrl}/og.jpg`,
   width: 1200,
   height: 630,
-  alt: "Runp — Build features at the speed of thought",
+  alt: "Runp | Build features at the speed of thought",
 };
 
 export const metadata: Metadata = {

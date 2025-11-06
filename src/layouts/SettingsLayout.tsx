@@ -11,7 +11,7 @@ import AppLayout from "./AppLayout";
 
 import { Button, Page, ScrollArea, Toolbar, Tooltip } from "@usefui/components";
 import { AppContainer } from "@/components";
-import { Icon, PixelIcon } from "@usefui/icons";
+import { Icon } from "@usefui/icons";
 
 const StyledToolbar = styled(Toolbar)`
   background-color: var(--contrast-color) !important;
@@ -23,25 +23,25 @@ const PageContent = styled(Page.Content)`
 
 const SettingsLinks = [
   {
-    icon: <PixelIcon.SlidersVertical />,
+    icon: <Icon.AdjustmentHorizontal />,
     label: "General",
     path: "/settings",
     disabled: false,
   },
   {
-    icon: <PixelIcon.Lock />,
+    icon: <Icon.ShieldKey />,
     label: "API Keys",
     path: "/settings/api-keys",
     disabled: false,
   },
   {
-    icon: <PixelIcon.Zap />,
+    icon: <Icon.Diamond />,
     label: "Pricing",
     path: "/settings/pricing",
     disabled: false,
   },
   {
-    icon: <PixelIcon.User />,
+    icon: <Icon.User />,
     label: "Profile",
     path: "/settings/profile",
     disabled: false,
