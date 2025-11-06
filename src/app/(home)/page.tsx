@@ -5,6 +5,7 @@ import { AppContainer } from "@/components";
 
 import HomeHeading from "./_components/HomeHeading";
 import HomePrompt from "./_components/HomePrompt";
+import HomeFooter from "./_components/HomeFooter";
 
 async function Page() {
   return (
@@ -16,30 +17,7 @@ async function Page() {
         </section>
       </AppContainer>
 
-      <footer className="p-medium-60  flex justify-center align-en g-medium-10">
-        <p className="fs-medium-10">
-          <span className="opacity-default-60">Built by</span>&nbsp;
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href="https://github.com/nnsncl"
-          >
-            nnsncl
-          </a>
-          .
-          <span className="opacity-default-60">
-            &nbsp;The source code is available on&nbsp;
-          </span>
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href="https://github.com/nn4-oss/runp"
-          >
-            Github
-          </a>
-          .
-        </p>
-      </footer>
+      <HomeFooter />
     </HydrateClient>
   );
 }
